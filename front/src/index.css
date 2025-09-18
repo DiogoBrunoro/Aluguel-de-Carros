@@ -1,0 +1,67 @@
+/* ======= Tema Locadora de Carros ======= */
+:root {
+  /* Paleta */
+  --bg: #0b1220;          /* asfalto noite */
+  --bg-2: #0f1b2d;        /* painel */
+  --card: #111e33;        /* cartão */
+  --stroke: #1f2c44;      /* bordas */
+  --text: #e8eef6;        /* texto principal */
+  --muted: #9fb1c9;       /* texto secundário */
+  --accent: #f5c518;      /* amarelo-táxi */
+  --accent-ink: #1a1a1a;  /* texto em botões amarelos */
+  --success: #22c55e;
+  --error: #ef4444;
+
+  color-scheme: dark;
+  color: var(--text);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0) 30%),
+    radial-gradient(1200px 400px at 50% -50px, rgba(245,197,24,0.08), transparent 60%),
+    var(--bg);
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  /* gradientes bem transparentes p/ ficar leve */
+  background:
+    radial-gradient(1000px 600px at 12% 8%, rgba(245,197,24,0.05), transparent 55%),
+    radial-gradient(900px 550px at 88% 12%, rgba(56,189,248,0.06), transparent 58%),
+    radial-gradient(1200px 700px at 85% 85%, rgba(99,102,241,0.06), transparent 60%),
+    linear-gradient(180deg, #0c1422 0%, #0f1a2c 100%);
+  background-repeat: no-repeat;
+  animation: bgFloat 28s ease-in-out infinite alternate;
+}
+
+/* ruído bem sutil para dar textura (leve) */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 3px 3px;
+  mix-blend-mode: soft-light;
+  opacity: .4;
+}
+
+/* Tema claro opcional */
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #f6f8fb;
+    --bg-2: #ffffff;
+    --card: #ffffff;
+    --stroke: #e5eaf1;
+    --text: #0f172a;
+    --muted: #5b6b82;
+  }
+  .navbar { background: var(--bg-2); }
+}
