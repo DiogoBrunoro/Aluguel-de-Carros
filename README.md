@@ -9,6 +9,11 @@
 
 [Figma](https://www.figma.com/board/9basqE4J4kzSJsj5oVfo2V/Class-Diagram-Template--Community-?node-id=0-1&t=EnP0oiht6XPItvUe-0)
 
+## Diagrama de Componentes:
+
+[Figma](https://www.figma.com/design/cg3CtCE9Lgaxv3V4wL67OQ/Architecture-Diagram-Components--Community-?node-id=0-1&t=BpVloc95cW9AGQBY-1)
+
+<img width="729" height="777" alt="image" src="https://github.com/user-attachments/assets/b077c278-c785-4caa-bc4f-75f33598db52" />
 
 ## Histórias de Usuário:
 
