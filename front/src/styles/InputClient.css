@@ -1,0 +1,50 @@
+/* Estilo do campo InputClient com tema "locadora" */
+.inputClient {
+  /* você também pode ajustar margens aqui se quiser */
+}
+
+/* Raiz do TextField (outlined) */
+.inputClient .MuiOutlinedInput-root {
+  background: #0c172a;            /* painel escuro */
+  border-radius: 12px;
+  transition: box-shadow .2s ease, border-color .2s ease, background .2s ease;
+}
+
+/* Borda padrão */
+.inputClient .MuiOutlinedInput-notchedOutline {
+  border-color: #1f2c44;
+}
+
+/* Hover */
+.inputClient .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: #2b3b5a;
+}
+
+/* Foco com “anel” amarelo táxi */
+.inputClient .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #f5c518;          /* amarelo */
+  box-shadow: 0 0 0 3px rgba(245, 197, 24, .2);
+}
+
+/* Placeholder e texto */
+.inputClient .MuiInputBase-input {
+  color: #e8eef6;                  /* texto */
+  padding: 12px 14px;              /* um pouco mais alto */
+}
+.inputClient .MuiInputBase-input::placeholder {
+  color: #9fb1c9;
+  opacity: 1;                      /* garante cor do placeholder */
+}
+
+/* Estado desabilitado (se usar no futuro) */
+.inputClient .MuiOutlinedInput-root.Mui-disabled {
+  background: #0a1424;
+}
+.inputClient .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline {
+  border-color: #1a2640;
+}
+
+/* Estado de erro (se usar no futuro) */
+.inputClient .MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline {
+  border-color: #ef4444;
+}
