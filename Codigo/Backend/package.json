@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev": "tsx watch ./server.ts",
+    "build": "tsc",
+    "start": "node ./build/server.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.57.4",
@@ -17,6 +18,11 @@
     "sequelize": "^6.33.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.10"
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.5.2",
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2"
   }
 }

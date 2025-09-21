@@ -1,7 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
-import clienteRoutes from "./routes/clienteRoutes.js";
+import clienteRoutes from "./adapters/routes/clienteRoutes"
 
 dotenv.config();
 

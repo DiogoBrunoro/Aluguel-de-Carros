@@ -1,7 +1,8 @@
-import sql from "../config/database.js";
+import { Handler } from "express";
+import sql from "../config/database";
 
 // Criar cliente + entidades empregadoras
-export const criarCliente = async (req, res) => {
+export const criarCliente: Handler = async (req, res) => {
   const { rg, cpf, nome, endereco, profissao, empregadores } = req.body;
   try {
     // Inserir cliente
@@ -23,14 +24,14 @@ export const criarCliente = async (req, res) => {
     }
 
     res.status(201).json({ ...cliente[0], empregadores });
-  } catch (err) {
+  } catch (err: any) {
     console.error(err); // Mostra o erro completo no terminal   
     res.status(400).json({ error: err.message || err.toString() });
   }
 };
 
 // Listar clientes com empregadores
-export const listarClientes = async (req, res) => {
+export const listarClientes: Handler = async (req, res) => {
   try {
     const clientes = await sql`SELECT * FROM clientes;`;
 
@@ -45,13 +46,13 @@ export const listarClientes = async (req, res) => {
     );
 
     res.json(clientesComEmpregadores);
-  } catch (err) {
+  } catch (err: any) {
     res.status(500).json({ error: err.message });
   }
 };
 
 // Buscar cliente por ID com empregadores
-export const buscarCliente = async (req, res) => {
+export const buscarCliente: Handler = async (req, res) => {
   try {
     const cliente = await sql`
       SELECT * FROM clientes WHERE id = ${req.params.id};
@@ -63,13 +64,13 @@ export const buscarCliente = async (req, res) => {
     `;
 
     res.json({ ...cliente[0], empregadores });
-  } catch (err) {
+  } catch (err: any) {
     res.status(500).json({ error: err.message });
   }
 };
 
 // Atualizar cliente + empregadores
-export const atualizarCliente = async (req, res) => {
+export const atualizarCliente: Handler = async (req, res) => {
   const { rg, cpf, nome, endereco, profissao, empregadores } = req.body;
   try {
     // Atualizar cliente
@@ -100,17 +101,17 @@ export const atualizarCliente = async (req, res) => {
     }
 
     res.json({ ...cliente[0], empregadores });
-  } catch (err) {
+  } catch (err: any) {
     res.status(400).json({ error: err.message });
   }
 };
 
 // Excluir cliente (cascade apaga empregadores)
-export const excluirCliente = async (req, res) => {
+export const excluirCliente: Handler = async (req, res) => {
   try {
     await sql`DELETE FROM clientes WHERE id = ${req.params.id};`;
     res.json({ message: "Cliente removido com sucesso" });
-  } catch (err) {
+  } catch (err: any) {
     res.status(500).json({ error: err.message });
   }
 };
