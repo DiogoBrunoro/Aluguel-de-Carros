@@ -1,31 +1,28 @@
-// src/components/InputClient.jsx
-import React, { useState, useRef, forwardRef, useImperativeHandle } from "react";
-import TextField from "@mui/material/TextField";
-import "../styles/InputClient.css"; // <-- importe o CSS
+"use client"
+import { TextField } from "@mui/material"
 
-const InputClient = forwardRef(function InputClient({ placeholder = "" }, ref) {
-  const [valor, setValor] = useState("");
-  const inputRef = useRef(null);
-
-  // expõe uma API mínima via ref, sem novas props
-  useImperativeHandle(ref, () => ({
-    getValue: () => valor,
-    setValue: (v) => setValor(v ?? ""),
-    clear: () => setValor(""),
-    focus: () => inputRef.current?.focus(),
-  }));
-
+export default function InputClient({ placeholder, value, onChange, ...props }) {
   return (
     <TextField
-      className="inputClient"
-      fullWidth
-      size="small"
       placeholder={placeholder}
-      value={valor}
-      onChange={(e) => setValor(e.target.value)}
-      inputRef={inputRef}
+      value={value}
+      onChange={onChange}
+      fullWidth
+      variant="outlined"
+      size="small"
+      sx={{
+        "& .MuiOutlinedInput-root": {
+          borderRadius: 2,
+          backgroundColor: "#f5f5f5",
+          "&:hover": {
+            backgroundColor: "#eeeeee",
+          },
+          "&.Mui-focused": {
+            backgroundColor: "#ffffff",
+          },
+        },
+      }}
+      {...props}
     />
-  );
-});
-
-export default InputClient;
+  )
+}

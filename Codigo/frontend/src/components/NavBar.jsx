@@ -1,114 +1,137 @@
-import * as React from "react";
+"use client";
+
+import React, { useState } from "react"; // Importar useState
 import {
   AppBar,
   Toolbar,
   Typography,
   IconButton,
   Button,
-  Box,
-  Menu,
-  MenuItem,
-  Divider,
+  Stack,
+  Drawer,         // <-- Importar Drawer
+  List,           // <-- Importar List
+  ListItemButton, // <-- Importar ListItemButton
+  ListItemIcon,   // <-- Importar ListItemIcon
+  ListItemText,   // <-- Importar ListItemText
+  useMediaQuery,  // <-- Importar useMediaQuery
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
+import { useTheme } from "@mui/material/styles"; // Importar useTheme para usar media queries
 
-export default function Navbar({ title = "Aluguel de Carros", links = [], rightSlot }) {
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
+import {
+  Home as HomeIcon, // Renomeado para evitar conflito com o nome do prop 'Home' da rota
+  Person,
+  DirectionsCar,
+  Add,
+  Assignment,
+  Menu as MenuIcon,
+  Home, // <-- Importar MenuIcon
+} from "@mui/icons-material";
 
-  const handleOpen = (e) => setAnchorEl(e.currentTarget);
-  const handleClose = () => setAnchorEl(null);
+export default function Navbar( { setTelaAtiva, telaAtiva }) {
+  const [drawerOpen, setDrawerOpen] = useState(false); 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md')); 
+
+  const handleDrawerToggle = () => {
+    setDrawerOpen(!drawerOpen);
+  };
+
+  const handleNavigateAndCloseDrawer = (tela) => {
+    setTelaAtiva(tela);
+    setDrawerOpen(false); 
+  };
+
+  // Links da navegação
+  const navLinks = [
+    { text: "Home", icon: <Home />, tela: "home" },
+    { text: "Clientes", icon: <Person />, tela: "consulta-clientes" },
+    { text: "Carros", icon: <DirectionsCar />, tela: "consulta-carros" },
+    { text: "Cadastrar", icon: <Add />, tela: "cadastro-carros" },
+    { text: "Aluguéis", icon: <Assignment />, tela: "gerenciamento-aluguel" },
+  ];
+
+  const drawerContent = (
+    <List>
+      <ListItemButton onClick={() => handleNavigateAndCloseDrawer("home")}>
+        <ListItemIcon>
+          <HomeIcon />
+        </ListItemIcon>
+        <ListItemText primary="Início" />
+      </ListItemButton>
+      {navLinks.map((link) => (
+        <ListItemButton
+          key={link.tela}
+          onClick={() => handleNavigateAndCloseDrawer(link.tela)}
+          selected={telaAtiva === link.tela}
+        >
+          <ListItemIcon>{link.icon}</ListItemIcon>
+          <ListItemText primary={link.text} />
+        </ListItemButton>
+      ))}
+    </List>
+  );
 
   return (
     <>
-      <AppBar
-        position="sticky"
-        elevation={0}
+     <AppBar
+        position="static"
         sx={{
-          backdropFilter: "blur(10px)",
-          background:
-            "linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.15))",
-          borderBottom: "1px solid rgba(255,255,255,0.08)",
+          background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+          boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
         }}
       >
-        <Toolbar sx={{ maxWidth: 1200, mx: "auto", width: "100%" }}>
-          {/* Menu mobile */}
-          <Box sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}>
+        <Toolbar>
+          {isMobile ? (
             <IconButton
-              color="inherit"
-              onClick={handleOpen}
-              aria-label="menu"
               edge="start"
-              size="large"
+              color="inherit"
+              aria-label="menu"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2 }}
             >
               <MenuIcon />
             </IconButton>
-          </Box>
+          ) : ( 
+            <IconButton edge="start" color="inherit" onClick={() => setTelaAtiva("home")} sx={{ mr: 2 }}>
+              <HomeIcon />
+            </IconButton>
+          )}
 
-          {/* Marca */}
-          <Typography
-            variant="h6"
-            sx={{
-              fontWeight: 800,
-              letterSpacing: 0.4,
-              flexGrow: { xs: 1, md: 0 },
-            }}
-          >
-            {title}
+          <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: 600 }}>
+            Sistema de Aluguel de Carros
           </Typography>
 
-          {/* Links desktop */}
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" }, ml: 3 }}>
-            {links.map((l) => (
-              <Button
-                key={l.label}
-                color="inherit"
-                onClick={() => (l.onClick ? l.onClick() : (window.location.href = l.href || "#"))}
-                sx={{ opacity: 0.9, "&:hover": { opacity: 1 } }}
-              >
-                {l.label}
-              </Button>
-            ))}
-          </Box>
-
-          {/* Slot à direita (ex: Login/Avatar) */}
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            {rightSlot}
-          </Box>
+          {!isMobile && (
+            <Stack direction="row" spacing={1}>
+              {navLinks.map((link) => (
+                <Button
+                  key={link.tela}
+                  color="inherit"
+                  startIcon={link.icon}
+                  onClick={() => setTelaAtiva(link.tela)}
+                  sx={{
+                    backgroundColor: telaAtiva === link.tela ? "rgba(255,255,255,0.2)" : "transparent",
+                    borderRadius: 2,
+                  }}
+                >
+                  {link.text}
+                </Button>
+              ))}
+            </Stack>
+          )}
         </Toolbar>
       </AppBar>
 
-      {/* Menu mobile */}
-      <Menu
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        transformOrigin={{ vertical: "top", horizontal: "left" }}
-        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+      <Drawer
+        anchor="left" 
+        open={drawerOpen}
+        onClose={handleDrawerToggle}
         PaperProps={{
-          sx: {
-            mt: 1,
-            minWidth: 220,
-            background: "rgba(15,27,45,.95)",
-            backdropFilter: "blur(8px)",
-            border: "1px solid rgba(255,255,255,.06)",
-          },
+          sx: { width: 240, background: 'linear-gradient(135deg, #e0f2f7 0%, #c1e8f3 100%)' } 
         }}
       >
-        <Typography sx={{ px: 2, py: 1, fontWeight: 700 }}>{title}</Typography>
-        <Divider sx={{ borderColor: "rgba(255,255,255,.06)" }} />
-        {links.map((l) => (
-          <MenuItem
-            key={l.label}
-            onClick={() => {
-              handleClose();
-              l.onClick ? l.onClick() : (window.location.href = l.href || "#");
-            }}
-          >
-            {l.label}
-          </MenuItem>
-        ))}
-      </Menu>
+        {drawerContent}
+      </Drawer>
     </>
   );
 }

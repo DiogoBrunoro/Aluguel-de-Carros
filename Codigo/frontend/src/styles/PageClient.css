@@ -1,112 +1,28 @@
-/* ===== Fundo moderno e leve (mesh suave + animação sutil) ===== */
-html, body, #root { height: 100%; }
-
-body {
-  margin: 0;
-  /* gradientes bem transparentes p/ ficar leve */
-  background:
-    radial-gradient(1000px 600px at 12% 8%, rgba(245,197,24,0.05), transparent 55%),
-    radial-gradient(900px 550px at 88% 12%, rgba(56,189,248,0.06), transparent 58%),
-    radial-gradient(1200px 700px at 85% 85%, rgba(99,102,241,0.06), transparent 60%),
-    linear-gradient(180deg, #0c1422 0%, #0f1a2c 100%);
-  background-repeat: no-repeat;
-  animation: bgFloat 28s ease-in-out infinite alternate;
-}
-
-/* ruído bem sutil para dar textura (leve) */
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background-image: radial-gradient(rgba(255,255,255,0.02) 1px, transparent 1px);
-  background-size: 3px 3px;
-  mix-blend-mode: soft-light;
-  opacity: .4;
-}
-
-/* anima apenas a posição dos gradientes (barato em performance) */
-@keyframes bgFloat {
-  0% {
-    background-position:
-      0% 0%, 100% 0%, 100% 100%, 0% 0%;
-  }
-  50% {
-    background-position:
-      8% 5%, 92% 9%, 84% 86%, 0% 30%;
-  }
-  100% {
-    background-position:
-      12% 10%, 88% 12%, 80% 90%, 0% 50%;
-  }
-}
-
-/* Respeita usuários com redução de movimento */
-@media (prefers-reduced-motion: reduce) {
-  body { animation: none; }
-  body::after { display: none; }
-}
-
-/* ===== Seu layout ===== */
-
-/* Centraliza tudo */
+/* Creating the CSS styles referenced in the consultation screen */
 .screen-center {
-  min-height: 100dvh;
-  display: grid;
-  place-items: center;
-  padding: 24px;
-}
-
-/* Card mais largo com efeito “glass” leve */
-.client-card {
-  width: min(90vw, 960px);
-  background: rgba(16, 27, 45, 0.6);     /* semitransparente para ver o fundo */
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 16px;
-  box-shadow: 0 12px 32px rgba(0,0,0,.28);
-  padding: 28px;
-  backdrop-filter: blur(8px);             /* vidro */
-}
-
-/* Título maior */
-.client-title {
-  margin: 0 0 20px;
-  font-size: 1.5rem;
-  font-weight: 800;
-  text-align: center;
-  color: #e8eef6;
-}
-
-/* Empilhar campos com respiro */
-.client-stack {
-  display: grid;
-  gap: 16px;
-}
-
-/* Linha de botões centralizada e maior */
-.client-actions {
   display: flex;
-  gap: 12px;
   justify-content: center;
-  padding-top: 10px;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
-/* --------- Upsize dos componentes MUI dentro do card --------- */
-.client-card .MuiTextField-root .MuiInputBase-input {
-  padding: 14px 16px;
-  font-size: 1.05rem;
-}
-.client-card .MuiOutlinedInput-root {
-  border-radius: 12px;
-}
-.client-card .MuiButton-root {
-  padding: 10px 18px;
-  font-size: 0.95rem;
-  border-radius: 10px;
+.client-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  width: 100%;
+  max-width: 800px;
 }
 
-/* Responsivo: em telas muito grandes, dá mais largura */
-@media (min-width: 1400px) {
-  .client-card { width: min(70vw, 1000px); }
-  .client-title { font-size: 1.6rem; }
+.client-title {
+  text-align: center;
+  color: #333;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
