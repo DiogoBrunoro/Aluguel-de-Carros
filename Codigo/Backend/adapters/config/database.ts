@@ -8,7 +8,15 @@ if (!process.env.DATABASE_URL) {
 }
 
 const sql = postgres(process.env.DATABASE_URL, {
-  ssl: { rejectUnauthorized: false } // necessário para Supabase
+  ssl: { rejectUnauthorized: false } 
 });
 
-export default sql;
+sql`SELECT 1`
+  .then(() => {
+    console.log("✅ Database connected successfully")
+  })
+  .catch((error) => {
+    console.error("❌ Database connection failed:", error)
+  })
+
+export default sql

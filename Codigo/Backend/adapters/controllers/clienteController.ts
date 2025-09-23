@@ -1,117 +1,148 @@
-import { Handler } from "express";
-import sql from "../config/database";
+import type { Handler } from "express"
+import { ClienteService } from "../../application/service/ClienteService"
+import { CreateClienteDTO, UpdateClienteDTO } from "../../application/dto/ClienteDTO"
+import { ClienteRepository } from "../repositories/ClienteRepository"
 
-// Criar cliente + entidades empregadoras
+// Dependency Injection
+const clienteRepository = new ClienteRepository()
+const clienteService = new ClienteService(clienteRepository)
+
 export const criarCliente: Handler = async (req, res) => {
-  const { rg, cpf, nome, endereco, profissao, empregadores } = req.body;
   try {
-    // Inserir cliente
-    const cliente = await sql`
-      INSERT INTO clientes (rg, cpf, nome, endereco, profissao)
-      VALUES (${rg}, ${cpf}, ${nome}, ${endereco}, ${profissao})
-      RETURNING *;
-    `;
-    const clienteId = cliente[0].id;
+    const clienteData: CreateClienteDTO = req.body
+    const cliente = await clienteService.criarCliente(clienteData)
 
-    // Inserir empregadores
-    if (empregadores && empregadores.length > 0) {
-      for (const e of empregadores) {
-        await sql`
-          INSERT INTO entidades_empregadoras (cliente_id, nome, rendimento)
-          VALUES (${clienteId}, ${e.nome}, ${e.rendimento});
-        `;
-      }
-    }
-
-    res.status(201).json({ ...cliente[0], empregadores });
-  } catch (err: any) {
-    console.error(err); // Mostra o erro completo no terminal   
-    res.status(400).json({ error: err.message || err.toString() });
+    res.status(201).json({
+      success: true,
+      data: cliente,
+      message: "Cliente criado com sucesso",
+    })
+  } catch (error: any) {
+    console.error("Erro ao criar cliente:", error)
+    res.status(400).json({
+      success: false,
+      error: error.message || "Erro interno do servidor",
+    })
   }
-};
+}
 
-// Listar clientes com empregadores
 export const listarClientes: Handler = async (req, res) => {
   try {
-    const clientes = await sql`SELECT * FROM clientes;`;
+    const clientes = await clienteService.listarClientes()
 
-    const clientesComEmpregadores = await Promise.all(
-      clientes.map(async (c) => {
-        const empregadores = await sql`
-          SELECT * FROM entidades_empregadoras
-          WHERE cliente_id = ${c.id};
-        `;
-        return { ...c, empregadores };
-      })
-    );
-
-    res.json(clientesComEmpregadores);
-  } catch (err: any) {
-    res.status(500).json({ error: err.message });
+    res.json({
+      success: true,
+      data: clientes,
+      total: clientes.length,
+    })
+  } catch (error: any) {
+    console.error("Erro ao listar clientes:", error)
+    res.status(500).json({
+      success: false,
+      error: error.message || "Erro interno do servidor",
+    })
   }
-};
+}
 
-// Buscar cliente por ID com empregadores
 export const buscarCliente: Handler = async (req, res) => {
   try {
-    const cliente = await sql`
-      SELECT * FROM clientes WHERE id = ${req.params.id};
-    `;
-    if (!cliente[0]) return res.status(404).json({ error: "Cliente não encontrado" });
+    const { id } = req.params
+    const cliente = await clienteService.buscarClientePorId(id)
 
-    const empregadores = await sql`
-      SELECT * FROM entidades_empregadoras WHERE cliente_id = ${req.params.id};
-    `;
-
-    res.json({ ...cliente[0], empregadores });
-  } catch (err: any) {
-    res.status(500).json({ error: err.message });
-  }
-};
-
-// Atualizar cliente + empregadores
-export const atualizarCliente: Handler = async (req, res) => {
-  const { rg, cpf, nome, endereco, profissao, empregadores } = req.body;
-  try {
-    // Atualizar cliente
-    const cliente = await sql`
-      UPDATE clientes SET
-        rg = ${rg},
-        cpf = ${cpf},
-        nome = ${nome},
-        endereco = ${endereco},
-        profissao = ${profissao},
-        updated_at = now()
-      WHERE id = ${req.params.id}
-      RETURNING *;
-    `;
-    if (!cliente[0]) return res.status(404).json({ error: "Cliente não encontrado" });
-
-    // Deletar empregadores antigos
-    await sql`DELETE FROM entidades_empregadoras WHERE cliente_id = ${req.params.id};`;
-
-    // Inserir novos empregadores
-    if (empregadores && empregadores.length > 0) {
-      for (const e of empregadores) {
-        await sql`
-          INSERT INTO entidades_empregadoras (cliente_id, nome, rendimento)
-          VALUES (${req.params.id}, ${e.nome}, ${e.rendimento});
-        `;
-      }
+    if (!cliente) {
+      return res.status(404).json({
+        success: false,
+        error: "Cliente não encontrado",
+      })
     }
 
-    res.json({ ...cliente[0], empregadores });
-  } catch (err: any) {
-    res.status(400).json({ error: err.message });
+    res.json({
+      success: true,
+      data: cliente,
+    })
+  } catch (error: any) {
+    console.error("Erro ao buscar cliente:", error)
+    res.status(500).json({
+      success: false,
+      error: error.message || "Erro interno do servidor",
+    })
   }
-};
+}
 
-// Excluir cliente (cascade apaga empregadores)
+export const buscarClientePorCpf: Handler = async (req, res) => {
+  try {
+    const { cpf } = req.params
+    const cliente = await clienteService.buscarClientePorCpf(cpf)
+
+    if (!cliente) {
+      return res.status(404).json({
+        success: false,
+        error: "Cliente não encontrado",
+      })
+    }
+
+    res.json({
+      success: true,
+      data: cliente,
+    })
+  } catch (error: any) {
+    console.error("Erro ao buscar cliente por CPF:", error)
+    res.status(500).json({
+      success: false,
+      error: error.message || "Erro interno do servidor",
+    })
+  }
+}
+
+export const atualizarCliente: Handler = async (req, res) => {
+  try {
+    const { id } = req.params
+    const clienteData: UpdateClienteDTO = req.body
+
+    const cliente = await clienteService.atualizarCliente(id, clienteData)
+
+    if (!cliente) {
+      return res.status(404).json({
+        success: false,
+        error: "Cliente não encontrado",
+      })
+    }
+
+    res.json({
+      success: true,
+      data: cliente,
+      message: "Cliente atualizado com sucesso",
+    })
+  } catch (error: any) {
+    console.error("Erro ao atualizar cliente:", error)
+    res.status(400).json({
+      success: false,
+      error: error.message || "Erro interno do servidor",
+    })
+  }
+}
+
 export const excluirCliente: Handler = async (req, res) => {
   try {
-    await sql`DELETE FROM clientes WHERE id = ${req.params.id};`;
-    res.json({ message: "Cliente removido com sucesso" });
-  } catch (err: any) {
-    res.status(500).json({ error: err.message });
+    const { id } = req.params
+    const sucesso = await clienteService.excluirCliente(id)
+
+    if (!sucesso) {
+      return res.status(404).json({
+        success: false,
+        error: "Cliente não encontrado",
+      })
+    }
+
+    res.json({
+      success: true,
+      message: "Cliente removido com sucesso",
+    })
+  } catch (error: any) {
+    console.error("Erro ao excluir cliente:", error)
+    res.status(500).json({
+      success: false,
+      error: error.message || "Erro interno do servidor",
+    })
   }
-};
+}
