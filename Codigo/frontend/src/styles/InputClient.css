@@ -1,7 +1,3 @@
-/* Estilo do campo InputClient com tema "locadora" */
-.inputClient {
-  /* você também pode ajustar margens aqui se quiser */
-}
 
 /* Raiz do TextField (outlined) */
 .inputClient .MuiOutlinedInput-root {

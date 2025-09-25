@@ -22,7 +22,7 @@ import {
   LocalOffer,     // Marca/Modelo
   Tag,            // Placa/Matrícula
 } from "@mui/icons-material";
-import "../styles/PageClient.css"; // Você pode renomear para Page.css se quiser um estilo mais genérico
+import "../styles/PageClient.css"; 
 import InputClient from "../components/InputClient"; // Reutilizando seu componente de input
 
 export default function ConsultaCarros() {
