@@ -19,7 +19,6 @@ export class AuthService {
       throw new Error("CPF ou senha inválidos");
     }
 
-    // Aqui você poderia gerar um token JWT, por exemplo:
     const token = this.gerarToken(cliente.id);
     return token;
   }
