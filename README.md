@@ -15,6 +15,11 @@
 
 <img width="729" height="777" alt="image" src="https://github.com/user-attachments/assets/b077c278-c785-4caa-bc4f-75f33598db52" />
 
+## Diagrama de Implantação:
+
+<img width="2482" height="1169" alt="DiagramaImplantacao drawio(1)" src="https://github.com/user-attachments/assets/a0d8e66d-4747-448c-827a-7b121b7016ec" />
+
+
 ## Histórias de Usuário:
 
 ### Clientes:
