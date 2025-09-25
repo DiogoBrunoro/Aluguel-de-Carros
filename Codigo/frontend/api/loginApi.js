@@ -1,3 +1,5 @@
+import apiUrl from "./apiUrl";
+
 async function Login(cpf, senha) {
   const loginData = {
     cpf: cpf,
@@ -5,7 +7,7 @@ async function Login(cpf, senha) {
   };
 
   try {
-    const response = await fetch('http://localhost:3000/api/login', {
+    const response = await fetch(`${apiUrl}/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

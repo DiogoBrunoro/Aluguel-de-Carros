@@ -1,1 +1,1 @@
-export default apiUrl = "localhost:3000";
+export default apiUrl = "localhost:3000/api";
