@@ -19,6 +19,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  Divider,
 } from "@mui/material"
 import {
   Edit,
@@ -36,23 +37,6 @@ import {
 } from "@mui/icons-material"
 import "../styles/PageClient.css"
 import InputClient from "../components/InputClient"
-
-export default function GerenciamentoAluguel() {
-  const [alugueis, setAlugueis] = useState([])
-  const [clientes, setClientes] = useState([])
-  const [carros, setCarros] = useState([])
-  const [busca, setBusca] = useState("")
-  const [editandoId, setEditandoId] = useState(null)
-  const [formData, setFormData] = useState({})
-  const [dialogAberto, setDialogAberto] = useState(false)
-  const [novoAluguel, setNovoAluguel] = useState({
-    clienteId: "",
-    carroId: "",
-    dataInicio: "",
-    dataFim: "",
-    valorDiario: "",
-    status: "pendente",
-  })
 
 //   const carregarDados = () => {
 //     // Carregar aluguéis
@@ -78,18 +62,35 @@ export default function GerenciamentoAluguel() {
 //     carregarDados()
 //   }, [])
 
+export default function GerenciamentoAluguel() {
+  const [alugueis, setAlugueis] = useState([])
+  const [clientes, setClientes] = useState([])
+  const [carros, setCarros] = useState([])
+  const [busca, setBusca] = useState("")
+  const [editandoId, setEditandoId] = useState(null)
+  const [formData, setFormData] = useState({})
+  const [dialogAberto, setDialogAberto] = useState(false)
+  const [novoAluguel, setNovoAluguel] = useState({
+    clienteId: "",
+    carroId: "",
+    dataInicio: "",
+    dataFim: "",
+    valorDiario: "",
+    status: "pendente",
+  })
+
   const getStatusColor = (status) => {
     switch (status) {
       case "ativo":
-        return "#4caf50"
+        return { bg: "#dcfce7", color: "#166534" } // verde claro
       case "pendente":
-        return "#ff9800"
+        return { bg: "#fef9c3", color: "#854d0e" } // amarelo claro
       case "cancelado":
-        return "#f44336"
+        return { bg: "#fee2e2", color: "#991b1b" } // vermelho claro
       case "finalizado":
-        return "#2196f3"
+        return { bg: "#dbeafe", color: "#1e3a8a" } // azul claro
       default:
-        return "#757575"
+        return { bg: "#f3f4f6", color: "#374151" } // cinza
     }
   }
 
@@ -108,60 +109,12 @@ export default function GerenciamentoAluguel() {
     }
   }
 
-  const handleEditar = (aluguel) => {
-    setEditandoId(aluguel.id)
-    setFormData({ ...aluguel })
-  }
-
-  const handleCancelar = () => {
-    setEditandoId(null)
-    setFormData({})
-  }
-
-  const handleSalvar = async () => {
-    try {
-      await fetch(`/api/alugueis/${editandoId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      })
-      setEditandoId(null)
-      carregarDados()
-    } catch (err) {
-      console.error("Erro ao salvar aluguel:", err)
-    }
-  }
-
-  const handleExcluir = async (id) => {
-    if (!window.confirm("Deseja realmente excluir este aluguel?")) return
-    try {
-      await fetch(`/api/alugueis/${id}`, { method: "DELETE" })
-      carregarDados()
-    } catch (err) {
-      console.error("Erro ao excluir aluguel:", err)
-    }
-  }
-
-  const handleNovoAluguel = async () => {
-    try {
-      await fetch("/api/alugueis", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(novoAluguel),
-      })
-      setDialogAberto(false)
-      setNovoAluguel({
-        clienteId: "",
-        carroId: "",
-        dataInicio: "",
-        dataFim: "",
-        valorDiario: "",
-        status: "pendente",
-      })
-      carregarDados()
-    } catch (err) {
-      console.error("Erro ao criar aluguel:", err)
-    }
+  const calcularValorTotal = (dataInicio, dataFim, valorDiario) => {
+    if (!dataInicio || !dataFim || !valorDiario) return 0
+    const inicio = new Date(dataInicio)
+    const fim = new Date(dataFim)
+    const dias = Math.ceil((fim - inicio) / (1000 * 60 * 60 * 24))
+    return dias * Number.parseFloat(valorDiario)
   }
 
   const aluguelsFiltrados = alugueis.filter((a) => {
@@ -178,27 +131,22 @@ export default function GerenciamentoAluguel() {
     )
   })
 
-  const calcularValorTotal = (dataInicio, dataFim, valorDiario) => {
-    if (!dataInicio || !dataFim || !valorDiario) return 0
-    const inicio = new Date(dataInicio)
-    const fim = new Date(dataFim)
-    const dias = Math.ceil((fim - inicio) / (1000 * 60 * 60 * 24))
-    return dias * Number.parseFloat(valorDiario)
-  }
-
   return (
     <div className="screen-center">
       <div className="client-card">
         <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 3 }}>
-          <h2 className="client-title">Gerenciamento de Aluguéis</h2>
+          <Typography variant="h5" sx={{ fontWeight: 700 }}>
+            Gerenciamento de Aluguéis
+          </Typography>
           <Button
             variant="contained"
             startIcon={<Add />}
             onClick={() => setDialogAberto(true)}
             sx={{
               borderRadius: 2,
-              background: "linear-gradient(45deg, #4caf50 30%, #66bb6a 90%)",
-              boxShadow: "0 3px 5px 2px rgba(76, 175, 80, .3)",
+              fontWeight: 600,
+              background: "linear-gradient(90deg,#22c55e,#16a34a)",
+              "&:hover": { background: "linear-gradient(90deg,#15803d,#166534)" },
             }}
           >
             Novo Aluguel
@@ -216,179 +164,71 @@ export default function GerenciamentoAluguel() {
             aluguelsFiltrados.map((a) => {
               const cliente = clientes.find((c) => c.id === a.clienteId)
               const carro = carros.find((c) => c.id === a.carroId)
+              const status = getStatusColor(a.status)
 
               return (
                 <Grid item xs={12} key={a.id}>
                   <Card
                     sx={{
-                      borderRadius: 3,
-                      boxShadow: "0 6px 20px rgba(0,0,0,0.2)",
-                      background: "#E0E0E0",
-                      color: "black",
-                      width: "100%",
-                      minHeight: 200,
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "space-between",
+                      borderRadius: 4,
+                      background: "#ffffff",
+                      boxShadow: "0 6px 18px rgba(0,0,0,0.08)",
+                      color: "#111827",
                     }}
                   >
-                    {editandoId === a.id ? (
-                      <>
-                        {/* Modo edição */}
-                        <CardContent sx={{ p: 3 }}>
-                          <Stack spacing={2}>
-                            <Stack direction="row" spacing={2}>
-                              <FormControl fullWidth size="small">
-                                <InputLabel>Cliente</InputLabel>
-                                <Select
-                                  value={formData.clienteId ?? ""}
-                                  onChange={(e) => setFormData({ ...formData, clienteId: e.target.value })}
-                                >
-                                  {clientes.map((c) => (
-                                    <MenuItem key={c.id} value={c.id}>
-                                      {c.nome}
-                                    </MenuItem>
-                                  ))}
-                                </Select>
-                              </FormControl>
+                    <CardContent sx={{ p: 3 }}>
+                      <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
+                        <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                          Aluguel #{a.id}
+                        </Typography>
+                        <Chip
+                          icon={getStatusIcon(a.status)}
+                          label={a.status.toUpperCase()}
+                          sx={{
+                            backgroundColor: status.bg,
+                            color: status.color,
+                            fontWeight: 600,
+                            px: 1,
+                          }}
+                        />
+                      </Stack>
 
-                              <FormControl fullWidth size="small">
-                                <InputLabel>Carro</InputLabel>
-                                <Select
-                                  value={formData.carroId ?? ""}
-                                  onChange={(e) => setFormData({ ...formData, carroId: e.target.value })}
-                                >
-                                  {carros.map((c) => (
-                                    <MenuItem key={c.id} value={c.id}>
-                                      {c.marca} {c.modelo} - {c.placa}
-                                    </MenuItem>
-                                  ))}
-                                </Select>
-                              </FormControl>
-                            </Stack>
+                      <Divider sx={{ mb: 2 }} />
 
-                            <Stack direction="row" spacing={2}>
-                              <TextField
-                                label="Data Início"
-                                type="date"
-                                value={formData.dataInicio ?? ""}
-                                onChange={(e) => setFormData({ ...formData, dataInicio: e.target.value })}
-                                fullWidth
-                                size="small"
-                                InputLabelProps={{ shrink: true }}
-                              />
+                      <Stack spacing={1.2}>
+                        <Typography variant="body2" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                          <Person fontSize="small" />
+                          <strong>Cliente:</strong> {cliente ? cliente.nome : "Cliente não encontrado"}
+                        </Typography>
+                        <Typography variant="body2" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                          <DirectionsCar fontSize="small" />
+                          <strong>Carro:</strong> {carro ? `${carro.marca} ${carro.modelo} - ${carro.placa}` : "Carro não encontrado"}
+                        </Typography>
+                        <Typography variant="body2" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                          <CalendarToday fontSize="small" />
+                          <strong>Período:</strong> {new Date(a.dataInicio).toLocaleDateString()} até {new Date(a.dataFim).toLocaleDateString()}
+                        </Typography>
+                        <Typography variant="body2" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                          <AttachMoney fontSize="small" />
+                          <strong>Valor:</strong> R$ {Number.parseFloat(a.valorDiario).toFixed(2)}/dia —
+                          <strong> Total: R$ {calcularValorTotal(a.dataInicio, a.dataFim, a.valorDiario).toFixed(2)}</strong>
+                        </Typography>
+                      </Stack>
+                    </CardContent>
 
-                              <TextField
-                                label="Data Fim"
-                                type="date"
-                                value={formData.dataFim ?? ""}
-                                onChange={(e) => setFormData({ ...formData, dataFim: e.target.value })}
-                                fullWidth
-                                size="small"
-                                InputLabelProps={{ shrink: true }}
-                              />
-                            </Stack>
-
-                            <Stack direction="row" spacing={2}>
-                              <TextField
-                                label="Valor Diário (R$)"
-                                type="number"
-                                value={formData.valorDiario ?? ""}
-                                onChange={(e) => setFormData({ ...formData, valorDiario: e.target.value })}
-                                fullWidth
-                                size="small"
-                              />
-
-                              <FormControl fullWidth size="small">
-                                <InputLabel>Status</InputLabel>
-                                <Select
-                                  value={formData.status ?? ""}
-                                  onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                                >
-                                  <MenuItem value="pendente">Pendente</MenuItem>
-                                  <MenuItem value="ativo">Ativo</MenuItem>
-                                  <MenuItem value="finalizado">Finalizado</MenuItem>
-                                  <MenuItem value="cancelado">Cancelado</MenuItem>
-                                </Select>
-                              </FormControl>
-                            </Stack>
-                          </Stack>
-                        </CardContent>
-
-                        <Stack
-                          direction="row"
-                          justifyContent="flex-end"
-                          spacing={1}
-                          sx={{ px: 2, py: 1, borderTop: "1px solid rgba(0,0,0,0.12)" }}
-                        >
-                          <IconButton sx={{ color: "#2e7d32" }} onClick={handleSalvar}>
-                            <Save />
-                          </IconButton>
-                          <IconButton sx={{ color: "#6b7280" }} onClick={handleCancelar}>
-                            <Cancel />
-                          </IconButton>
-                        </Stack>
-                      </>
-                    ) : (
-                      <>
-                        {/* Modo visualização */}
-                        <CardContent sx={{ p: 3 }}>
-                          <Stack direction="row" justifyContent="space-between" alignItems="flex-start" sx={{ mb: 2 }}>
-                            <Typography variant="h6" sx={{ fontWeight: 700 }}>
-                              Aluguel #{a.id}
-                            </Typography>
-                            <Chip
-                              icon={getStatusIcon(a.status)}
-                              label={a.status.toUpperCase()}
-                              sx={{
-                                backgroundColor: getStatusColor(a.status),
-                                color: "white",
-                                fontWeight: 600,
-                              }}
-                            />
-                          </Stack>
-
-                          <Stack spacing={1}>
-                            <Typography variant="body2" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                              <Person fontSize="small" />
-                              <strong>Cliente:</strong> {cliente ? cliente.nome : "Cliente não encontrado"}
-                            </Typography>
-                            <Typography variant="body2" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                              <DirectionsCar fontSize="small" />
-                              <strong>Carro:</strong>{" "}
-                              {carro ? `${carro.marca} ${carro.modelo} - ${carro.placa}` : "Carro não encontrado"}
-                            </Typography>
-                            <Typography variant="body2" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                              <CalendarToday fontSize="small" />
-                              <strong>Período:</strong> {new Date(a.dataInicio).toLocaleDateString()} até{" "}
-                              {new Date(a.dataFim).toLocaleDateString()}
-                            </Typography>
-                            <Typography variant="body2" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                              <AttachMoney fontSize="small" />
-                              <strong>Valor:</strong> R$ {Number.parseFloat(a.valorDiario).toFixed(2)}/dia -
-                              <strong>
-                                {" "}
-                                Total: R$ {calcularValorTotal(a.dataInicio, a.dataFim, a.valorDiario).toFixed(2)}
-                              </strong>
-                            </Typography>
-                          </Stack>
-                        </CardContent>
-
-                        <Stack
-                          direction="row"
-                          justifyContent="flex-end"
-                          spacing={1}
-                          sx={{ px: 2, py: 1, borderTop: "1px solid rgba(0,0,0,0.12)" }}
-                        >
-                          <IconButton sx={{ color: "#1976d2" }} onClick={() => handleEditar(a)}>
-                            <Edit />
-                          </IconButton>
-                          <IconButton sx={{ color: "#d32f2f" }} onClick={() => handleExcluir(a.id)}>
-                            <Delete />
-                          </IconButton>
-                        </Stack>
-                      </>
-                    )}
+                    <Stack
+                      direction="row"
+                      justifyContent="flex-end"
+                      spacing={1}
+                      sx={{ px: 2, py: 1.5, borderTop: "1px solid #e5e7eb" }}
+                    >
+                      <IconButton sx={{ color: "#2563eb" }}>
+                        <Edit />
+                      </IconButton>
+                      <IconButton sx={{ color: "#ef4444" }}>
+                        <Delete />
+                      </IconButton>
+                    </Stack>
                   </Card>
                 </Grid>
               )
@@ -399,16 +239,39 @@ export default function GerenciamentoAluguel() {
         </Grid>
 
         {/* Dialog para novo aluguel */}
-        <Dialog open={dialogAberto} onClose={() => setDialogAberto(false)} maxWidth="md" fullWidth>
-          <DialogTitle>Novo Aluguel</DialogTitle>
-          <DialogContent>
-            <Stack spacing={3} sx={{ mt: 1 }}>
+        {/* Dialog para novo aluguel */}
+        <Dialog open={dialogAberto} onClose={() => setDialogAberto(false)} maxWidth="sm" fullWidth>
+          {/* Cabeçalho moderno */}
+          <DialogTitle
+            sx={{
+              fontWeight: 700,
+              textAlign: "center",
+              py: 2,
+              background: "linear-gradient(90deg,#2563eb,#1d4ed8)", // azul
+              color: "white",
+              borderTopLeftRadius: 2,
+              borderTopRightRadius: 2,
+            }}
+          >
+            Novo Aluguel
+          </DialogTitle>
+
+          {/* Conteúdo com espaçamento maior */}
+          <DialogContent sx={{ p: 4, backgroundColor: "#f9fafb", marginTop: 5 }}>
+            <Stack spacing={3}>
+              {/* Seletores lado a lado */}
               <Stack direction="row" spacing={2}>
                 <FormControl fullWidth>
                   <InputLabel>Cliente</InputLabel>
                   <Select
                     value={novoAluguel.clienteId}
-                    onChange={(e) => setNovoAluguel({ ...novoAluguel, clienteId: e.target.value })}
+                    onChange={(e) =>
+                      setNovoAluguel({ ...novoAluguel, clienteId: e.target.value })
+                    }
+                    sx={{
+                      borderRadius: 2,
+                      background: "white",
+                    }}
                   >
                     {clientes.map((c) => (
                       <MenuItem key={c.id} value={c.id}>
@@ -422,7 +285,13 @@ export default function GerenciamentoAluguel() {
                   <InputLabel>Carro</InputLabel>
                   <Select
                     value={novoAluguel.carroId}
-                    onChange={(e) => setNovoAluguel({ ...novoAluguel, carroId: e.target.value })}
+                    onChange={(e) =>
+                      setNovoAluguel({ ...novoAluguel, carroId: e.target.value })
+                    }
+                    sx={{
+                      borderRadius: 2,
+                      background: "white",
+                    }}
                   >
                     {carros.map((c) => (
                       <MenuItem key={c.id} value={c.id}>
@@ -433,42 +302,99 @@ export default function GerenciamentoAluguel() {
                 </FormControl>
               </Stack>
 
+              {/* Datas lado a lado */}
               <Stack direction="row" spacing={2}>
                 <TextField
                   label="Data Início"
                   type="date"
                   value={novoAluguel.dataInicio}
-                  onChange={(e) => setNovoAluguel({ ...novoAluguel, dataInicio: e.target.value })}
+                  onChange={(e) =>
+                    setNovoAluguel({ ...novoAluguel, dataInicio: e.target.value })
+                  }
                   fullWidth
                   InputLabelProps={{ shrink: true }}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      borderRadius: 2,
+                      background: "white",
+                    },
+                  }}
                 />
-
                 <TextField
                   label="Data Fim"
                   type="date"
                   value={novoAluguel.dataFim}
-                  onChange={(e) => setNovoAluguel({ ...novoAluguel, dataFim: e.target.value })}
+                  onChange={(e) =>
+                    setNovoAluguel({ ...novoAluguel, dataFim: e.target.value })
+                  }
                   fullWidth
                   InputLabelProps={{ shrink: true }}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      borderRadius: 2,
+                      background: "white",
+                    },
+                  }}
                 />
               </Stack>
 
+              {/* Valor */}
               <TextField
                 label="Valor Diário (R$)"
                 type="number"
                 value={novoAluguel.valorDiario}
-                onChange={(e) => setNovoAluguel({ ...novoAluguel, valorDiario: e.target.value })}
+                onChange={(e) =>
+                  setNovoAluguel({ ...novoAluguel, valorDiario: e.target.value })
+                }
                 fullWidth
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: 2,
+                    background: "white",
+                  },
+                }}
               />
             </Stack>
           </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setDialogAberto(false)}>Cancelar</Button>
-            <Button onClick={handleNovoAluguel} variant="contained">
+
+          {/* Rodapé com botões */}
+          <DialogActions
+            sx={{
+              px: 3,
+              pb: 3,
+              backgroundColor: "#f9fafb",
+              borderTop: "1px solid #e5e7eb",
+            }}
+          >
+            <Button
+              onClick={() => setDialogAberto(false)}
+              sx={{
+                borderRadius: 2,
+                fontWeight: 600,
+                color: "#374151",
+                border: "1px solid #d1d5db",
+                "&:hover": { backgroundColor: "#f3f4f6" },
+              }}
+            >
+              Cancelar
+            </Button>
+            <Button
+              onClick={() => { }}
+              variant="contained"
+              sx={{
+                borderRadius: 2,
+                fontWeight: 600,
+                px: 3,
+                background: "linear-gradient(90deg,#2563eb,#1d4ed8)",
+                boxShadow: "0 4px 14px rgba(37,99,235,0.4)",
+                "&:hover": { background: "linear-gradient(90deg,#1e3a8a,#1d4ed8)" },
+              }}
+            >
               Criar Aluguel
             </Button>
           </DialogActions>
         </Dialog>
+
       </div>
     </div>
   )

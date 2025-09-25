@@ -1,7 +1,15 @@
 "use client"
 
 import { useState } from "react"
-import { Card, CardContent, TextField, Button, Stack, Alert } from "@mui/material"
+import {
+  Card,
+  CardContent,
+  TextField,
+  Button,
+  Stack,
+  Alert,
+  Typography,
+} from "@mui/material"
 import { DirectionsCar, Save, Clear } from "@mui/icons-material"
 import "../styles/PageClient.css"
 
@@ -32,7 +40,6 @@ export default function CadastroCarros() {
   }
 
   const handleSalvar = async () => {
-    // Validação básica
     if (!formData.marca || !formData.modelo || !formData.ano || !formData.matricula || !formData.placa) {
       setMessage({ type: "error", text: "Todos os campos são obrigatórios!" })
       return
@@ -69,15 +76,27 @@ export default function CadastroCarros() {
   return (
     <div className="screen-center">
       <div className="client-card">
-        <h2 className="client-title">
-          <DirectionsCar sx={{ mr: 2, fontSize: "2rem" }} />
+        <Typography
+          variant="h4"
+          sx={{
+            fontWeight: 700,
+            display: "flex",
+            alignItems: "center",
+            mb: 3,
+          }}
+        >
+          <DirectionsCar sx={{ mr: 2, fontSize: "2.2rem", color: "#2563eb" }} />
           Cadastro de Carros
-        </h2>
+        </Typography>
 
         {message.text && (
           <Alert
             severity={message.type}
-            sx={{ mb: 3, borderRadius: 2 }}
+            sx={{
+              mb: 3,
+              borderRadius: 2,
+              fontWeight: 500,
+            }}
             onClose={() => setMessage({ type: "", text: "" })}
           >
             {message.text}
@@ -86,10 +105,9 @@ export default function CadastroCarros() {
 
         <Card
           sx={{
-            borderRadius: 3,
-            boxShadow: "0 6px 20px rgba(0,0,0,0.2)",
-            background: "#E0E0E0",
-            color: "black",
+            borderRadius: 4,
+            boxShadow: "0 8px 30px rgba(0,0,0,0.1)",
+            background: "#ffffff",
           }}
         >
           <CardContent sx={{ p: 4 }}>
@@ -99,14 +117,7 @@ export default function CadastroCarros() {
                 value={formData.marca}
                 onChange={(e) => handleInputChange("marca", e.target.value)}
                 fullWidth
-                variant="outlined"
                 required
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    borderRadius: 2,
-                    backgroundColor: "#f5f5f5",
-                  },
-                }}
               />
 
               <TextField
@@ -114,14 +125,7 @@ export default function CadastroCarros() {
                 value={formData.modelo}
                 onChange={(e) => handleInputChange("modelo", e.target.value)}
                 fullWidth
-                variant="outlined"
                 required
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    borderRadius: 2,
-                    backgroundColor: "#f5f5f5",
-                  },
-                }}
               />
 
               <TextField
@@ -130,15 +134,8 @@ export default function CadastroCarros() {
                 value={formData.ano}
                 onChange={(e) => handleInputChange("ano", e.target.value)}
                 fullWidth
-                variant="outlined"
                 required
                 inputProps={{ min: 1900, max: new Date().getFullYear() + 1 }}
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    borderRadius: 2,
-                    backgroundColor: "#f5f5f5",
-                  },
-                }}
               />
 
               <TextField
@@ -146,14 +143,7 @@ export default function CadastroCarros() {
                 value={formData.matricula}
                 onChange={(e) => handleInputChange("matricula", e.target.value)}
                 fullWidth
-                variant="outlined"
                 required
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    borderRadius: 2,
-                    backgroundColor: "#f5f5f5",
-                  },
-                }}
               />
 
               <TextField
@@ -161,15 +151,8 @@ export default function CadastroCarros() {
                 value={formData.placa}
                 onChange={(e) => handleInputChange("placa", e.target.value.toUpperCase())}
                 fullWidth
-                variant="outlined"
                 required
                 placeholder="ABC-1234"
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    borderRadius: 2,
-                    backgroundColor: "#f5f5f5",
-                  },
-                }}
               />
 
               <Stack direction="row" spacing={2} sx={{ mt: 4 }}>
@@ -181,11 +164,12 @@ export default function CadastroCarros() {
                   sx={{
                     flex: 1,
                     py: 1.5,
-                    borderRadius: 2,
-                    background: "linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)",
-                    boxShadow: "0 3px 5px 2px rgba(33, 203, 243, .3)",
+                    borderRadius: 3,
+                    fontWeight: 600,
+                    fontSize: "1rem",
+                    background: "linear-gradient(90deg,#2563eb,#1d4ed8)",
                     "&:hover": {
-                      background: "linear-gradient(45deg, #1976D2 30%, #1CB5E0 90%)",
+                      background: "linear-gradient(90deg,#1e40af,#1d4ed8)",
                     },
                   }}
                 >
@@ -200,13 +184,15 @@ export default function CadastroCarros() {
                   sx={{
                     flex: 1,
                     py: 1.5,
-                    borderRadius: 2,
-                    borderColor: "#666",
-                    color: "#666",
+                    borderRadius: 3,
+                    fontWeight: 600,
+                    fontSize: "1rem",
+                    borderColor: "#9ca3af",
+                    color: "#6b7280",
                     "&:hover": {
-                      borderColor: "#333",
-                      color: "#333",
-                      backgroundColor: "rgba(0,0,0,0.04)",
+                      borderColor: "#4b5563",
+                      color: "#111827",
+                      backgroundColor: "#f3f4f6",
                     },
                   }}
                 >

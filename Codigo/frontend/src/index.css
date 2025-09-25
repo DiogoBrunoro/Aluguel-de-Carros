@@ -14,10 +14,6 @@
 
   color-scheme: dark;
   color: var(--text);
-  background:
-    linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0) 30%),
-    radial-gradient(1200px 400px at 50% -50px, rgba(245,197,24,0.08), transparent 60%),
-    var(--bg);
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
