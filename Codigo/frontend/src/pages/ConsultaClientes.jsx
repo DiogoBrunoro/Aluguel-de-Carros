@@ -1,5 +1,5 @@
 // src/pages/ConsultaClientes.jsx
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Card,
   CardContent,
@@ -8,6 +8,11 @@ import {
   IconButton,
   TextField,
   Stack,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import {
   Edit,
@@ -18,6 +23,7 @@ import {
   CreditCard,  // CPF
   Work,        // Profissão
   Home,        // Endereço
+  PersonAdd,   // Novo cliente
 } from "@mui/icons-material";
 import "../styles/PageClient.css";
 import InputClient from "../components/InputClient";
@@ -27,6 +33,14 @@ export default function ConsultaClientes() {
   const [busca, setBusca] = useState("");
   const [editandoId, setEditandoId] = useState(null);
   const [formData, setFormData] = useState({});
+  const [dialogAberto, setDialogAberto] = useState(false);
+  const [novoCliente, setNovoCliente] = useState({
+    nome: "",
+    cpf: "",
+    rg: "",
+    profissao: "",
+    endereco: "",
+  });
 
   // const carregarClientes = () => {
   //   fetch("/api/clientes")
@@ -35,9 +49,7 @@ export default function ConsultaClientes() {
   //     .catch((err) => console.error("Erro ao buscar clientes:", err));
   // };
 
-  // useEffect(() => {
-  //   carregarClientes();
-  // }, []);
+  // useEffect(() => { carregarClientes(); }, []);
 
   const handleEditar = (cliente) => {
     setEditandoId(cliente.id);
@@ -57,7 +69,7 @@ export default function ConsultaClientes() {
         body: JSON.stringify(formData),
       });
       setEditandoId(null);
-      carregarClientes();
+      // carregarClientes();
     } catch (err) {
       console.error("Erro ao salvar cliente:", err);
     }
@@ -67,9 +79,30 @@ export default function ConsultaClientes() {
     if (!window.confirm("Deseja realmente excluir este cliente?")) return;
     try {
       await fetch(`/api/clientes/${id}`, { method: "DELETE" });
-      carregarClientes();
+      // carregarClientes();
     } catch (err) {
       console.error("Erro ao excluir cliente:", err);
+    }
+  };
+
+  const handleNovoCliente = async () => {
+    try {
+      await fetch("/api/clientes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(novoCliente),
+      });
+      setDialogAberto(false);
+      setNovoCliente({
+        nome: "",
+        cpf: "",
+        rg: "",
+        profissao: "",
+        endereco: "",
+      });
+      // carregarClientes();
+    } catch (err) {
+      console.error("Erro ao criar cliente:", err);
     }
   };
 
@@ -80,7 +113,27 @@ export default function ConsultaClientes() {
   return (
     <div className="screen-center">
       <div className="client-card">
-        <h2 className="client-title">Consulta de Clientes</h2>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          sx={{ mb: 3 }}
+        >
+          <h2 className="client-title">Consulta de Clientes</h2>
+          <Button
+            variant="contained"
+            startIcon={<PersonAdd />}
+            onClick={() => setDialogAberto(true)}
+            sx={{
+              borderRadius: 2,
+              fontWeight: 600,
+              background: "linear-gradient(90deg,#22c55e,#16a34a)",
+              "&:hover": { background: "linear-gradient(90deg,#15803d,#166534)" },
+            }}
+          >
+            Novo Cliente
+          </Button>
+        </Stack>
 
         <InputClient
           placeholder="Buscar cliente"
@@ -223,6 +276,160 @@ export default function ConsultaClientes() {
             <Typography variant="body1">Nenhum cliente encontrado.</Typography>
           )}
         </Grid>
+
+        {/* Dialog Novo Cliente */}
+        {/* Dialog Novo Cliente */}
+        <Dialog
+          open={dialogAberto}
+          onClose={() => setDialogAberto(false)}
+          maxWidth="sm"
+          fullWidth
+          PaperProps={{
+            sx: {
+              borderRadius: 4,
+              overflow: "hidden",
+              boxShadow: "0 12px 40px rgba(0,0,0,0.4)",
+            },
+          }}
+        >
+          <DialogTitle
+            sx={{
+              m: 0,
+              p: 3,
+              fontWeight: 700,
+              fontSize: "1.4rem",
+              textAlign: "center",
+              background: "linear-gradient(90deg, #22c55e, #16a34a)",
+              color: "white",
+            }}
+          >
+            Novo Cliente
+          </DialogTitle>
+
+          <DialogContent sx={{ p: 4, backgroundColor: "#f9fafb", marginTop: 5 }}>
+            <Stack spacing={3}>
+              <TextField
+                label="Nome"
+                value={novoCliente.nome}
+                onChange={(e) =>
+                  setNovoCliente({ ...novoCliente, nome: e.target.value })
+                }
+                fullWidth
+                variant="outlined"
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: 2,
+                    backgroundColor: "white",
+                  },
+                }}
+              />
+              <TextField
+                label="CPF"
+                value={novoCliente.cpf}
+                onChange={(e) =>
+                  setNovoCliente({ ...novoCliente, cpf: e.target.value })
+                }
+                fullWidth
+                variant="outlined"
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: 2,
+                    backgroundColor: "white",
+                  },
+                }}
+              />
+              <TextField
+                label="RG"
+                value={novoCliente.rg}
+                onChange={(e) =>
+                  setNovoCliente({ ...novoCliente, rg: e.target.value })
+                }
+                fullWidth
+                variant="outlined"
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: 2,
+                    backgroundColor: "white",
+                  },
+                }}
+              />
+              <TextField
+                label="Profissão"
+                value={novoCliente.profissao}
+                onChange={(e) =>
+                  setNovoCliente({ ...novoCliente, profissao: e.target.value })
+                }
+                fullWidth
+                variant="outlined"
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: 2,
+                    backgroundColor: "white",
+                  },
+                }}
+              />
+              <TextField
+                label="Endereço"
+                value={novoCliente.endereco}
+                onChange={(e) =>
+                  setNovoCliente({ ...novoCliente, endereco: e.target.value })
+                }
+                fullWidth
+                variant="outlined"
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: 2,
+                    backgroundColor: "white",
+                  },
+                }}
+              />
+            </Stack>
+          </DialogContent>
+
+          <DialogActions
+            sx={{
+              p: 3,
+              backgroundColor: "#f9fafb",
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <Button
+              onClick={() => setDialogAberto(false)}
+              sx={{
+                borderRadius: 3,
+                px: 3,
+                fontWeight: 600,
+                color: "#374151",
+                border: "1px solid #d1d5db",
+                "&:hover": {
+                  backgroundColor: "#e5e7eb",
+                  borderColor: "#9ca3af",
+                },
+              }}
+            >
+              Cancelar
+            </Button>
+
+            <Button
+              onClick={handleNovoCliente}
+              variant="contained"
+              sx={{
+                borderRadius: 3,
+                px: 3,
+                fontWeight: 600,
+                background: "linear-gradient(90deg, #22c55e, #16a34a)",
+                boxShadow: "0 4px 14px rgba(22, 163, 74, 0.4)",
+                "&:hover": {
+                  background: "linear-gradient(90deg, #15803d, #166534)",
+                },
+              }}
+            >
+              Criar Cliente
+            </Button>
+          </DialogActions>
+        </Dialog>
+
       </div>
     </div>
   );

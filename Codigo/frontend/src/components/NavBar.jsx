@@ -27,10 +27,10 @@ import {
   Home, // <-- Importar MenuIcon
 } from "@mui/icons-material";
 
-export default function Navbar( { setTelaAtiva, telaAtiva }) {
-  const [drawerOpen, setDrawerOpen] = useState(false); 
+export default function Navbar({ setTelaAtiva, telaAtiva }) {
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md')); 
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const handleDrawerToggle = () => {
     setDrawerOpen(!drawerOpen);
@@ -38,7 +38,7 @@ export default function Navbar( { setTelaAtiva, telaAtiva }) {
 
   const handleNavigateAndCloseDrawer = (tela) => {
     setTelaAtiva(tela);
-    setDrawerOpen(false); 
+    setDrawerOpen(false);
   };
 
   // Links da navegação
@@ -73,13 +73,17 @@ export default function Navbar( { setTelaAtiva, telaAtiva }) {
 
   return (
     <>
-     <AppBar
+      <AppBar
         position="static"
         sx={{
-          background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-          boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
+          background: "rgba(15, 15, 15, 0.9)", // preto translúcido
+          backdropFilter: "blur(8px)",         // efeito vidro
+          boxShadow: "0 4px 20px rgba(0,0,0,0.7)",
         }}
       >
+
+
+
         <Toolbar>
           {isMobile ? (
             <IconButton
@@ -91,7 +95,7 @@ export default function Navbar( { setTelaAtiva, telaAtiva }) {
             >
               <MenuIcon />
             </IconButton>
-          ) : ( 
+          ) : (
             <IconButton edge="start" color="inherit" onClick={() => setTelaAtiva("home")} sx={{ mr: 2 }}>
               <HomeIcon />
             </IconButton>
@@ -123,11 +127,11 @@ export default function Navbar( { setTelaAtiva, telaAtiva }) {
       </AppBar>
 
       <Drawer
-        anchor="left" 
+        anchor="left"
         open={drawerOpen}
         onClose={handleDrawerToggle}
         PaperProps={{
-          sx: { width: 240, background: 'linear-gradient(135deg, #e0f2f7 0%, #c1e8f3 100%)' } 
+          sx: { width: 240, background: 'linear-gradient(135deg, #e0f2f7 0%, #c1e8f3 100%)' }
         }}
       >
         {drawerContent}

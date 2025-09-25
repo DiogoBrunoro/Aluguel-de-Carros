@@ -129,123 +129,162 @@ export default function ConsultaCarros() {
           {carrosFiltrados.length > 0 ? (
             carrosFiltrados.map((c) => (
               <Grid item xs={12} key={c.id}>
-                <Card
-                  sx={{
-                    borderRadius: 3,
-                    boxShadow: "0 6px 20px rgba(0,0,0,0.2)",
-                    background: "#E0E0E0",
-                    color: "black",
-                    width: "100%",
-                    minHeight: 180,
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  {editandoId === c.id ? (
-                    <>
-                      {/* Modo edição */}
-                      <CardContent sx={{ p: 3 }}>
-                        <Stack spacing={1.25}>
-                          <TextField
-                            label="Placa"
-                            value={formData.placa ?? ""}
-                            onChange={(e) =>
-                              setFormData({ ...formData, placa: e.target.value })
-                            }
-                            fullWidth
-                            size="small"
-                          />
-                           <TextField
-                            label="Matrícula"
-                            value={formData.matricula ?? ""}
-                            onChange={(e) =>
-                              setFormData({ ...formData, matricula: e.target.value })
-                            }
-                            fullWidth
-                            size="small"
-                          />
-                          <TextField
-                            label="Ano"
-                            type="number"
-                            value={formData.ano ?? ""}
-                            onChange={(e) =>
-                              setFormData({ ...formData, ano: Number(e.target.value) })
-                            }
-                            fullWidth
-                            size="small"
-                          />
-                          <TextField
-                            label="Marca"
-                            value={formData.marca ?? ""}
-                            onChange={(e) =>
-                              setFormData({ ...formData, marca: e.target.value })
-                            }
-                            fullWidth
-                            size="small"
-                          />
-                          <TextField
-                            label="Modelo"
-                            value={formData.modelo ?? ""}
-                            onChange={(e) =>
-                              setFormData({ ...formData, modelo: e.target.value })
-                            }
-                            fullWidth
-                            size="small"
-                          />
-                        </Stack>
-                      </CardContent>
+<Card
+  sx={{
+    borderRadius: 4,
+    background: "#f9fafb", // fundo claro sólido
+    border: "1px solid #e5e7eb",
+    color: "#1f2937",
+    width: "100%",
+    minHeight: 180,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    boxShadow: "0 6px 15px rgba(0,0,0,0.1)",
+    transition: "transform 0.2s ease, box-shadow 0.2s ease",
+    "&:hover": {
+      transform: "translateY(-4px)",
+      boxShadow: "0 10px 20px rgba(0,0,0,0.15)",
+    },
+  }}
+>
+  {editandoId === c.id ? (
+    <>
+      {/* Modo edição */}
+      <CardContent sx={{ p: 3 }}>
+        <Stack spacing={1.25}>
+          <TextField
+            label="Placa"
+            value={formData.placa ?? ""}
+            onChange={(e) =>
+              setFormData({ ...formData, placa: e.target.value })
+            }
+            fullWidth
+            size="small"
+          />
+          <TextField
+            label="Matrícula"
+            value={formData.matricula ?? ""}
+            onChange={(e) =>
+              setFormData({ ...formData, matricula: e.target.value })
+            }
+            fullWidth
+            size="small"
+          />
+          <TextField
+            label="Ano"
+            type="number"
+            value={formData.ano ?? ""}
+            onChange={(e) =>
+              setFormData({ ...formData, ano: Number(e.target.value) })
+            }
+            fullWidth
+            size="small"
+          />
+          <TextField
+            label="Marca"
+            value={formData.marca ?? ""}
+            onChange={(e) =>
+              setFormData({ ...formData, marca: e.target.value })
+            }
+            fullWidth
+            size="small"
+          />
+          <TextField
+            label="Modelo"
+            value={formData.modelo ?? ""}
+            onChange={(e) =>
+              setFormData({ ...formData, modelo: e.target.value })
+            }
+            fullWidth
+            size="small"
+          />
+        </Stack>
+      </CardContent>
 
-                      <Stack
-                        direction="row"
-                        justifyContent="flex-end"
-                        spacing={1}
-                        sx={{ px: 2, py: 1, borderTop: "1px solid rgba(0,0,0,0.12)" }}
-                      >
-                        <IconButton sx={{ color: "#2e7d32" }} onClick={handleSalvar}>
-                          <Save />
-                        </IconButton>
-                        <IconButton sx={{ color: "#6b7280" }} onClick={handleCancelar}>
-                          <Cancel />
-                        </IconButton>
-                      </Stack>
-                    </>
-                  ) : (
-                    <>
-                      {/* Modo visualização */}
-                      <CardContent sx={{ p: 3 }}>
-                        <Typography variant="h6" sx={{ fontWeight: 700, mb: 2 }}>
-                          {c.marca} {c.modelo} ({c.ano})
-                        </Typography>
-                        <Stack spacing={1}>
-                          <Typography variant="body2" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                            <Tag fontSize="small" /> <strong>Placa:</strong> {c.placa}
-                          </Typography>
-                          <Typography variant="body2" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                            <DirectionsCar fontSize="small" /> <strong>Matrícula:</strong> {c.matricula}
-                          </Typography>
-                          <Typography variant="body2" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                            <DateRange fontSize="small" /> <strong>Ano:</strong> {c.ano}
-                          </Typography>
-                        </Stack>
-                      </CardContent>
+      <Stack
+        direction="row"
+        justifyContent="flex-end"
+        spacing={1}
+        sx={{ px: 2, py: 1.5, borderTop: "1px solid #e5e7eb" }}
+      >
+        <IconButton
+          sx={{ color: "#22c55e", "&:hover": { backgroundColor: "rgba(34,197,94,0.1)" } }}
+          onClick={handleSalvar}
+        >
+          <Save />
+        </IconButton>
+        <IconButton
+          sx={{ color: "#6b7280", "&:hover": { backgroundColor: "rgba(107,114,128,0.1)" } }}
+          onClick={handleCancelar}
+        >
+          <Cancel />
+        </IconButton>
+      </Stack>
+    </>
+  ) : (
+    <>
+      {/* Modo visualização */}
+      <CardContent sx={{ p: 3 }}>
+        <Typography
+          variant="h6"
+          sx={{
+            fontWeight: 700,
+            mb: 2,
+            color: "#111827",
+          }}
+        >
+          {c.marca} {c.modelo} ({c.ano})
+        </Typography>
+        <Stack spacing={1}>
+          <Typography
+            variant="body2"
+            sx={{ display: "flex", alignItems: "center", gap: 1, color: "#374151" }}
+          >
+            <Tag fontSize="small" sx={{ color: "#2563eb" }} />
+            <strong>Placa:</strong> {c.placa}
+          </Typography>
+          <Typography
+            variant="body2"
+            sx={{ display: "flex", alignItems: "center", gap: 1, color: "#374151" }}
+          >
+            <DirectionsCar fontSize="small" sx={{ color: "#16a34a" }} />
+            <strong>Matrícula:</strong> {c.matricula}
+          </Typography>
+          <Typography
+            variant="body2"
+            sx={{ display: "flex", alignItems: "center", gap: 1, color: "#374151" }}
+          >
+            <DateRange fontSize="small" sx={{ color: "#9333ea" }} />
+            <strong>Ano:</strong> {c.ano}
+          </Typography>
+        </Stack>
+      </CardContent>
 
-                      <Stack
-                        direction="row"
-                        justifyContent="flex-end"
-                        spacing={1}
-                        sx={{ px: 2, py: 1, borderTop: "1px solid rgba(0,0,0,0.12)" }}
-                      >
-                        <IconButton sx={{ color: "#1976d2" }} onClick={() => handleEditar(c)}>
-                          <Edit />
-                        </IconButton>
-                        <IconButton sx={{ color: "#d32f2f" }} onClick={() => handleExcluir(c.id)}>
-                          <Delete />
-                        </IconButton>
-                      </Stack>
-                    </>
-                  )}
-                </Card>
+      <Stack
+        direction="row"
+        justifyContent="flex-end"
+        spacing={1}
+        sx={{ px: 2, py: 1.5, borderTop: "1px solid #e5e7eb" }}
+      >
+        <IconButton
+          sx={{ color: "#3b82f6", "&:hover": { backgroundColor: "rgba(59,130,246,0.1)" } }}
+          onClick={() => handleEditar(c)}
+        >
+          <Edit />
+        </IconButton>
+        <IconButton
+          sx={{ color: "#ef4444", "&:hover": { backgroundColor: "rgba(239,68,68,0.1)" } }}
+          onClick={() => handleExcluir(c.id)}
+        >
+          <Delete />
+        </IconButton>
+      </Stack>
+    </>
+  )}
+</Card>
+
+
               </Grid>
             ))
           ) : (
