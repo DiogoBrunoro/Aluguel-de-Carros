@@ -2,15 +2,15 @@ import express from "express";
 import { criarCliente, listarClientes, atualizarCliente, buscarCliente, buscarClientePorCpf, excluirCliente } from "../controllers/clienteController"
 import { loginCliente } from "../controllers/AuthController";
 
-const router = express.Router();
+const ClienteRouter = express.Router();
 
-router.post("/clientes", criarCliente)
-router.get("/clientes", listarClientes)
-router.get("/clientes/:id", buscarCliente)
-router.get("/clientes/cpf/:cpf", buscarClientePorCpf)
-router.put("/clientes/:id", atualizarCliente)
-router.delete("/clientes/:id", excluirCliente)
-router.post("/login", loginCliente)
+ClienteRouter.post("/clientes", criarCliente)
+ClienteRouter.get("/clientes", listarClientes)
+ClienteRouter.get("/clientes/:id", buscarCliente)
+ClienteRouter.get("/clientes/cpf/:cpf", buscarClientePorCpf)
+ClienteRouter.put("/clientes/:id", atualizarCliente)
+ClienteRouter.delete("/clientes/:id", excluirCliente)
+ClienteRouter.post("/login", loginCliente)
 
 
-export default router;
+export default ClienteRouter;
