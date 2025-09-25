@@ -7,6 +7,7 @@ export interface Cliente {
   profissao?: string
   rendimentos: number[] 
   empregadores: string[]
+  senha?: string;  
   createdAt?: Date
   updatedAt?: Date
 }

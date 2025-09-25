@@ -3,49 +3,54 @@ import type { Cliente } from "../../application/model/ClienteModel"
 import type { CreateClienteDTO, UpdateClienteDTO } from "../../application/dto/ClienteDTO"
 import sql from "../config/database"
 import { v4 as uuidv4 } from "uuid"
+import bcrypt from "bcrypt";
 
 export class ClienteRepository implements IClienteRepository {
     async create(clienteData: CreateClienteDTO): Promise<Cliente> {
-        const clienteId = uuidv4()
+        const clienteId = uuidv4();
 
         try {
-            // Validar que rendimentos tem exatamente 3 valores
+            // Validar rendimentos
             if (!clienteData.rendimentos || clienteData.rendimentos.length !== 3) {
-                throw new Error("Rendimentos deve conter exatamente 3 valores")
+                throw new Error("Rendimentos deve conter exatamente 3 valores");
             }
+
+            // Criptografar a senha
+            const senhaHash = clienteData.senha ? await bcrypt.hash(clienteData.senha, 10) : null;
 
             // Inserir cliente
             const cliente = await sql`
-        INSERT INTO clientes (id, rg, cpf, nome, endereco, profissao, rendimentos, empregadores)
-        VALUES (
-          ${clienteId}, 
-          ${clienteData.rg}, 
-          ${clienteData.cpf}, 
-          ${clienteData.nome}, 
-          ${clienteData.endereco}, 
-          ${clienteData.profissao || null},
-          ${clienteData.rendimentos},
-          ${clienteData.empregadores}
-        )
-        RETURNING *;
-      `
+                INSERT INTO clientes 
+                    (id, rg, cpf, nome, endereco, profissao, rendimentos, empregadores, senha)
+                VALUES 
+                    (${clienteId}, 
+                     ${clienteData.rg}, 
+                     ${clienteData.cpf}, 
+                     ${clienteData.nome}, 
+                     ${clienteData.endereco}, 
+                     ${clienteData.profissao || null}, 
+                     ${clienteData.rendimentos}, 
+                     ${clienteData.empregadores}, 
+                     ${senhaHash})
+                RETURNING *;
+            `;
 
             // Inserir entidades empregadoras se existirem
             if (clienteData.empregadores && clienteData.empregadores.length > 0) {
                 for (let i = 0; i < clienteData.empregadores.length; i++) {
-                    const empregador = clienteData.empregadores[i]
-                    const rendimento = clienteData.rendimentos[i] || 0
+                    const empregador = clienteData.empregadores[i];
+                    const rendimento = clienteData.rendimentos[i] || 0;
 
                     await sql`
-            INSERT INTO entidades_empregadoras (cliente_id, nome, rendimento)
-            VALUES (${clienteId}, ${empregador}, ${rendimento});
-          `
+                        INSERT INTO entidades_empregadoras (cliente_id, nome, rendimento)
+                        VALUES (${clienteId}, ${empregador}, ${rendimento});
+                    `;
                 }
             }
 
-            return this.mapToCliente(cliente[0])
+            return this.mapToCliente(cliente[0]);
         } catch (error) {
-            throw new Error(`Erro ao criar cliente: ${error}`)
+            throw new Error(`Erro ao criar cliente: ${error}`);
         }
     }
 
@@ -165,10 +170,11 @@ export class ClienteRepository implements IClienteRepository {
             cpf: row.cpf,
             endereco: row.endereco,
             profissao: row.profissao,
-            rendimentos: row.rendimentos ? row.rendimentos : [0, 0, 0],
-            empregadores: row.empregadores ? row.empregadores : [],
+            rendimentos: row.rendimentos || [0, 0, 0],
+            empregadores: row.empregadores || [],
+            senha: row.senha, // agora incluído para login
             createdAt: row.created_at,
             updatedAt: row.updated_at,
-        }
+        };
     }
 }
