@@ -1,111 +1,156 @@
-// src/pages/CadastroCliente.jsx
-import React, { useRef, useState } from "react";
-import { Button } from "@mui/material";
-import InputClient from "../components/InputClient";
-import "../styles/PageClient.css";
+"use client"
 
-const API =
-  (typeof window !== "undefined" && window.API_BASE) ||
-  (typeof window !== "undefined"
-    ? `${window.location.origin}/api`
-    : "http://localhost:3000/api");
+import { useState } from "react"
+import { Card, CardContent } from "../components/ui/Card"
+import { Button } from "../components/ui/Button"
+import { Input } from "../components/ui/Input"
+import { Label } from "../components/ui/Label"
+import { Car, Mail, Lock, User, Phone, ArrowRight } from "lucide-react"
+import { CardMembership } from "@mui/icons-material"
+// import { criarCliente } from "../../api/usuario"
 
-export default function CadastroCliente() {
-  const nomeRef = useRef(null);
-  const cpfRef = useRef(null);
-  const rgRef = useRef(null);
-  const profRef = useRef(null);
-  const endRef = useRef(null);
+export default function RegisterScreen({ onSwitchToLogin }) {
+  const [formData, setFormData] = useState({
+    name: "",
+    cpf: "",
+    rg: "",
+    password: "",
+    confirmPassword: "",
+  })
 
-  const [msg, setMsg] = useState("");
-  const [err, setErr] = useState("");
+  const handleChange = (field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }))
+  }
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    setMsg("");
-    setErr("");
-
-    const payload = {
-      nome: nomeRef.current?.getValue() || "",
-      cpf: cpfRef.current?.getValue() || null,
-      rg: rgRef.current?.getValue() || null,
-      profissao: profRef.current?.getValue() || null,
-      endereco: endRef.current?.getValue() || null,
-      empregadores: [], // seu back aceita array; deixei vazio aqui
-    };
-
-    if (!payload.nome.trim()) {
-      setErr("Nome é obrigatório.");
-      return;
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    if (formData.password !== formData.confirmPassword) {
+      alert("As senhas não coincidem!")
+      return
     }
-
-    try {
-      const r = await fetch(`${API}/clientes`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      if (!r.ok) throw new Error((await r.text()) || "Falha ao salvar");
-
-      // sucesso
-      setMsg("Cliente cadastrado!");
-      nomeRef.current?.clear();
-      cpfRef.current?.clear();
-      rgRef.current?.clear();
-      profRef.current?.clear();
-      endRef.current?.clear();
-      nomeRef.current?.focus();
-    } catch (e) {
-      setErr(e.message || "Erro ao cadastrar");
-    }
-  };
+    // criarCliente(formData)
+  }
 
   return (
-    <div className="screen-center">
-      <form className="client-card" onSubmit={onSubmit}>
-        <h2 className="client-title">Cadastro de Cliente</h2>
-
-        <div className="client-stack">
-          <InputClient ref={nomeRef} placeholder="Nome completo *" />
-          <InputClient ref={cpfRef} placeholder="CPF" />
-          <InputClient ref={rgRef} placeholder="RG" />
-          <InputClient ref={profRef} placeholder="Profissão" />
-          <InputClient ref={endRef} placeholder="Endereço" />
-
-          {msg && (
-            <div style={{ color: "#22c55e", textAlign: "center", fontWeight: 600 }}>
-              {msg}
-            </div>
-          )}
-          {err && (
-            <div style={{ color: "#ef4444", textAlign: "center", fontWeight: 600 }}>
-              {err}
-            </div>
-          )}
-
-          <div className="client-actions">
-            <Button type="submit" variant="contained">
-              Salvar
-            </Button>
-            <Button
-              variant="outlined"
-              type="button"
-              onClick={() => {
-                nomeRef.current?.clear();
-                cpfRef.current?.clear();
-                rgRef.current?.clear();
-                profRef.current?.clear();
-                endRef.current?.clear();
-                setMsg("");
-                setErr("");
-                nomeRef.current?.focus();
-              }}
-            >
-              Limpar
-            </Button>
+    <div className="screen-container register-bg">
+      <div className="form-container">
+        {/* Logo/Header */}
+        <div className="header-section">
+          <div className="logo-container purple-gradient">
+            <Car className="action-icon" style={{ width: "2rem", height: "2rem", margin: 0 }} />
           </div>
+          <h1 className="main-title">Criar Conta</h1>
+          <p className="subtitle">Cadastre-se para acessar o sistema</p>
         </div>
-      </form>
+
+        {/* Register Card */}
+        <Card>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="form-space compact">
+              <div className="field-group">
+                <Label htmlFor="name">Nome Completo</Label>
+                <div className="input-wrapper">
+                  <User className="input-icon" />
+                  <Input
+                    id="name"
+                    type="text"
+                    placeholder="Seu nome completo"
+                    value={formData.name}
+                    onChange={(e) => handleChange("name", e.target.value)}
+                    className="with-icon purple-focus"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="field-group">
+                <Label htmlFor="cpf">CPF</Label>
+                <div className="input-wrapper">
+                  <CardMembership className="input-icon" />
+                  <Input
+                    id="cpf"
+                    type="text"
+                    placeholder="000.000.000-00"
+                    value={formData.cpf}
+                    onChange={(e) => handleChange("cpf", e.target.value)}
+                    className="with-icon purple-focus"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="field-group">
+                <Label htmlFor="rg">RG</Label>
+                <div className="input-wrapper">
+                  <Mail className="input-icon" />
+                  <Input
+                    id="rg"
+                    type="text"
+                    placeholder="MG-00.000.000"
+                    value={formData.rg}
+                    onChange={(e) => handleChange("rg", e.target.value)}
+                    className="with-icon purple-focus"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="field-group">
+                <Label htmlFor="password">Senha</Label>
+                <div className="input-wrapper">
+                  <Lock className="input-icon" />
+                  <Input
+                    id="password"
+                    type="password"
+                    placeholder="••••••••"
+                    value={formData.password}
+                    onChange={(e) => handleChange("password", e.target.value)}
+                    className="with-icon purple-focus"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="field-group">
+                <Label htmlFor="confirmPassword">Confirmar Senha</Label>
+                <div className="input-wrapper">
+                  <Lock className="input-icon" />
+                  <Input
+                    id="confirmPassword"
+                    type="password"
+                    placeholder="••••••••"
+                    value={formData.confirmPassword}
+                    onChange={(e) => handleChange("confirmPassword", e.target.value)}
+                    className="with-icon purple-focus"
+                    required
+                  />
+                </div>
+              </div>
+
+              <Button type="submit" variant="secondary" className="btn-full">
+                <span className="flex-center">
+                  Criar Conta
+                  <ArrowRight style={{ width: "1rem", height: "1rem" }} />
+                </span>
+              </Button>
+            </form>
+
+            <div className="mt-6 text-center">
+              <p className="text-slate-300">
+                Já tem uma conta?{" "}
+                <button onClick={onSwitchToLogin} className="text-link purple">
+                  Faça login
+                </button>
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Footer */}
+        <div className="footer-section">
+          <p className="footer-text">© 2025 Sistema de Aluguel de Carros</p>
+        </div>
+      </div>
     </div>
-  );
+  )
 }
