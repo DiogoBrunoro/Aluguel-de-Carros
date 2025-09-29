@@ -6,8 +6,12 @@ import { Button } from "../components/ui/Button"
 import { Input } from "../components/ui/Input"
 import { Label } from "../components/ui/Label"
 import { Car, Mail, Lock, ArrowRight } from "lucide-react"
+import { useNavigate } from "react-router-dom"
 
-export default function LoginScreen({ onLogin, onSwitchToRegister }) {
+export default function LoginScreen() {
+
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
@@ -75,7 +79,7 @@ export default function LoginScreen({ onLogin, onSwitchToRegister }) {
             <div className="mt-6 text-center">
               <p className="text-slate-300">
                 Não tem uma conta?{" "}
-                <button onClick={onSwitchToRegister} className="text-link">
+                <button onClick={() => navigate("/cadastro")} className="text-link">
                   Cadastre-se
                 </button>
               </p>

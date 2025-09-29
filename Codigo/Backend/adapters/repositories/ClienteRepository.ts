@@ -40,11 +40,12 @@ export class ClienteRepository implements IClienteRepository {
                 for (let i = 0; i < clienteData.empregadores.length; i++) {
                     const empregador = clienteData.empregadores[i];
                     const rendimento = clienteData.rendimentos[i] || 0;
+                    const empregadorId = uuidv4();
 
                     await sql`
-                        INSERT INTO entidades_empregadoras (cliente_id, nome, rendimento)
-                        VALUES (${clienteId}, ${empregador}, ${rendimento});
-                    `;
+        INSERT INTO entidades_empregadoras (id, cliente_id, nome, rendimento)
+        VALUES (${empregadorId}, ${clienteId}, ${empregador}, ${rendimento});
+    `;
                 }
             }
 

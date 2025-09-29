@@ -5,15 +5,22 @@ import { Card, CardContent } from "../components/ui/Card"
 import { Button } from "../components/ui/Button"
 import { Input } from "../components/ui/Input"
 import { Label } from "../components/ui/Label"
-import { Car, Mail, Lock, User, Phone, ArrowRight } from "lucide-react"
+import { Car, Mail, Lock, User, Phone, ArrowRight, BriefcaseBusiness, DollarSign, MapPinHouse, Users } from "lucide-react"
 import { CardMembership } from "@mui/icons-material"
-// import { criarCliente } from "../../api/usuario"
+import { useNavigate } from "react-router-dom"
+import { criarCliente } from "../../api/usuario"
 
-export default function RegisterScreen({ onSwitchToLogin }) {
+export default function RegisterScreen() {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: "",
     cpf: "",
     rg: "",
+    endereco: "",
+    profissao: "",
+    rendimentos: "",
+    empregadores: "",
     password: "",
     confirmPassword: "",
   })
@@ -22,13 +29,40 @@ export default function RegisterScreen({ onSwitchToLogin }) {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
+
     if (formData.password !== formData.confirmPassword) {
       alert("As senhas não coincidem!")
       return
     }
-    // criarCliente(formData)
+
+    const clienteData = {
+      nome: formData.name,
+      rg: formData.rg,
+      cpf: formData.cpf,
+      endereco: formData.endereco,
+      profissao: formData.profissao || undefined,
+      rendimentos: formData.rendimentos
+        .split(",")
+        .map((r) => parseFloat(r.trim()))
+        .filter((r) => !isNaN(r)),
+      empregadores: formData.empregadores
+        .split(",")
+        .map((e) => e.trim())
+        .filter((e) => e.length > 0),
+      senha: formData.password,
+    }
+    console.log("Cliente Data: ", clienteData)
+    try {
+      console.log("Cliente Data: ", clienteData)
+      const response = await criarCliente(clienteData)
+      console.log("Response: ", response)
+      alert("Cliente criado com sucesso!")
+    } catch (error) {
+      alert("Erro ao criar cliente. Tente novamente.")
+      console.log("Error: ", error)
+    }
   }
 
   return (
@@ -127,6 +161,69 @@ export default function RegisterScreen({ onSwitchToLogin }) {
                 </div>
               </div>
 
+              <div className="field-group">
+                <Label htmlFor="endereco">Endereço</Label>
+                <div className="input-wrapper">
+                  <MapPinHouse className="input-icon" />
+                  <Input
+                    id="endereco"
+                    type="text"
+                    placeholder="Rua, nº, bairro, cidade"
+                    value={formData.endereco}
+                    onChange={(e) => handleChange("endereco", e.target.value)}
+                    className="with-icon purple-focus"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="field-group">
+                <Label htmlFor="profissao">Profissão</Label>
+                <div className="input-wrapper">
+                  <BriefcaseBusiness className="input-icon" />
+                  <Input
+                    id="profissao"
+                    type="text"
+                    placeholder="Sua profissão"
+                    value={formData.profissao}
+                    onChange={(e) => handleChange("profissao", e.target.value)}
+                    className="with-icon purple-focus"
+                  />
+                </div>
+              </div>
+
+              <div className="field-group">
+                <Label htmlFor="rendimentos">Rendimentos</Label>
+                <div className="input-wrapper">
+                  <DollarSign className="input-icon" />
+                  <Input
+                    id="rendimentos"
+                    type="text"
+                    placeholder="Ex: 2500, 3200, 1500"
+                    value={formData.rendimentos}
+                    onChange={(e) => handleChange("rendimentos", e.target.value)}
+                    className="with-icon purple-focus"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="field-group">
+                <Label htmlFor="empregadores">Empregadores</Label>
+                <div className="input-wrapper">
+                  <Users className="input-icon" />
+                  <Input
+                    id="empregadores"
+                    type="text"
+                    placeholder="Ex: Empresa A, Empresa B"
+                    value={formData.empregadores}
+                    onChange={(e) => handleChange("empregadores", e.target.value)}
+                    className="with-icon purple-focus"
+                    required
+                  />
+                </div>
+              </div>
+
               <Button type="submit" variant="secondary" className="btn-full">
                 <span className="flex-center">
                   Criar Conta
@@ -138,7 +235,7 @@ export default function RegisterScreen({ onSwitchToLogin }) {
             <div className="mt-6 text-center">
               <p className="text-slate-300">
                 Já tem uma conta?{" "}
-                <button onClick={onSwitchToLogin} className="text-link purple">
+                <button onClick={() => navigate("/login")} className="text-link purple">
                   Faça login
                 </button>
               </p>

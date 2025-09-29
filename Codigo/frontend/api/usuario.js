@@ -4,11 +4,6 @@ import apiUrl from "./apiUrl";
 
 const API_BASE_URL = apiUrl; 
 
-/**
- * Função utilitária para lidar com a resposta da API.
- * @param {Response} response - A resposta HTTP da requisição fetch.
- * @returns {Promise<any>} - O corpo da resposta JSON ou lança um erro.
- */
 async function handleApiResponse(response) {
   const data = await response.json();
   if (!response.ok) {
@@ -18,11 +13,6 @@ async function handleApiResponse(response) {
   return data;
 }
 
-/**
- * Cria um novo cliente.
- * @param {object} clienteData - Dados do cliente a ser criado (conforme CreateClienteDTO).
- * @returns {Promise<object>} - O cliente criado.
- */
 export async function criarCliente(clienteData) {
   try {
     const response = await fetch(`${API_BASE_URL}/clientes`, {
@@ -32,6 +22,7 @@ export async function criarCliente(clienteData) {
       },
       body: JSON.stringify(clienteData),
     });
+    console.log("Response: ", response)
     return await handleApiResponse(response);
   } catch (error) {
     console.error('Erro ao criar cliente:', error);

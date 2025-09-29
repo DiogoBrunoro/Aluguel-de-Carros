@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import PageCliente from "./pages/PageCliente";
-import CadastroCliente from "./pages/CadastroCliente";
 import ConsultaClientes from "./pages/ConsultaClientes";
 import ConsultaCarros from "./pages/ConsultaCarros";
 import GerenciamentoAluguel from "./pages/GerenciaAlugueis";
@@ -35,7 +34,6 @@ export default function App() {
           <Route path="/carros/novo" element={<CadastroCarros />} />
           <Route path="/carros/gerencia" element={<GerenciamentoAluguel />} />
           <Route path="/login" element={<LoginScreen />} />
-          <Route path="/cadastro" element={<CadastroCliente></CadastroCliente>}></Route>
         </Routes>
       </div>
     </BrowserRouter>
