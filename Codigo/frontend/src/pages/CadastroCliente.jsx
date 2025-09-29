@@ -44,7 +44,7 @@ export default function RegisterScreen({ onSwitchToLogin }) {
         </div>
 
         {/* Register Card */}
-        <Card>
+        <Card className="bg-white/30 backdrop-blur-3xl shadow-lg">
           <CardContent>
             <form onSubmit={handleSubmit} className="form-space compact">
               <div className="field-group">
