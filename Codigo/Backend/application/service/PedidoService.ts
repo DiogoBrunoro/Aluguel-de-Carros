@@ -1,6 +1,6 @@
-import type { PedidoAluguel } from "../model/PedidoAluguelModel";
-import type { CreatePedidoDTO, UpdatePedidoDTO } from "../dto/PedidoDTO";
-import { IPedidoRepository } from "../interface/IPedidoRepository";
+import type { PedidoAluguel } from "../model/PedidoAluguelModel.js";
+import type { CreatePedidoDTO, UpdatePedidoDTO } from "../dto/PedidoDTO.js";
+import { IPedidoRepository } from "../interface/IPedidoRepository.js";
 import crypto from "crypto";
 
 export class PedidoService {

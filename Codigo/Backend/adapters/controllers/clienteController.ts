@@ -1,7 +1,7 @@
 import type { Handler } from "express"
-import { ClienteService } from "../../application/service/ClienteService"
-import { CreateClienteDTO, UpdateClienteDTO } from "../../application/dto/ClienteDTO"
-import { ClienteRepository } from "../repositories/ClienteRepository"
+import { ClienteService } from "../../application/service/ClienteService.js"
+import { CreateClienteDTO, UpdateClienteDTO } from "../../application/dto/ClienteDTO.js"
+import { ClienteRepository } from "../repositories/ClienteRepository.js"
 
 // Dependency Injection
 const clienteRepository = new ClienteRepository()

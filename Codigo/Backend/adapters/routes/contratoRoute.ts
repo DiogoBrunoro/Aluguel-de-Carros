@@ -1,6 +1,6 @@
 // routes/contratoRoutes.ts
 import express from "express";
-import { criarContrato, atualizarContrato, buscarContratoPorPedido } from "../controllers/ContratoController";
+import { criarContrato, atualizarContrato, buscarContratoPorPedido } from "../controllers/ContratoController.js";
 
 const ContratoRouter = express.Router();
 

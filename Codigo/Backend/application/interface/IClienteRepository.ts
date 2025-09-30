@@ -1,5 +1,5 @@
-import type { Cliente } from "../model/ClienteModel"
-import type { CreateClienteDTO, UpdateClienteDTO } from "../dto/ClienteDTO"
+import type { Cliente } from "../model/ClienteModel.js"
+import type { CreateClienteDTO, UpdateClienteDTO } from "../dto/ClienteDTO.js"
 
 export interface IClienteRepository {
   create(clienteData: CreateClienteDTO): Promise<Cliente>

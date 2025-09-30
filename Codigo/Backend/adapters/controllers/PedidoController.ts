@@ -1,8 +1,8 @@
 // Adapters/Controllers/PedidoController.ts
 import type { Handler } from "express";
-import { PedidoService } from "../../application/service/PedidoService";
-import { CreatePedidoDTO, UpdatePedidoDTO } from "../../application/dto/PedidoDTO";
-import { PedidoRepository } from "../repositories/PedidoRepository";
+import { PedidoService } from "../../application/service/PedidoService.js";
+import { CreatePedidoDTO, UpdatePedidoDTO } from "../../application/dto/PedidoDTO.js";
+import { PedidoRepository } from "../repositories/PedidoRepository.js";
 
 // Dependency Injection
 const pedidoRepository = new PedidoRepository();

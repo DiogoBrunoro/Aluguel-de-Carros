@@ -1,6 +1,6 @@
-import type { Contrato } from "../model/ContratoModel";
-import type { CreateContratoDTO, UpdateContratoDTO } from "../dto/ContratoDTO";
-import { IContratoRepository } from "../interface/IContratoRepository";
+import type { Contrato } from "../model/ContratoModel.js";
+import type { CreateContratoDTO, UpdateContratoDTO } from "../dto/ContratoDTO.js";
+import { IContratoRepository } from "../interface/IContratoRepository.js";
 import crypto from "crypto";
 
 export class ContratoService {

@@ -1,5 +1,5 @@
-import type { Contrato } from "../model/ContratoModel";
-import type { CreateContratoDTO, UpdateContratoDTO } from "../dto/ContratoDTO";
+import type { Contrato } from "../model/ContratoModel.js";
+import type { CreateContratoDTO, UpdateContratoDTO } from "../dto/ContratoDTO.js";
 
 export interface IContratoRepository {
     create(contratoData: CreateContratoDTO): Promise<Contrato>;

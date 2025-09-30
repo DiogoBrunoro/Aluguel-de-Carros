@@ -1,6 +1,6 @@
-import type { Automovel } from "../model/AutomovelModel";
-import type { CreateAutomovelDTO, UpdateAutomovelDTO } from "../dto/AutomovelDTO";
-import { IAutomovelRepository } from "../interface/IAutomovelRepository";
+import type { Automovel } from "../model/AutomovelModel.js";
+import type { CreateAutomovelDTO, UpdateAutomovelDTO } from "../dto/AutomovelDTO.js";
+import { IAutomovelRepository } from "../interface/IAutomovelRepository.js";
 import crypto from "crypto";
 
 export class AutomovelService {

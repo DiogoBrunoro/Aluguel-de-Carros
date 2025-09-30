@@ -1,6 +1,6 @@
 import express from "express";
-import { criarCliente, listarClientes, atualizarCliente, buscarCliente, buscarClientePorCpf, excluirCliente } from "../controllers/clienteController"
-import { loginCliente } from "../controllers/AuthController";
+import { criarCliente, listarClientes, atualizarCliente, buscarCliente, buscarClientePorCpf, excluirCliente } from "../controllers/clienteController.js"
+import { loginCliente } from "../controllers/AuthController.js";
 
 const ClienteRouter = express.Router();
 

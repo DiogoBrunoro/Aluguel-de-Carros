@@ -1,8 +1,8 @@
 // Adapters/Controllers/ContratoController.ts
 import type { Handler } from "express";
-import { ContratoService } from "../../application/service/ContratoService";
-import { CreateContratoDTO, UpdateContratoDTO } from "../../application/dto/ContratoDTO";
-import { ContratoRepository } from "../repositories/ContratoRepository";
+import { ContratoService } from "../../application/service/ContratoService.js";
+import { CreateContratoDTO, UpdateContratoDTO } from "../../application/dto/ContratoDTO.js";
+import { ContratoRepository } from "../repositories/ContratoRepository.js";
 
 // Dependency Injection
 const contratoRepository = new ContratoRepository();

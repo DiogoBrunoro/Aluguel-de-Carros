@@ -1,8 +1,8 @@
 // Adapters/Controllers/AutomovelController.ts
 import type { Handler } from "express";
-import { AutomovelService } from "../../application/service/AutomovelService";
-import { CreateAutomovelDTO, UpdateAutomovelDTO } from "../../application/dto/AutomovelDTO";
-import { AutomovelRepository } from "../repositories/AutomovelRepository";
+import { AutomovelService } from "../../application/service/AutomovelService.js";
+import { CreateAutomovelDTO, UpdateAutomovelDTO } from "../../application/dto/AutomovelDTO.js";
+import { AutomovelRepository } from "../repositories/AutomovelRepository.js";
 
 // Dependency Injection
 const automovelRepository = new AutomovelRepository();

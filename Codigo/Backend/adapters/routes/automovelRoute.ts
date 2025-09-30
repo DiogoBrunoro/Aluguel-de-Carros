@@ -1,6 +1,6 @@
 // routes/automovelRoutes.ts
 import express from "express";
-import { criarAutomovel, listarAutomoveisDisponiveis, atualizarAutomovel } from "../controllers/AutomovelController";
+import { criarAutomovel, listarAutomoveisDisponiveis, atualizarAutomovel } from "../controllers/AutomovelController.js";
 
 const AutomovelRouter = express.Router();
 

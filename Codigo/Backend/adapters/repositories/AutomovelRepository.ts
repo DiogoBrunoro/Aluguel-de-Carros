@@ -1,7 +1,7 @@
-import type { IAutomovelRepository } from "../../application/interface/IAutomovelRepository";
-import type { Automovel } from "../../application/model/AutomovelModel";
-import type { CreateAutomovelDTO, UpdateAutomovelDTO } from "../../application/dto/AutomovelDTO";
-import sql from "../config/database";
+import type { IAutomovelRepository } from "../../application/interface/IAutomovelRepository.js";
+import type { Automovel } from "../../application/model/AutomovelModel.js";
+import type { CreateAutomovelDTO, UpdateAutomovelDTO } from "../../application/dto/AutomovelDTO.js";
+import sql from "../config/database.js";
 import { v4 as uuidv4 } from "uuid";
 
 export class AutomovelRepository implements IAutomovelRepository {

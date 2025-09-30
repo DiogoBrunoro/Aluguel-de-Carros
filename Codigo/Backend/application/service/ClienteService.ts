@@ -1,6 +1,6 @@
-import type { Cliente } from "../model/ClienteModel"
-import type { CreateClienteDTO, UpdateClienteDTO } from "../dto/ClienteDTO"
-import { IClienteRepository } from "../interface/IClienteRepository"
+import type { Cliente } from "../model/ClienteModel.js"
+import type { CreateClienteDTO, UpdateClienteDTO } from "../dto/ClienteDTO.js"
+import { IClienteRepository } from "../interface/IClienteRepository.js"
 
 export class ClienteService {
     constructor(private clienteRepository: IClienteRepository) { }

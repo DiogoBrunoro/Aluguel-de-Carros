@@ -1,6 +1,6 @@
 // routes/pedidoRoutes.ts
 import express from "express";
-import { criarPedido, listarPedidosPorCliente, atualizarPedido, cancelarPedido } from "../controllers/PedidoController";
+import { criarPedido, listarPedidosPorCliente, atualizarPedido, cancelarPedido } from "../controllers/PedidoController.js";
 
 const PedidoRouter = express.Router();
 

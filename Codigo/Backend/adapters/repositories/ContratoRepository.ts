@@ -1,7 +1,7 @@
-import type { IContratoRepository } from "../../application/interface/IContratoRepository";
-import type { Contrato } from "../../application/model/ContratoModel";
-import type { CreateContratoDTO, UpdateContratoDTO } from "../../application/dto/ContratoDTO";
-import sql from "../config/database";
+import type { IContratoRepository } from "../../application/interface/IContratoRepository.js";
+import type { Contrato } from "../../application/model/ContratoModel.js";
+import type { CreateContratoDTO, UpdateContratoDTO } from "../../application/dto/ContratoDTO.js";
+import sql from "../config/database.js";
 import { v4 as uuidv4 } from "uuid";
 
 export class ContratoRepository implements IContratoRepository {

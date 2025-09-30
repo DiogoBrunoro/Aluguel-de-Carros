@@ -1,5 +1,5 @@
-import type { Automovel } from "../model/AutomovelModel";
-import type { CreateAutomovelDTO, UpdateAutomovelDTO } from "../dto/AutomovelDTO";
+import type { Automovel } from "../model/AutomovelModel.js";
+import type { CreateAutomovelDTO, UpdateAutomovelDTO } from "../dto/AutomovelDTO.js";
 
 export interface IAutomovelRepository {
     create(automovelData: CreateAutomovelDTO): Promise<Automovel>;

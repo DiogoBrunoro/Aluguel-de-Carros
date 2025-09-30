@@ -1,6 +1,6 @@
 // application/service/AuthService.ts
-import { IClienteRepository } from "../interface/IClienteRepository";
-import { LoginDTO } from "../dto/LoginDTO";
+import { IClienteRepository } from "../interface/IClienteRepository.js";
+import { LoginDTO } from "../dto/LoginDTO.js";
 import bcrypt from "bcrypt";
 
 export class AuthService {

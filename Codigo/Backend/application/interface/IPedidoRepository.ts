@@ -1,5 +1,5 @@
-import type { PedidoAluguel } from "../model/PedidoAluguelModel";
-import type { CreatePedidoDTO, UpdatePedidoDTO } from "../dto/PedidoDTO";
+import type { PedidoAluguel } from "../model/PedidoAluguelModel.js";
+import type { CreatePedidoDTO, UpdatePedidoDTO } from "../dto/PedidoDTO.js";
 
 export interface IPedidoRepository {
     create(pedidoData: CreatePedidoDTO): Promise<PedidoAluguel>;

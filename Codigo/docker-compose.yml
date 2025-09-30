@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend # Caminho para a pasta do seu projeto backend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3001" 
+    environment:
+      NODE_ENV: production
+    env_file:
+      - ./backend/.env
+  frontend:
+    build:
+      context: ./frontend # Caminho para a pasta do seu projeto frontend
+      dockerfile: Dockerfile
+      args:
+        # Passa a URL da API para o processo de build do frontend (Vite)
+        # 'backend' é o nome do serviço do Docker Compose, acessível pela rede interna
+        VITE_APP_API_URL: http://backend:3000
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend # Garante que o serviço de backend seja iniciado antes do frontend

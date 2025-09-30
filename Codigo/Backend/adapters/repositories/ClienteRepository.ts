@@ -1,7 +1,7 @@
-import type { IClienteRepository } from "../../application/interface/IClienteRepository"
-import type { Cliente } from "../../application/model/ClienteModel"
-import type { CreateClienteDTO, UpdateClienteDTO } from "../../application/dto/ClienteDTO"
-import sql from "../config/database"
+import type { IClienteRepository } from "../../application/interface/IClienteRepository.js"
+import type { Cliente } from "../../application/model/ClienteModel.js"
+import type { CreateClienteDTO, UpdateClienteDTO } from "../../application/dto/ClienteDTO.js"
+import sql from "../config/database.js"
 import { v4 as uuidv4 } from "uuid"
 import bcrypt from "bcrypt";
 

@@ -1,10 +1,10 @@
-import type { IPedidoRepository } from "../../application/interface/IPedidoRepository";
-import type { PedidoAluguel } from "../../application/model/PedidoAluguelModel";
+import type { IPedidoRepository } from "../../application/interface/IPedidoRepository.js";
+import type { PedidoAluguel } from "../../application/model/PedidoAluguelModel.js";
 import type {
   CreatePedidoDTO,
   UpdatePedidoDTO,
-} from "../../application/dto/PedidoDTO";
-import sql from "../config/database";
+} from "../../application/dto/PedidoDTO.js";
+import sql from "../config/database.js";
 import { v4 as uuidv4 } from "uuid";
 
 export class PedidoRepository implements IPedidoRepository {

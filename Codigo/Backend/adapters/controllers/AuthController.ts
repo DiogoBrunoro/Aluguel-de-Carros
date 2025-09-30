@@ -1,8 +1,8 @@
 // adapters/controllers/AuthController.ts
 import { Request, Response, Handler } from "express";
-import { AuthService } from "../../application/service/AuthService";
-import { ClienteRepository } from "../repositories/ClienteRepository";
-import { LoginDTO } from "../../application/dto/LoginDTO";
+import { AuthService } from "../../application/service/AuthService.js";
+import { ClienteRepository } from "../repositories/ClienteRepository.js";
+import { LoginDTO } from "../../application/dto/LoginDTO.js";
 
 const clienteRepository = new ClienteRepository();
 const authService = new AuthService(clienteRepository);
