@@ -1,14 +1,8 @@
-export interface Cliente {
-  id: string
-  nome: string
-  rg: string
-  cpf: string
-  endereco: string
-  profissao?: string
-  rendimentos: number[] 
-  empregadores: string[]
-  senha?: string;  
-  createdAt?: Date
-  updatedAt?: Date
-}
+import { Usuario } from "./UsuarioModel";
+import { Empregador } from "./EmpregadorModel";
 
+export interface Cliente extends Usuario {
+  role: "CLIENTE";
+  profissao: string;
+  empregadores: Empregador[];
+}

@@ -1,6 +1,6 @@
 
 export interface LoginDTO {
-    cpf: string;
+    email: string;
     senha: string;
   }
   
