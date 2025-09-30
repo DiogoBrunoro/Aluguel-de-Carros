@@ -1,5 +1,5 @@
 // src/pages/ConsultaClientes.jsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -27,88 +27,89 @@ import {
 } from "@mui/icons-material";
 import "../styles/PageClient.css";
 import InputClient from "../components/InputClient";
+import { Cliente } from "../types/types";
+
+interface NovoClienteForm {
+  nome: string
+  cpf: string
+  rg: string
+  profissao: string
+  endereco: string
+}
 
 export default function ConsultaClientes() {
-  const [clientes, setClientes] = useState([]);
-  const [busca, setBusca] = useState("");
-  const [editandoId, setEditandoId] = useState(null);
-  const [formData, setFormData] = useState({});
-  const [dialogAberto, setDialogAberto] = useState(false);
-  const [novoCliente, setNovoCliente] = useState({
+  const [clientes, setClientes] = useState<Cliente[]>([])
+  const [busca, setBusca] = useState<string>("")
+  const [editandoId, setEditandoId] = useState<string | null>(null)
+  const [formData, setFormData] = useState<Partial<Cliente>>({})
+  const [dialogAberto, setDialogAberto] = useState<boolean>(false)
+  const [novoCliente, setNovoCliente] = useState<NovoClienteForm>({
     nome: "",
     cpf: "",
     rg: "",
     profissao: "",
     endereco: "",
-  });
+  })
 
-  // const carregarClientes = () => {
-  //   fetch("/api/clientes")
-  //     .then((res) => res.json())
-  //     .then((data) => setClientes(data))
-  //     .catch((err) => console.error("Erro ao buscar clientes:", err));
-  // };
+  const carregarClientes = () => {
 
-  // useEffect(() => { carregarClientes(); }, []);
-
-  const handleEditar = (cliente) => {
-    setEditandoId(cliente.id);
-    setFormData({ ...cliente });
   };
 
-  const handleCancelar = () => {
-    setEditandoId(null);
-    setFormData({});
-  };
+  useEffect(() => { carregarClientes(); }, []);
 
-  const handleSalvar = async () => {
+  const handleEditar = (cliente: Cliente): void => {
+    setEditandoId(cliente.id)
+    setFormData({ ...cliente })
+  }
+
+  const handleCancelar = (): void => {
+    setEditandoId(null)
+    setFormData({})
+  }
+
+  const handleSalvar = async (): Promise<void> => {
     try {
       await fetch(`/api/clientes/${editandoId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
-      });
-      setEditandoId(null);
-      // carregarClientes();
+      })
+      setEditandoId(null)
     } catch (err) {
-      console.error("Erro ao salvar cliente:", err);
+      console.error("Erro ao salvar cliente:", err)
     }
-  };
+  }
 
-  const handleExcluir = async (id) => {
-    if (!window.confirm("Deseja realmente excluir este cliente?")) return;
+  const handleExcluir = async (id: string): Promise<void> => {
+    if (!window.confirm("Deseja realmente excluir este cliente?")) return
     try {
-      await fetch(`/api/clientes/${id}`, { method: "DELETE" });
-      // carregarClientes();
+      await fetch(`/api/clientes/${id}`, { method: "DELETE" })
     } catch (err) {
-      console.error("Erro ao excluir cliente:", err);
+      console.error("Erro ao excluir cliente:", err)
     }
-  };
+  }
 
-  const handleNovoCliente = async () => {
+  const handleNovoCliente = async (): Promise<void> => {
     try {
       await fetch("/api/clientes", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(novoCliente),
-      });
-      setDialogAberto(false);
+      })
+      setDialogAberto(false)
       setNovoCliente({
         nome: "",
         cpf: "",
         rg: "",
         profissao: "",
         endereco: "",
-      });
-      // carregarClientes();
+      })
     } catch (err) {
-      console.error("Erro ao criar cliente:", err);
+      console.error("Erro ao criar cliente:", err)
     }
-  };
+  }
 
-  const clientesFiltrados = clientes.filter((c) =>
-    c.nome.toLowerCase().includes(busca.toLowerCase())
-  );
+  const clientesFiltrados = clientes.filter((c) => c.nome.toLowerCase().includes(busca.toLowerCase()))
 
   return (
     <div className="screen-center">

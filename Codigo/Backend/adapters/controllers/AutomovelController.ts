@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { AutomovelRepository } from "../repositories/AutomovelRepository";
+import { AutomovelRepository } from "../repositories/AutomovelRepository.js";
 import { v4 as uuidv4 } from 'uuid';
 
 const automovelRepository = new AutomovelRepository();

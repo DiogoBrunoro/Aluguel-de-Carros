@@ -1,21 +1,16 @@
-// src/pages/HomePage.jsx
-"use client";
-
 import { useState } from "react";
 
 import ConsultaClientes from "./ConsultaClientes";
 import ConsultaCarros from "./ConsultaCarros";
 import CadastroCarros from "./CadastroCarros";
 import GerenciamentoAluguel from "./GerenciaAlugueis";
-
-import Navbar from "../components/NavBar"; // Seu componente Navbar
-import HomeDashboard from "../components/HomeDashboard"; // Seu componente HomeDashboard
-
-// Importar estilos globais
 import "../styles/PageClient.css";
+import HomeDashboard from "../components/HomeDashboard";
+import Navbar from "../components/NavBar";
+import { TelaAtiva } from "../types/types";
 
 export default function HomePage() {
-  const [telaAtiva, setTelaAtiva] = useState("home");
+  const [telaAtiva, setTelaAtiva] = useState<TelaAtiva>("home")
 
   // Mova a função renderTela PARA DENTRO do componente HomePage
   const renderTelaContent = () => {

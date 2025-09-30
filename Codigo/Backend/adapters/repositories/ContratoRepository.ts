@@ -1,6 +1,6 @@
-import { IContratoRepository } from "../../application/interface/IContrato";
-import { Contrato } from "../../application/model/ContratoModel";
-import sql from "../config/database";
+import { IContratoRepository } from "../../application/interface/IContrato.js";
+import { Contrato } from "../../application/model/ContratoModel.js";
+import sql from "../config/database.js";
 
 export class ContratoRepository implements IContratoRepository {
     async createContrato(contrato: Contrato): Promise<Contrato> {

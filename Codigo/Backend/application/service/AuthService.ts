@@ -1,5 +1,5 @@
-import { LoginDTO } from "../dto/LoginDTO";
-import { IUserRepository } from "../interface/IUserRepository";
+import { LoginDTO } from "../dto/LoginDTO.js";
+import { IUserRepository } from "../interface/IUserRepository.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 

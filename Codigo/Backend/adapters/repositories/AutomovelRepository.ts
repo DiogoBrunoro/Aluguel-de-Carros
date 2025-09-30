@@ -1,6 +1,6 @@
-import { Automovel } from "../../application/model/AutomovelModel";
-import { IAutomovelRepository } from "../../application/interface/IAutomovelRepository";
-import sql from "../config/database";
+import { Automovel } from "../../application/model/AutomovelModel.js";
+import { IAutomovelRepository } from "../../application/interface/IAutomovelRepository.js";
+import sql from "../config/database.js";
 
 export class AutomovelRepository implements IAutomovelRepository {
   async createAutomovel(automovel: Automovel): Promise<Automovel> {

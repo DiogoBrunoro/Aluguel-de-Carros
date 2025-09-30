@@ -1,6 +1,6 @@
-import { CreateAutomovelDTO } from "../dto/AutomovelDTO";
-import { IAutomovelRepository } from "../interface/IAutomovelRepository";
-import { Automovel } from "../model/AutomovelModel";
+import { CreateAutomovelDTO } from "../dto/AutomovelDTO.js";
+import { IAutomovelRepository } from "../interface/IAutomovelRepository.js";
+import { Automovel } from "../model/AutomovelModel.js";
 import { v4 as uuidv4 } from "uuid";
 
 export class AutomovelService {

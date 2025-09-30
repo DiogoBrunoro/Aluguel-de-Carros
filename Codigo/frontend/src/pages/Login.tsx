@@ -1,12 +1,12 @@
 "use client"
 
 import { useState } from "react"
-import { Card, CardContent } from "../components/ui/Card"
-import { Button } from "../components/ui/Button"
-import { Input } from "../components/ui/Input"
+import { Card, CardContent} from "../components/ui/Card"
 import { Label } from "../components/ui/Label"
+import { Input } from "../components/ui/Input"
 import { Car, Mail, Lock, ArrowRight } from "lucide-react"
 import { useNavigate } from "react-router-dom"
+import { Button } from "../components/ui/Button"
 
 export default function LoginScreen() {
 
@@ -15,9 +15,9 @@ export default function LoginScreen() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault()
-    onLogin()
+
   }
 
   return (

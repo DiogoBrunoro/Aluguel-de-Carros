@@ -1,7 +1,14 @@
 "use client"
-import { TextField } from "@mui/material"
+import type React from "react"
+import { TextField, type TextFieldProps } from "@mui/material"
 
-export default function InputClient({ placeholder, value, onChange, ...props }) {
+interface InputClientProps extends Omit<TextFieldProps, "variant" | "fullWidth" | "size"> {
+  placeholder?: string
+  value?: string
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
+}
+
+export default function InputClient({ placeholder, value, onChange, ...props }: InputClientProps) {
   return (
     <TextField
       placeholder={placeholder}

@@ -1,7 +1,7 @@
-import { IContratoRepository } from "../interface/IContrato";
-import { Contrato } from "../model/ContratoModel";
-import { CreateContratoDTO } from "../dto/ContratoDTO";
-import { UpdateContratoDTO } from "../dto/ContratoDTO";
+import { IContratoRepository } from "../interface/IContrato.js";
+import { Contrato } from "../model/ContratoModel.js";
+import { CreateContratoDTO } from "../dto/ContratoDTO.js";
+import { UpdateContratoDTO } from "../dto/ContratoDTO.js";
 
 export class ContratoService {
     private contratoRepository: IContratoRepository;

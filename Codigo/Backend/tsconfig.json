@@ -1,8 +1,9 @@
+// backend/tsconfig.json
 {
   "compilerOptions": {
-    "target": "es2016",
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "target": "es2022", 
+    "module": "nodenext", 
+    "moduleResolution": "nodenext", 
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "strict": true,
@@ -11,4 +12,11 @@
     "rootDir": "./",
     "outDir": "./build"
   },
+  "include": [
+    "**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "build"
+  ]
 }

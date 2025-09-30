@@ -1,19 +1,31 @@
 "use client"
 
-import { useState } from "react"
-import { Card, CardContent } from "../components/ui/Card"
-import { Button } from "../components/ui/Button"
-import { Input } from "../components/ui/Input"
-import { Label } from "../components/ui/Label"
+import { FormEvent, useState } from "react"
 import { Car, Mail, Lock, User, Phone, ArrowRight, BriefcaseBusiness, DollarSign, MapPinHouse, Users } from "lucide-react"
 import { CardMembership } from "@mui/icons-material"
 import { useNavigate } from "react-router-dom"
-import { criarCliente } from "../../api/usuario"
+import { Card, CardContent } from "../components/ui/Card"
+import { Label } from "../components/ui/Label"
+import { Input } from "../components/ui/Input"
+import { Button } from "../components/ui/Button"
+import { Cliente } from "../types/types"
+
+interface FormData {
+  name: string
+  cpf: string
+  rg: string
+  endereco: string
+  profissao: string
+  rendimentos: string
+  empregadores: string
+  password: string
+  confirmPassword: string
+}
 
 export default function RegisterScreen() {
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
     cpf: "",
     rg: "",
@@ -25,11 +37,11 @@ export default function RegisterScreen() {
     confirmPassword: "",
   })
 
-  const handleChange = (field, value) => {
+  const handleChange = (field: keyof FormData, value: string): void => {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault()
 
     if (formData.password !== formData.confirmPassword) {
@@ -37,7 +49,7 @@ export default function RegisterScreen() {
       return
     }
 
-    const clienteData = {
+    const clienteData: Omit<Cliente, "id"> = {
       nome: formData.name,
       rg: formData.rg,
       cpf: formData.cpf,
@@ -45,7 +57,7 @@ export default function RegisterScreen() {
       profissao: formData.profissao || undefined,
       rendimentos: formData.rendimentos
         .split(",")
-        .map((r) => parseFloat(r.trim()))
+        .map((r) => Number.parseFloat(r.trim()))
         .filter((r) => !isNaN(r)),
       empregadores: formData.empregadores
         .split(",")
@@ -53,15 +65,19 @@ export default function RegisterScreen() {
         .filter((e) => e.length > 0),
       senha: formData.password,
     }
-    console.log("Cliente Data: ", clienteData)
+
     try {
-      console.log("Cliente Data: ", clienteData)
       const response = await criarCliente(clienteData)
-      console.log("Response: ", response)
-      alert("Cliente criado com sucesso!")
+      if (response.ok) {
+        alert("Cliente criado com sucesso!")
+        navigate("/login")
+      } else {
+        const error = await response.json()
+        alert(`Erro ao criar cliente: ${error.message}`)
+      }
     } catch (error) {
       alert("Erro ao criar cliente. Tente novamente.")
-      console.log("Error: ", error)
+      console.error("Error:", error)
     }
   }
 

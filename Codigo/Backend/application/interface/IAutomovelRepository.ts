@@ -1,4 +1,4 @@
-import { Automovel } from "../model/AutomovelModel";
+import { Automovel } from "../model/AutomovelModel.js";
 
 export interface IAutomovelRepository {
   createAutomovel(automovel: Automovel): Promise<Automovel>;
