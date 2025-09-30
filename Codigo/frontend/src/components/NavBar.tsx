@@ -1,6 +1,7 @@
-"use client";
+"use client"
 
-import React, { useState } from "react"; // Importar useState
+import type React from "react"
+import { useState } from "react"
 import {
   AppBar,
   Toolbar,
@@ -8,47 +9,51 @@ import {
   IconButton,
   Button,
   Stack,
-  Drawer,         // <-- Importar Drawer
-  List,           // <-- Importar List
-  ListItemButton, // <-- Importar ListItemButton
-  ListItemIcon,   // <-- Importar ListItemIcon
-  ListItemText,   // <-- Importar ListItemText
-  useMediaQuery,  // <-- Importar useMediaQuery
-} from "@mui/material";
-import { useTheme } from "@mui/material/styles"; // Importar useTheme para usar media queries
+  Drawer,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  useMediaQuery,
+} from "@mui/material"
+import { useTheme } from "@mui/material/styles"
 
-import {
-  Home as HomeIcon, // Renomeado para evitar conflito com o nome do prop 'Home' da rota
-  Person,
-  DirectionsCar,
-  Add,
-  Assignment,
-  Menu as MenuIcon,
-  Home, // <-- Importar MenuIcon
-} from "@mui/icons-material";
+import { Home as HomeIcon, Person, DirectionsCar, Add, Assignment, Menu as MenuIcon, Home } from "@mui/icons-material"
 
-export default function Navbar({ setTelaAtiva, telaAtiva }) {
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+type TelaAtiva = "home" | "consulta-clientes" | "consulta-carros" | "cadastro-carros" | "gerenciamento-aluguel"
+
+interface NavbarProps {
+  setTelaAtiva: (tela: TelaAtiva) => void
+  telaAtiva: TelaAtiva
+}
+
+interface NavLink {
+  text: string
+  icon: React.ReactNode
+  tela: TelaAtiva
+}
+
+export default function Navbar({ setTelaAtiva, telaAtiva }: NavbarProps) {
+  const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
 
   const handleDrawerToggle = () => {
-    setDrawerOpen(!drawerOpen);
-  };
+    setDrawerOpen(!drawerOpen)
+  }
 
-  const handleNavigateAndCloseDrawer = (tela) => {
-    setTelaAtiva(tela);
-    setDrawerOpen(false);
-  };
+  const handleNavigateAndCloseDrawer = (tela: TelaAtiva) => {
+    setTelaAtiva(tela)
+    setDrawerOpen(false)
+  }
 
-  // Links da navegação
-  const navLinks = [
+  const navLinks: NavLink[] = [
     { text: "Home", icon: <Home />, tela: "home" },
     { text: "Clientes", icon: <Person />, tela: "consulta-clientes" },
     { text: "Carros", icon: <DirectionsCar />, tela: "consulta-carros" },
     { text: "Cadastrar", icon: <Add />, tela: "cadastro-carros" },
     { text: "Aluguéis", icon: <Assignment />, tela: "gerenciamento-aluguel" },
-  ];
+  ]
 
   const drawerContent = (
     <List>
@@ -69,30 +74,21 @@ export default function Navbar({ setTelaAtiva, telaAtiva }) {
         </ListItemButton>
       ))}
     </List>
-  );
+  )
 
   return (
     <>
       <AppBar
         position="static"
         sx={{
-          background: "rgba(15, 15, 15, 0.9)", // preto translúcido
-          backdropFilter: "blur(8px)",         // efeito vidro
+          background: "rgba(15, 15, 15, 0.9)",
+          backdropFilter: "blur(8px)",
           boxShadow: "0 4px 20px rgba(0,0,0,0.7)",
         }}
       >
-
-
-
         <Toolbar>
           {isMobile ? (
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              onClick={handleDrawerToggle}
-              sx={{ mr: 2 }}
-            >
+            <IconButton edge="start" color="inherit" aria-label="menu" onClick={handleDrawerToggle} sx={{ mr: 2 }}>
               <MenuIcon />
             </IconButton>
           ) : (
@@ -131,11 +127,11 @@ export default function Navbar({ setTelaAtiva, telaAtiva }) {
         open={drawerOpen}
         onClose={handleDrawerToggle}
         PaperProps={{
-          sx: { width: 240, background: 'linear-gradient(135deg, #e0f2f7 0%, #c1e8f3 100%)' }
+          sx: { width: 240, background: "linear-gradient(135deg, #e0f2f7 0%, #c1e8f3 100%)" },
         }}
       >
         {drawerContent}
       </Drawer>
     </>
-  );
+  )
 }

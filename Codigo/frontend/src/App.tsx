@@ -14,7 +14,7 @@ export default function App() {
   useEffect(() => {
     const video = document.getElementById("bg-video");
     if (video) {
-      video.playbackRate = 1.0; 
+      // video.playbackRate = 1.0; 
     }
   }, []);
 

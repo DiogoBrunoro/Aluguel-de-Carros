@@ -5,7 +5,6 @@ import {
   Card,
   CardContent,
   Typography,
-  Grid,
   IconButton,
   TextField,
   Stack,
@@ -20,6 +19,7 @@ import {
   DialogContent,
   DialogActions,
   Divider,
+  Grid, 
 } from "@mui/material"
 import {
   Edit,
@@ -37,6 +37,7 @@ import {
 } from "@mui/icons-material"
 import "../styles/PageClient.css"
 import InputClient from "../components/InputClient"
+import { Aluguel, Carro, Cliente, StatusAluguel } from "../types/types"
 
 //   const carregarDados = () => {
 //     // Carregar aluguéis
@@ -62,15 +63,27 @@ import InputClient from "../components/InputClient"
 //     carregarDados()
 //   }, [])
 
+interface NovoAluguelForm {
+  clienteId: string
+  carroId: string
+  dataInicio: string
+  dataFim: string
+  valorDiario: string
+  status: StatusAluguel
+}
+
+interface StatusStyle {
+  bg: string
+  color: string
+}
+
 export default function GerenciamentoAluguel() {
-  const [alugueis, setAlugueis] = useState([])
-  const [clientes, setClientes] = useState([])
-  const [carros, setCarros] = useState([])
-  const [busca, setBusca] = useState("")
-  const [editandoId, setEditandoId] = useState(null)
-  const [formData, setFormData] = useState({})
-  const [dialogAberto, setDialogAberto] = useState(false)
-  const [novoAluguel, setNovoAluguel] = useState({
+  const [alugueis, setAlugueis] = useState<Aluguel[]>([])
+  const [clientes, setClientes] = useState<Cliente[]>([])
+  const [carros, setCarros] = useState<Carro[]>([])
+  const [busca, setBusca] = useState<string>("")
+  const [dialogAberto, setDialogAberto] = useState<boolean>(false)
+  const [novoAluguel, setNovoAluguel] = useState<NovoAluguelForm>({
     clienteId: "",
     carroId: "",
     dataInicio: "",
@@ -79,22 +92,23 @@ export default function GerenciamentoAluguel() {
     status: "pendente",
   })
 
-  const getStatusColor = (status) => {
+  const getStatusColor = (status: StatusAluguel): StatusStyle => {
     switch (status) {
       case "ativo":
-        return { bg: "#dcfce7", color: "#166534" } // verde claro
+        return { bg: "#dcfce7", color: "#166534" }
       case "pendente":
-        return { bg: "#fef9c3", color: "#854d0e" } // amarelo claro
+        return { bg: "#fef9c3", color: "#854d0e" }
       case "cancelado":
-        return { bg: "#fee2e2", color: "#991b1b" } // vermelho claro
+        return { bg: "#fee2e2", color: "#991b1b" }
       case "finalizado":
-        return { bg: "#dbeafe", color: "#1e3a8a" } // azul claro
+        return { bg: "#dbeafe", color: "#1e3a8a" }
       default:
-        return { bg: "#f3f4f6", color: "#374151" } // cinza
+        return { bg: "#f3f4f6", color: "#374151" }
     }
   }
 
-  const getStatusIcon = (status) => {
+
+  const getStatusIcon = (status: StatusAluguel) => {
     switch (status) {
       case "ativo":
         return <CheckCircle fontSize="small" />
@@ -109,14 +123,13 @@ export default function GerenciamentoAluguel() {
     }
   }
 
-  const calcularValorTotal = (dataInicio, dataFim, valorDiario) => {
+  const calcularValorTotal = (dataInicio: string, dataFim: string, valorDiario: string): number => {
     if (!dataInicio || !dataFim || !valorDiario) return 0
     const inicio = new Date(dataInicio)
     const fim = new Date(dataFim)
-    const dias = Math.ceil((fim - inicio) / (1000 * 60 * 60 * 24))
+    const dias = Math.ceil((fim.getTime() - inicio.getTime()) / (1000 * 60 * 60 * 24))
     return dias * Number.parseFloat(valorDiario)
   }
-
   const aluguelsFiltrados = alugueis.filter((a) => {
     const cliente = clientes.find((c) => c.id === a.clienteId)
     const carro = carros.find((c) => c.id === a.carroId)

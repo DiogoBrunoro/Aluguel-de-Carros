@@ -1,30 +1,32 @@
 "use client"
 
 import { useState } from "react"
-import {
-  Card,
-  CardContent,
-  TextField,
-  Button,
-  Stack,
-  Alert,
-  Typography,
-} from "@mui/material"
+
 import { DirectionsCar, Save, Clear } from "@mui/icons-material"
 import "../styles/PageClient.css"
+import { Alert, Card, CardContent, Stack, TextField, Typography, Button } from "@mui/material"
+import { MessageState } from "../types/types"
+
+interface CarroFormData {
+  marca: string
+  modelo: string
+  ano: string
+  matricula: string
+  placa: string
+}
 
 export default function CadastroCarros() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<CarroFormData>({
     marca: "",
     modelo: "",
     ano: "",
     matricula: "",
     placa: "",
   })
-  const [loading, setLoading] = useState(false)
-  const [message, setMessage] = useState({ type: "", text: "" })
+  const [loading, setLoading] = useState<boolean>(false)
+  const [message, setMessage] = useState<MessageState>({ type: "", text: "" })
 
-  const handleInputChange = (field, value) => {
+  const handleInputChange = (field: keyof CarroFormData, value: string) => {
     setFormData({ ...formData, [field]: value })
   }
 
@@ -39,13 +41,14 @@ export default function CadastroCarros() {
     setMessage({ type: "", text: "" })
   }
 
-  const handleSalvar = async () => {
+  const handleSalvar = async (): Promise<void> => {
     if (!formData.marca || !formData.modelo || !formData.ano || !formData.matricula || !formData.placa) {
       setMessage({ type: "error", text: "Todos os campos são obrigatórios!" })
       return
     }
 
-    if (formData.ano < 1900 || formData.ano > new Date().getFullYear() + 1) {
+    const anoNumerico = Number.parseInt(formData.ano)
+    if (anoNumerico < 1900 || anoNumerico > new Date().getFullYear() + 1) {
       setMessage({ type: "error", text: "Ano inválido!" })
       return
     }
@@ -91,7 +94,7 @@ export default function CadastroCarros() {
 
         {message.text && (
           <Alert
-            severity={message.type}
+            severity={message.type === "success" ? "success" : "error"}
             sx={{
               mb: 3,
               borderRadius: 2,
