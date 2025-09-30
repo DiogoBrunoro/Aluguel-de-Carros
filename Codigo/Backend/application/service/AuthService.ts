@@ -1,21 +1,28 @@
 import { LoginDTO } from "../dto/LoginDTO";
 import { IUserRepository } from "../interface/IUserRepository";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
+export class AuthService {
+  private userRepository: IUserRepository;
 
-export class AuthService{
-    private userRepository: IUserRepository;
-
-constructor(userRepository: IUserRepository){
+  constructor(userRepository: IUserRepository) {
     this.userRepository = userRepository;
-}
+  }
 
-async login(dto: LoginDTO): Promise<{ token: string; role: string }> {
+  async login(dto: LoginDTO): Promise<{ token: string; role: string }> {
     const user = await this.userRepository.findByEmail(dto.email);
 
-    if (!user || user.senha !== dto.senha) {
+    console.log(user);
+
+    if (!user) {
       throw new Error("Credenciais inválidas");
     }
+    const validPassword = await bcrypt.compare(dto.senha, user.senha);
+
+  if (!validPassword) {
+  throw new Error("Credenciais inválidas");
+}
 
     const token = jwt.sign(
       { id: user.id, role: user.role },
@@ -25,5 +32,4 @@ async login(dto: LoginDTO): Promise<{ token: string; role: string }> {
 
     return { token, role: user.role };
   }
-
 }

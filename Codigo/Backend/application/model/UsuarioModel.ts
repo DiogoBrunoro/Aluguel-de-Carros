@@ -1,4 +1,5 @@
-// application/models/Usuario.ts
+import { Empregador } from "./EmpregadorModel";
+
 export interface Usuario {
     id: string;
     nome: string;
