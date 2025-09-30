@@ -4,78 +4,57 @@ import { ContratoService } from "../../application/service/ContratoService.js";
 import { CreateContratoDTO, UpdateContratoDTO } from "../../application/dto/ContratoDTO.js";
 import { ContratoRepository } from "../repositories/ContratoRepository.js";
 
-// Dependency Injection
+
 const contratoRepository = new ContratoRepository();
 const contratoService = new ContratoService(contratoRepository);
 
-export const criarContrato: Handler = async (req, res) => {
-  try {
-    const contratoData: CreateContratoDTO = req.body;
-    const contrato = await contratoService.criarContrato(contratoData);
+export class ContratoController {
 
-    res.status(201).json({
-      success: true,
-      data: contrato,
-      message: "Contrato criado com sucesso",
-    });
-  } catch (error: any) {
-    console.error("Erro ao criar contrato:", error);
-    res.status(400).json({
-      success: false,
-      error: error.message || "Erro interno do servidor",
-    });
-  }
-};
+    static createContrato: Handler = async (req, res) => {
+        try {
+            const dto: CreateContratoDTO = req.body;
+            const newContrato = await contratoService.createContrato(dto);
+            res.status(201).json(newContrato);
+        } catch (err: any) {
+            console.error(err);
+            res.status(500).json({ error: err.message });
+        }
+    };
 
-export const atualizarContrato: Handler = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const contratoData: UpdateContratoDTO = req.body;
+    static getContratoById: Handler = async (req, res) => {
+        try {
+            const { id } = req.params;
+            const contrato = await contratoService.getContratoById(id);
+            if (!contrato) return res.status(404).json({ error: "Contrato não encontrado" });
+            res.json(contrato);
+        } catch (err: any) {
+            console.error(err);
+            res.status(500).json({ error: err.message });
+        }
+    };
 
-    const contratoAtualizado = await contratoService.atualizarContrato(id, contratoData);
+    static updateContrato: Handler = async (req, res) => {
+        try {
+            const { id } = req.params;
+            const dto: UpdateContratoDTO = req.body;
+            const updatedContrato = await contratoService.updateContrato(id, dto);
+            res.json(updatedContrato);
+        } catch (err: any) {
+            console.error(err);
+            if (err.message === "Contrato não encontrado") {
+                return res.status(404).json({ error: err.message });
+            }
+            res.status(500).json({ error: err.message });
+        }
+    };
 
-    if (!contratoAtualizado) {
-      return res.status(404).json({
-        success: false,
-        error: "Contrato não encontrado",
-      });
-    }
-
-    res.json({
-      success: true,
-      data: contratoAtualizado,
-      message: "Contrato atualizado com sucesso",
-    });
-  } catch (error: any) {
-    console.error("Erro ao atualizar contrato:", error);
-    res.status(400).json({
-      success: false,
-      error: error.message || "Erro interno do servidor",
-    });
-  }
-};
-
-export const buscarContratoPorPedido: Handler = async (req, res) => {
-  try {
-    const { pedidoId } = req.params;
-    const contrato = await contratoService.buscarContratoPorPedido(pedidoId);
-
-    if (!contrato) {
-      return res.status(404).json({
-        success: false,
-        error: "Contrato não encontrado",
-      });
-    }
-
-    res.json({
-      success: true,
-      data: contrato,
-    });
-  } catch (error: any) {
-    console.error("Erro ao buscar contrato:", error);
-    res.status(500).json({
-      success: false,
-      error: error.message || "Erro interno do servidor",
-    });
-  }
-};
+    static listContratos: Handler = async (req, res) => {
+        try {
+            const contratos = await contratoService.listContratos();
+            res.json(contratos);
+        } catch (err: any) {
+            console.error(err);
+            res.status(500).json({ error: err.message });
+        }
+    };
+}

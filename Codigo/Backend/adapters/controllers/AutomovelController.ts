@@ -1,74 +1,55 @@
-// Adapters/Controllers/AutomovelController.ts
-import type { Handler } from "express";
-import { AutomovelService } from "../../application/service/AutomovelService.js";
-import { CreateAutomovelDTO, UpdateAutomovelDTO } from "../../application/dto/AutomovelDTO.js";
+import { Request, Response } from "express";
 import { AutomovelRepository } from "../repositories/AutomovelRepository.js";
+import { v4 as uuidv4 } from 'uuid';
 
-// Dependency Injection
 const automovelRepository = new AutomovelRepository();
-const automovelService = new AutomovelService(automovelRepository);
 
-export const criarAutomovel: Handler = async (req, res) => {
-  try {
-    const automovelData: CreateAutomovelDTO = req.body;
-    const automovel = await automovelService.criarAutomovel(automovelData);
-
-    res.status(201).json({
-      success: true,
-      data: automovel,
-      message: "Automóvel criado com sucesso",
-    });
-  } catch (error: any) {
-    console.error("Erro ao criar automóvel:", error);
-    res.status(400).json({
-      success: false,
-      error: error.message || "Erro interno do servidor",
-    });
-  }
-};
-
-export const listarAutomoveisDisponiveis: Handler = async (req, res) => {
-  try {
-    const automoveis = await automovelService.listarAutomoveisDisponiveis();
-
-    res.json({
-      success: true,
-      data: automoveis,
-      total: automoveis.length,
-    });
-  } catch (error: any) {
-    console.error("Erro ao listar automóveis:", error);
-    res.status(500).json({
-      success: false,
-      error: error.message || "Erro interno do servidor",
-    });
-  }
-};
-
-export const atualizarAutomovel: Handler = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const automovelData: UpdateAutomovelDTO = req.body;
-
-    const automovelAtualizado = await automovelService.atualizarAutomovel(id, automovelData);
-
-    if (!automovelAtualizado) {
-      return res.status(404).json({
-        success: false,
-        error: "Automóvel não encontrado",
+export class AutomovelController {
+  async create(req: Request, res: Response) {
+    try {
+      const { marca, modelo, ano, matricula, placa } = req.body;
+      const automovel = await automovelRepository.createAutomovel({
+        id: uuidv4(),
+        marca,
+        modelo,
+        ano,
+        matricula,
+        placa,
+        disponivel: true
       });
+      res.status(201).json(automovel);
+    } catch (error: any) {
+      res.status(400).json({ error: error.message });
     }
-
-    res.json({
-      success: true,
-      data: automovelAtualizado,
-      message: "Automóvel atualizado com sucesso",
-    });
-  } catch (error: any) {
-    console.error("Erro ao atualizar automóvel:", error);
-    res.status(400).json({
-      success: false,
-      error: error.message || "Erro interno do servidor",
-    });
   }
-};
+
+  async list(req: Request, res: Response) {
+    const automoveis = await automovelRepository.listAutomoveis();
+    res.json(automoveis);
+  }
+
+  async getById(req: Request, res: Response) {
+    const automovel = await automovelRepository.getAutomovelById(req.params.id);
+    if (!automovel) {
+      return res.status(404).json({ error: "Automóvel não encontrado" });
+    }
+    res.json(automovel);
+  }
+
+  async update(req: Request, res: Response) {
+    try {
+      const automovel = await automovelRepository.updateAutomovel({
+        id: req.params.id,
+        ...req.body
+      });
+      res.json(automovel);
+    } catch (error: any) {
+      res.status(400).json({ error: error.message });
+    }
+  }
+
+  async delete(req: Request, res: Response) {
+    await automovelRepository.deleteAutomovel(req.params.id);
+    res.status(204).send();
+  }
+}

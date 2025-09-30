@@ -1,5 +1,4 @@
-
-export interface Automovel {
+export interface Automovel{
     id: string;
     marca: string;
     modelo: string;
@@ -7,7 +6,4 @@ export interface Automovel {
     matricula: string;
     placa: string;
     disponivel: boolean;
-    createdAt?: Date;
-    updatedAt?: Date;
-  }
-  
+}

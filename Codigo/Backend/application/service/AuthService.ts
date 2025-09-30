@@ -1,33 +1,35 @@
-// application/service/AuthService.ts
-import { IClienteRepository } from "../interface/IClienteRepository.js";
 import { LoginDTO } from "../dto/LoginDTO.js";
+import { IUserRepository } from "../interface/IUserRepository.js";
+import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
 export class AuthService {
-  constructor(private clienteRepository: IClienteRepository) {}
+  private userRepository: IUserRepository;
 
-  async login(loginData: LoginDTO): Promise<string> {
-    const cliente = await this.clienteRepository.findByCpf(loginData.cpf);
-
-    if (!cliente || !cliente.senha) {
-      throw new Error("CPF ou senha inválidos");
-    }
-
-    const senhaValida = await bcrypt.compare(loginData.senha, cliente.senha);
-
-    if (!senhaValida) {
-      throw new Error("CPF ou senha inválidos");
-    }
-
-    const token = this.gerarToken(cliente.id);
-    return token;
+  constructor(userRepository: IUserRepository) {
+    this.userRepository = userRepository;
   }
 
-  private gerarToken(clienteId: string): string {
-    // JWT simples (exemplo, use segredo em .env)
-    const jwt = require("jsonwebtoken");
-    return jwt.sign({ id: clienteId }, process.env.JWT_SECRET || "segredo", {
-      expiresIn: "1h",
-    });
+  async login(dto: LoginDTO): Promise<{ token: string; role: string }> {
+    const user = await this.userRepository.findByEmail(dto.email);
+
+    console.log(user);
+
+    if (!user) {
+      throw new Error("Credenciais inválidas");
+    }
+    const validPassword = await bcrypt.compare(dto.senha, user.senha);
+
+  if (!validPassword) {
+  throw new Error("Credenciais inválidas");
+}
+
+    const token = jwt.sign(
+      { id: user.id, role: user.role },
+      process.env.JWT_SECRET || "chavesecreta",
+      { expiresIn: "1h" }
+    );
+
+    return { token, role: user.role };
   }
 }

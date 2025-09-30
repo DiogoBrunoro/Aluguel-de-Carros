@@ -1,11 +1,9 @@
-import type { Automovel } from "../model/AutomovelModel.js";
-import type { CreateAutomovelDTO, UpdateAutomovelDTO } from "../dto/AutomovelDTO.js";
+import { Automovel } from "../model/AutomovelModel.js";
 
 export interface IAutomovelRepository {
-    create(automovelData: CreateAutomovelDTO): Promise<Automovel>;
-    findAll(): Promise<Automovel[]>;
-    findById(id: string): Promise<Automovel | null>;
-    update(id: string, automovelData: UpdateAutomovelDTO): Promise<Automovel | null>;
-    delete(id: string): Promise<boolean>;
-    findDisponiveis(): Promise<Automovel[]>;
+  createAutomovel(automovel: Automovel): Promise<Automovel>;
+  getAutomovelById(id: string): Promise<Automovel | null>;
+  updateAutomovel(automovel: Automovel): Promise<Automovel>;
+  deleteAutomovel(id: string): Promise<void>;
+  listAutomoveis(): Promise<Automovel[]>;
 }

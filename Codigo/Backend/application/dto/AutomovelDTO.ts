@@ -1,4 +1,3 @@
-
 export interface CreateAutomovelDTO {
     marca: string;
     modelo: string;

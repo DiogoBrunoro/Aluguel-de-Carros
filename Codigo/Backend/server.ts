@@ -1,19 +1,17 @@
 import express from "express";
-import bodyParser from "body-parser";
 import dotenv from "dotenv";
-import ClienteRouter from "./adapters/routes/clienteRoutes.js";
-import AutomovelRouter from "./adapters/routes/automovelRoute.js";
-import ContratoRouter from "./adapters/routes/contratoRoute.js";
-import PedidoRouter from "./adapters/routes/pedidoRoute.js";
+import userRoutes from "../Backend/adapters/routes/UserRoutes.js"; 
+import loginRoutes from "../Backend/adapters/routes/LoginRoutes.js";
+import automovelRoutes from "../Backend/adapters/routes/AutomovelRoutes.js";
 
 dotenv.config();
 
 const app = express();
-app.use(bodyParser.json());
-app.use('/api', ClienteRouter);     
-app.use('/api', AutomovelRouter);   
-app.use('/api', ContratoRouter);    
-app.use('/api', PedidoRouter);     
+
+app.use(express.json()); 
+app.use("/api/users", userRoutes);
+app.use("/api/users", loginRoutes); 
+app.use("/api/automoveis",automovelRoutes)
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Server rodando em http://localhost:${port}`));

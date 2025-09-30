@@ -1,25 +1,18 @@
-// adapters/controllers/AuthController.ts
-import { Request, Response, Handler } from "express";
+import { Request, Response } from "express";
 import { AuthService } from "../../application/service/AuthService.js";
-import { ClienteRepository } from "../repositories/ClienteRepository.js";
-import { LoginDTO } from "../../application/dto/LoginDTO.js";
+import { UserRepository } from "../repositories/UserRepository.js";
 
-const clienteRepository = new ClienteRepository();
-const authService = new AuthService(clienteRepository);
+const userRepository = new UserRepository();
+const authService = new AuthService(userRepository);
 
-export const loginCliente: Handler = async (req: Request, res: Response) => {
-  try {
-    const loginData: LoginDTO = req.body;
-    const token = await authService.login(loginData);
-
-    res.json({
-      success: true,
-      token,
-    });
-  } catch (error: any) {
-    res.status(401).json({
-      success: false,
-      error: error.message,
-    });
+export class AuthController {
+  static async login(req: Request, res: Response) {
+    try {
+      const { email, senha } = req.body;
+      const result = await authService.login({ email, senha });
+      return res.json(result);
+    } catch (err: any) {
+      return res.status(401).json({ error: err.message });
+    }
   }
-};
+}

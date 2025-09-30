@@ -1,39 +1,47 @@
-import type { Contrato } from "../model/ContratoModel.js";
-import type { CreateContratoDTO, UpdateContratoDTO } from "../dto/ContratoDTO.js";
-import { IContratoRepository } from "../interface/IContratoRepository.js";
-import crypto from "crypto";
+import { IContratoRepository } from "../interface/IContrato.js";
+import { Contrato } from "../model/ContratoModel.js";
+import { CreateContratoDTO } from "../dto/ContratoDTO.js";
+import { UpdateContratoDTO } from "../dto/ContratoDTO.js";
 
 export class ContratoService {
-    constructor(private contratoRepository: IContratoRepository) {}
+    private contratoRepository: IContratoRepository;
 
-    async criarContrato(data: CreateContratoDTO): Promise<Contrato> {
-        const contrato: Contrato = {
-            id: crypto.randomUUID(),
-            pedidoId: data.pedidoId,
-            tipoPropriedade: data.tipoPropriedade,
-            creditoBancario: data.creditoBancario,
-            status: "PENDENTE",
-            createdAt: new Date(),
-            updatedAt: new Date(),
-        };
-
-        return this.contratoRepository.create(contrato);
+    constructor(contratoRepository: IContratoRepository) {
+        this.contratoRepository = contratoRepository;
     }
 
-    async atualizarContrato(id: string, data: UpdateContratoDTO): Promise<Contrato | null> {
-        const existente = await this.contratoRepository.findById(id);
-        if (!existente) return null;
-
-        const atualizado: Contrato = {
-            ...existente,
-            ...data,
-            updatedAt: new Date(),
+    async createContrato(dto: CreateContratoDTO) {
+        const newContrato: Contrato = {
+            id: "", 
+            pedidoId: dto.pedidoId,
+            clienteId: dto.clienteId,
+            automovelId: dto.automovelId,
+            agenteId: dto.agenteId,
+            dataInicio: dto.dataInicio,
+            dataFim: dto.dataFim,
+            valor: dto.valor,
+            propriedade: dto.propriedade,
         };
-
-        return this.contratoRepository.update(id, atualizado);
+        return this.contratoRepository.createContrato(newContrato);
     }
 
-    async buscarContratoPorPedido(pedidoId: string): Promise<Contrato | null> {
-        return this.contratoRepository.findByPedidoId(pedidoId);
+    async getContratoById(id: string) {
+        return this.contratoRepository.getContratoById(id);
+    }
+
+    async updateContrato(id: string, dto: UpdateContratoDTO) {
+        const existingContrato = await this.contratoRepository.getContratoById(id);
+        if (!existingContrato) {
+            throw new Error("Contrato não encontrado");
+        }
+        const updatedContrato: Contrato = {
+            ...existingContrato,
+            ...dto,
+        };
+        return this.contratoRepository.updateContrato(updatedContrato);
+    }
+
+    async listContratos() {
+        return this.contratoRepository.listContratos();
     }
 }

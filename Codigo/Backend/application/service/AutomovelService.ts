@@ -1,46 +1,52 @@
-import type { Automovel } from "../model/AutomovelModel.js";
-import type { CreateAutomovelDTO, UpdateAutomovelDTO } from "../dto/AutomovelDTO.js";
+import { CreateAutomovelDTO } from "../dto/AutomovelDTO.js";
 import { IAutomovelRepository } from "../interface/IAutomovelRepository.js";
-import crypto from "crypto";
+import { Automovel } from "../model/AutomovelModel.js";
+import { v4 as uuidv4 } from "uuid";
 
 export class AutomovelService {
-    constructor(private automovelRepository: IAutomovelRepository) {}
+  private automovelRepository: IAutomovelRepository;
 
-    async criarAutomovel(data: CreateAutomovelDTO): Promise<Automovel> {
-        const automovel: Automovel = {
-            id: crypto.randomUUID(),
-            marca: data.marca,
-            modelo: data.modelo,
-            ano: data.ano,
-            matricula: data.matricula,
-            placa: data.placa,
-            disponivel: data.disponivel ?? true,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-        };
+  constructor(automovelRepository: IAutomovelRepository) {
+    this.automovelRepository = automovelRepository;
+  }
 
-        return this.automovelRepository.create(automovel);
+  async createAutomovel(dto: CreateAutomovelDTO) {
+    const id = uuidv4();
+    const newAutomovel: Automovel = {
+      id,
+      marca: dto.marca,
+      modelo: dto.modelo,
+      ano: dto.ano,
+      matricula: dto.matricula,
+      placa: dto.placa,
+      disponivel: dto.disponivel ?? true,
+    };
+    return this.automovelRepository.createAutomovel(newAutomovel);
+  }
+
+  async getAutomovelById(id: string) {
+    return this.automovelRepository.getAutomovelById(id);
+  }
+
+  async updateAutomovel(id: string, dto: Partial<CreateAutomovelDTO>) {
+    const existingAutomovel = await this.automovelRepository.getAutomovelById(
+      id
+    );
+    if (!existingAutomovel) {
+      throw new Error("Automóvel não encontrado");
     }
+    const updatedAutomovel: Automovel = {
+      ...existingAutomovel,
+      ...dto,
+    };
+    return this.automovelRepository.updateAutomovel(updatedAutomovel);
+  }
 
-    async atualizarAutomovel(id: string, data: UpdateAutomovelDTO): Promise<Automovel | null> {
-        const existente = await this.automovelRepository.findById(id);
-        if (!existente) return null;
+  async deleteAutomovel(id: string) {
+    return this.automovelRepository.deleteAutomovel(id);
+  }
 
-        const atualizado: Automovel = {
-            ...existente,
-            ...data,
-            updatedAt: new Date(),
-        };
-
-        return this.automovelRepository.update(id, atualizado);
-    }
-
-    async listarAutomoveisDisponiveis(): Promise<Automovel[]> {
-        const todos = await this.automovelRepository.findAll();
-        return todos.filter(a => a.disponivel);
-    }
-
-    async buscarAutomovelPorId(id: string): Promise<Automovel | null> {
-        return this.automovelRepository.findById(id);
-    }
+  async listAutomoveis() {
+    return this.automovelRepository.listAutomoveis();
+  }
 }
