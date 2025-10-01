@@ -11,6 +11,7 @@ import {
   Select,
   InputLabel,
   FormControl,
+  Box,
 } from "@mui/material";
 import {
   Edit,
@@ -22,9 +23,9 @@ import {
   LocalOffer,     // Marca/Modelo
   Tag,            // Placa/Matrícula
 } from "@mui/icons-material";
-import "../styles/PageClient.css";
-import InputClient from "../components/InputClient";
-import { Carro } from "../types/types";
+// import "../styles/PageClient.css";
+import InputClient from "../../components/InputClient";
+import { Carro } from "../../types/types";
 
 export default function ConsultaCarros() {
   const [carros, setCarros] = useState<Carro[]>([])
@@ -41,6 +42,7 @@ export default function ConsultaCarros() {
       ano: 2020,
       marca: "Toyota",
       modelo: "Corolla",
+      imagemUrl: "https://www.comprecar.com.br/storage/news/featured/2Aw_A_xdWZC9Dne.jpg",
     },
     {
       id: "car2",
@@ -49,6 +51,7 @@ export default function ConsultaCarros() {
       ano: 2022,
       marca: "Honda",
       modelo: "Civic",
+      imagemUrl: "https://www.comprecar.com.br/storage/news/featured/2Aw_A_xdWZC9Dne.jpg",
     },
     {
       id: "car3",
@@ -57,6 +60,7 @@ export default function ConsultaCarros() {
       ano: 2019,
       marca: "Volkswagen",
       modelo: "Jetta",
+      imagemUrl: "https://www.comprecar.com.br/storage/news/featured/2Aw_A_xdWZC9Dne.jpg",
     },
   ];
 
@@ -119,7 +123,7 @@ export default function ConsultaCarros() {
         <Grid container direction="column" spacing={2} sx={{ mt: 2 }}>
           {carrosFiltrados.length > 0 ? (
             carrosFiltrados.map((c) => (
-              <Grid item xs={12} key={c.id}>
+              <Grid>
                 <Card
                   sx={{
                     borderRadius: 4,
@@ -217,60 +221,71 @@ export default function ConsultaCarros() {
                     <>
                       {/* Modo visualização */}
                       <CardContent sx={{ p: 3 }}>
-                        <Typography
-                          variant="h6"
-                          sx={{
-                            fontWeight: 700,
-                            mb: 2,
-                            color: "#111827",
-                          }}
+                        <Stack direction="row" spacing={3} alignItems="center" sx={{ mb: 3 }}>
+                          {/* Imagem à esquerda */}
+                          <Box
+                            component="img"
+                            src={c.imagemUrl || "/placeholder.png"} // Substitua pelo URL da imagem
+                            alt={`${c.marca} ${c.modelo}`}
+                            sx={{ width: 150, height: "100%", borderRadius: 2, objectFit: "cover" }}
+                          />
+
+                          {/* Conteúdo do card */}
+                          <Stack spacing={1} flex={1}>
+                            <Typography
+                              variant="h6"
+                              sx={{ fontWeight: 700, mb: 2, color: "#111827" }}
+                            >
+                              {c.marca} {c.modelo} ({c.ano})
+                            </Typography>
+
+                            <Stack spacing={1}>
+                              <Typography
+                                variant="body2"
+                                sx={{ display: "flex", alignItems: "center", gap: 1, color: "#374151" }}
+                              >
+                                <Tag fontSize="small" sx={{ color: "#2563eb" }} />
+                                <strong>Placa:</strong> {c.placa}
+                              </Typography>
+                              <Typography
+                                variant="body2"
+                                sx={{ display: "flex", alignItems: "center", gap: 1, color: "#374151" }}
+                              >
+                                <DirectionsCar fontSize="small" sx={{ color: "#16a34a" }} />
+                                <strong>Matrícula:</strong> {c.matricula}
+                              </Typography>
+                              <Typography
+                                variant="body2"
+                                sx={{ display: "flex", alignItems: "center", gap: 1, color: "#374151" }}
+                              >
+                                <DateRange fontSize="small" sx={{ color: "#9333ea" }} />
+                                <strong>Ano:</strong> {c.ano}
+                              </Typography>
+                            </Stack>
+                          </Stack>
+                        </Stack>
+
+                        {/* Botões de ação */}
+                        <Stack
+                          direction="row"
+                          justifyContent="flex-end"
+                          spacing={1}
+                          sx={{ px: 2, borderTop: "1px solid #e5e7eb" }}
                         >
-                          {c.marca} {c.modelo} ({c.ano})
-                        </Typography>
-                        <Stack spacing={1}>
-                          <Typography
-                            variant="body2"
-                            sx={{ display: "flex", alignItems: "center", gap: 1, color: "#374151" }}
+                          <IconButton
+                            sx={{ color: "#3b82f6", "&:hover": { backgroundColor: "rgba(59,130,246,0.1)" } }}
+                            onClick={() => handleEditar(c)}
                           >
-                            <Tag fontSize="small" sx={{ color: "#2563eb" }} />
-                            <strong>Placa:</strong> {c.placa}
-                          </Typography>
-                          <Typography
-                            variant="body2"
-                            sx={{ display: "flex", alignItems: "center", gap: 1, color: "#374151" }}
+                            <Edit />
+                          </IconButton>
+                          <IconButton
+                            sx={{ color: "#ef4444", "&:hover": { backgroundColor: "rgba(239,68,68,0.1)" } }}
+                            onClick={() => handleExcluir(c.id)}
                           >
-                            <DirectionsCar fontSize="small" sx={{ color: "#16a34a" }} />
-                            <strong>Matrícula:</strong> {c.matricula}
-                          </Typography>
-                          <Typography
-                            variant="body2"
-                            sx={{ display: "flex", alignItems: "center", gap: 1, color: "#374151" }}
-                          >
-                            <DateRange fontSize="small" sx={{ color: "#9333ea" }} />
-                            <strong>Ano:</strong> {c.ano}
-                          </Typography>
+                            <Delete />
+                          </IconButton>
                         </Stack>
                       </CardContent>
-
-                      <Stack
-                        direction="row"
-                        justifyContent="flex-end"
-                        spacing={1}
-                        sx={{ px: 2, py: 1.5, borderTop: "1px solid #e5e7eb" }}
-                      >
-                        <IconButton
-                          sx={{ color: "#3b82f6", "&:hover": { backgroundColor: "rgba(59,130,246,0.1)" } }}
-                          onClick={() => handleEditar(c)}
-                        >
-                          <Edit />
-                        </IconButton>
-                        <IconButton
-                          sx={{ color: "#ef4444", "&:hover": { backgroundColor: "rgba(239,68,68,0.1)" } }}
-                          onClick={() => handleExcluir(c.id)}
-                        >
-                          <Delete />
-                        </IconButton>
-                      </Stack>
                     </>
                   )}
                 </Card>

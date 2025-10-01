@@ -25,9 +25,9 @@ import {
   Home,        // Endereço
   PersonAdd,   // Novo cliente
 } from "@mui/icons-material";
-import "../styles/PageClient.css";
-import InputClient from "../components/InputClient";
-import { Cliente } from "../types/types";
+// import "../styles/PageClient.css";
+import InputClient from "../../components/InputClient";
+import { Cliente } from "../../types/types";
 
 interface NovoClienteForm {
   nome: string
@@ -145,7 +145,7 @@ export default function ConsultaClientes() {
         <Grid container direction="column" spacing={2} sx={{ mt: 2 }}>
           {clientesFiltrados.length > 0 ? (
             clientesFiltrados.map((c) => (
-              <Grid item xs={12} key={c.id}>
+              <Grid>
                 <Card
                   sx={{
                     borderRadius: 3,

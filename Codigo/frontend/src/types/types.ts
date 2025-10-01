@@ -17,6 +17,8 @@ export interface Carro {
   ano: number
   matricula: string
   placa: string
+  imagemUrl?: string
+  disponivel?: boolean
 }
 
 export type StatusAluguel = "ativo" | "pendente" | "cancelado" | "finalizado"
@@ -31,7 +33,16 @@ export interface Aluguel {
   status: StatusAluguel
 }
 
-export type TelaAtiva = "home" | "consulta-clientes" | "consulta-carros" | "cadastro-carros" | "gerenciamento-aluguel"
+export type TelaAtiva =
+  | "home"
+  | "consulta-clientes"
+  | "consulta-carros"
+  | "cadastro-carros"
+  | "gerenciamento-aluguel"
+  | "meus-alugueis"
+  | "carros-disponiveis"
+  | "solicitar-aluguel"
+
 
 export interface MessageState {
   type: "success" | "error" | ""

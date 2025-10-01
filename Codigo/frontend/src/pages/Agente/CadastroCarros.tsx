@@ -1,11 +1,9 @@
-"use client"
-
 import { useState } from "react"
 
 import { DirectionsCar, Save, Clear } from "@mui/icons-material"
-import "../styles/PageClient.css"
+// import "../../styles/PageCliente"
 import { Alert, Card, CardContent, Stack, TextField, Typography, Button } from "@mui/material"
-import { MessageState } from "../types/types"
+import { MessageState } from "../../types/types"
 
 interface CarroFormData {
   marca: string

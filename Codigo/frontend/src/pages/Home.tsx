@@ -1,9 +1,9 @@
 import { useState } from "react";
 
-import ConsultaClientes from "./ConsultaClientes";
-import ConsultaCarros from "./ConsultaCarros";
-import CadastroCarros from "./CadastroCarros";
-import GerenciamentoAluguel from "./GerenciaAlugueis";
+import ConsultaClientes from "./Agente/ConsultaClientes";
+import ConsultaCarros from "./Agente/ConsultaCarros";
+import CadastroCarros from "./Agente/CadastroCarros";
+import GerenciamentoAluguel from "./Agente/GerenciaAlugueis";
 import "../styles/PageClient.css";
 import HomeDashboard from "../components/HomeDashboard";
 import Navbar from "../components/NavBar";

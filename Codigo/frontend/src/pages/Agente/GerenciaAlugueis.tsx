@@ -35,9 +35,9 @@ import {
   Pending,
   Cancel as CancelIcon,
 } from "@mui/icons-material"
-import "../styles/PageClient.css"
-import InputClient from "../components/InputClient"
-import { Aluguel, Carro, Cliente, StatusAluguel } from "../types/types"
+// import "../styles/PageClient.css"
+import InputClient from "../../components/InputClient"
+import { Aluguel, Carro, Cliente, StatusAluguel } from "../../types/types"
 
 //   const carregarDados = () => {
 //     // Carregar aluguéis
@@ -180,7 +180,7 @@ export default function GerenciamentoAluguel() {
               const status = getStatusColor(a.status)
 
               return (
-                <Grid item xs={12} key={a.id}>
+                <Grid>
                   <Card
                     sx={{
                       borderRadius: 4,
