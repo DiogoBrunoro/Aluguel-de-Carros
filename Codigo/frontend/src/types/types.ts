@@ -39,14 +39,19 @@ export interface MessageState {
 }
 
 export interface Usuario {
-  id: string
-  nome: string
-  email: string
-  cpf: string
-  rg: string
-  senha: string
-  role: "cliente" | "agente"
-  perfilId: string
+  id?: string
+  nome?: string
+  email?: string
+  cpf?: string
+  rg?: string
+  senha?: string
+  endereco?: string
+  profissao?: string
+  rendimentos?: number[]
+  empregadores?: string[]
+  role?: "CLIENTE" | "AGENTE"
+  tipoAgente?: "BANCO" | "EMPRESA"
+  perfilId?: string
 }
 
 export interface Agente {
@@ -59,8 +64,8 @@ export interface Agente {
   email: string
 }
 
-export type UserRole = "cliente" | "agente"
+export type UserRole = "CLIENTE" | "AGENTE"
 
-export type TipoAgente = "banco" | "empresa"
+export type TipoAgente = "BANCO" | "EMPRESA"
 
 export type Step = 1 | 2 | 3

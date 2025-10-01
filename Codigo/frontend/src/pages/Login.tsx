@@ -7,6 +7,7 @@ import { Input } from "../components/ui/Input"
 import { Car, Mail, Lock, ArrowRight } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 import { Button } from "../components/ui/Button"
+import { useAuth } from "../hooks/useAuth"
 
 export default function LoginScreen() {
 
@@ -14,34 +15,17 @@ export default function LoginScreen() {
 
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const { login, isAuthenticated, user } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    try {
-      const response = await fetch("http://localhost:3000/api/users/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, senha: password }),
-      });
+    const success = await login(email, password);
 
-      const data = await response.json();
-      console.log("Data: ", data)
-
-      if (!response.ok) {
-        throw new Error(data.error || "Erro no login");
-      }
-
-      // Exemplo: salvar o token no localStorage
-      localStorage.setItem("token", data.token);
-
+    if (success) {
       alert("Login realizado com sucesso!");
-      navigate("/home");
-    } catch (error: any) {
-      console.log(`Erro: ${error.message}`);
-      console.error("Erro no login:", error);
+    } else {
+      alert("Erro no login");
     }
   };
 

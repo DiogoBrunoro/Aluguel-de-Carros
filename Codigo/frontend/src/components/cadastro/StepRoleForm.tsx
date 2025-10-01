@@ -22,7 +22,7 @@ export default function StepRole({ onSelect, onBack }: StepRoleProps): JSX.Eleme
         <div className="grid gap-4 md:grid-cols-2">
           <Card
             className="cursor-pointer border-2 transition-colors hover:border-primary"
-            onClick={() => onSelect("cliente")}
+            onClick={() => onSelect("CLIENTE")}
           >
             <CardHeader className="text-center">
               <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
@@ -35,7 +35,7 @@ export default function StepRole({ onSelect, onBack }: StepRoleProps): JSX.Eleme
 
           <Card
             className="cursor-pointer border-2 transition-colors hover:border-primary"
-            onClick={() => onSelect("agente")}
+            onClick={() => onSelect("AGENTE")}
           >
             <CardHeader className="relative text-center">
               <div className="relative mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">

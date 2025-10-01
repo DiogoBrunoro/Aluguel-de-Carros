@@ -78,11 +78,11 @@ export default function RegisterScreen(): JSX.Element {
 
         {currentStep === 1 && <StepRole onSelect={handleRoleSelect} onBack={handleRoleBack} />}
 
-        {currentStep === 2 && selectedRole === "cliente" && (
+        {currentStep === 2 && selectedRole === "CLIENTE" && (
           <StepCliente onSuccess={handleSuccess} onBack={handlePerfilBack} />
         )}
 
-        {currentStep === 2 && selectedRole === "agente" && (
+        {currentStep === 2 && selectedRole === "AGENTE" && (
           <StepAgente onSuccess={handleSuccess} onBack={handlePerfilBack} />
         )}
 

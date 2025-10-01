@@ -10,11 +10,15 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "../ui
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "../ui/Select"
 
 export interface AgenteFormData {
-    cnpj: string
-    razaoSocial: string
+    // cnpj: string
+    // razaoSocial: string
+    // enderecoComercial: string
+    // telefone: string
+    nome: string
+    email: string
+    senha: string
+    confirmarSenha: string
     tipoAgente: TipoAgente
-    enderecoComercial: string
-    telefone: string
 }
 
 interface StepAgenteProps {
@@ -22,13 +26,13 @@ interface StepAgenteProps {
     onBack: () => void
 }
 
-export default function StepAgente({  onSuccess, onBack }: StepAgenteProps): JSX.Element {
+export default function StepAgente({ onSuccess, onBack }: StepAgenteProps): JSX.Element {
     const [formData, setFormData] = useState<AgenteFormData>({
-        cnpj: "",
-        razaoSocial: "",
-        tipoAgente: "banco",
-        enderecoComercial: "",
-        telefone: "",
+        tipoAgente: "BANCO",
+        nome: "",
+        email: "",
+        senha: "",
+        confirmarSenha: "",
     })
 
     const [loading, setLoading] = useState<boolean>(false)
@@ -48,13 +52,25 @@ export default function StepAgente({  onSuccess, onBack }: StepAgenteProps): JSX
         setError("")
         setLoading(true)
 
+        if (formData.senha !== formData.confirmarSenha) {
+            setError("As senhas não coincidem")
+            setLoading(false)
+            return
+        }
         try {
-            const response = await fetch("http://localhost:8080/api/agentes", {
+            const payload = {
+                nome: formData.nome,
+                email: formData.email,
+                senha: formData.senha,
+                role: "AGENTE",
+                tipo: formData.tipoAgente
+            }
+
+
+            const response = await fetch("http://localhost:3000/api/users/agentes", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    ...formData,
-                }),
+                body: JSON.stringify(payload),
             })
 
             if (!response.ok) {
@@ -77,7 +93,7 @@ export default function StepAgente({  onSuccess, onBack }: StepAgenteProps): JSX
             </CardHeader>
             <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-4">
-                    <div className="space-y-2">
+                    {/* <div className="space-y-2">
                         <Label htmlFor="cnpj">CNPJ</Label>
                         <Input
                             id="cnpj"
@@ -92,6 +108,36 @@ export default function StepAgente({  onSuccess, onBack }: StepAgenteProps): JSX
                     <div className="space-y-2">
                         <Label htmlFor="razaoSocial">Razão Social</Label>
                         <Input id="razaoSocial" name="razaoSocial" value={formData.razaoSocial} onChange={handleChange} required />
+                    </div> */}
+
+                    {/* Nome */}
+                    <div className="space-y-2">
+                        <Label htmlFor="nome">Nome</Label>
+                        <Input id="nome" name="nome" value={formData.nome} onChange={handleChange} required />
+                    </div>
+
+                    {/* Email */}
+                    <div className="space-y-2">
+                        <Label htmlFor="email">Email</Label>
+                        <Input id="email" name="email" type="email" value={formData.email} onChange={handleChange} required />
+                    </div>
+
+                    {/* Senha */}
+                    <div className="space-y-2">
+                        <Label htmlFor="senha">Senha</Label>
+                        <Input id="senha" name="senha" type="password" value={formData.senha} onChange={handleChange} required />
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label htmlFor="confirmarSenha">Confirmar Senha</Label>
+                        <Input
+                            id="confirmarSenha"
+                            name="confirmarSenha"
+                            type="password"
+                            value={formData.confirmarSenha}
+                            onChange={handleChange}
+                            required
+                        />
                     </div>
 
                     <div className="space-y-2">
@@ -101,13 +147,13 @@ export default function StepAgente({  onSuccess, onBack }: StepAgenteProps): JSX
                                 <SelectValue placeholder="Selecione o tipo" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="banco">Banco</SelectItem>
-                                <SelectItem value="empresa">Empresa</SelectItem>
+                                <SelectItem value="BANCO">Banco</SelectItem>
+                                <SelectItem value="EMPRESA">Empresa</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
 
-                    <div className="space-y-2">
+                    {/* <div className="space-y-2">
                         <Label htmlFor="enderecoComercial">Endereço Comercial</Label>
                         <Input
                             id="enderecoComercial"
@@ -130,7 +176,7 @@ export default function StepAgente({  onSuccess, onBack }: StepAgenteProps): JSX
                             placeholder="(00) 00000-0000"
                             required
                         />
-                    </div>
+                    </div> */}
 
                     {error && <div className="rounded-md bg-destructive/15 p-3 text-sm text-destructive">{error}</div>}
 
