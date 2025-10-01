@@ -37,3 +37,30 @@ export interface MessageState {
   type: "success" | "error" | ""
   text: string
 }
+
+export interface Usuario {
+  id: string
+  nome: string
+  email: string
+  cpf: string
+  rg: string
+  senha: string
+  role: "cliente" | "agente"
+  perfilId: string
+}
+
+export interface Agente {
+  id: string
+  razaoSocial: string
+  cnpj: string
+  tipoAgente: "banco" | "empresa"
+  enderecoComercial: string
+  telefone: string
+  email: string
+}
+
+export type UserRole = "cliente" | "agente"
+
+export type TipoAgente = "banco" | "empresa"
+
+export type Step = 1 | 2 | 3

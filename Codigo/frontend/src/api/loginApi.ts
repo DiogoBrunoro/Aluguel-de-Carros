@@ -1,6 +1,6 @@
 import apiUrl from "./apiUrl";
 
-async function Login(cpf, senha) {
+async function Login(cpf: string, senha: string) {
   const loginData = {
     cpf: cpf,
     senha: senha,
@@ -26,7 +26,7 @@ async function Login(cpf, senha) {
       throw new Error(data.error || 'Falha no login');
     }
   } catch (error) {
-    console.error('Erro ao conectar com o servidor de login:', error.message);
+    console.error('Erro ao conectar com o servidor de login');
     throw new Error('Não foi possível conectar com o servidor. Tente novamente mais tarde.');
   }
 }

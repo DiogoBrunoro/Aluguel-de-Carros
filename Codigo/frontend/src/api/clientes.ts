@@ -1,10 +1,11 @@
 // services/clienteApiService.js
 
+import { Cliente } from "../types/types";
 import apiUrl from "./apiUrl";
 
 const API_BASE_URL = apiUrl; 
 
-async function handleApiResponse(response) {
+async function handleApiResponse(response: Response) {
   const data = await response.json();
   if (!response.ok) {
     // Se a resposta não for bem-sucedida (status 4xx ou 5xx)
@@ -13,7 +14,7 @@ async function handleApiResponse(response) {
   return data;
 }
 
-export async function criarCliente(clienteData) {
+export async function criarCliente(clienteData: Cliente) {
   try {
     const response = await fetch(`${API_BASE_URL}/clientes`, {
       method: 'POST',
@@ -30,10 +31,6 @@ export async function criarCliente(clienteData) {
   }
 }
 
-/**
- * Lista todos os clientes.
- * @returns {Promise<Array<object>>} - Uma lista de clientes.
- */
 export async function listarClientes() {
   try {
     const response = await fetch(`${API_BASE_URL}/clientes`, {
@@ -49,12 +46,7 @@ export async function listarClientes() {
   }
 }
 
-/**
- * Busca um cliente pelo ID.
- * @param {string} id - O ID do cliente.
- * @returns {Promise<object>} - O cliente encontrado.
- */
-export async function buscarClientePorId(id) {
+export async function buscarClientePorId(id: string) {
   try {
     const response = await fetch(`${API_BASE_URL}/clientes/${id}`, {
       method: 'GET',
@@ -69,12 +61,7 @@ export async function buscarClientePorId(id) {
   }
 }
 
-/**
- * Busca um cliente pelo CPF.
- * @param {string} cpf - O CPF do cliente.
- * @returns {Promise<object>} - O cliente encontrado.
- */
-export async function buscarClientePorCpf(cpf) {
+export async function buscarClientePorCpf(cpf: string) {
   try {
     const response = await fetch(`${API_BASE_URL}/clientes/cpf/${cpf}`, {
       method: 'GET',
@@ -89,13 +76,7 @@ export async function buscarClientePorCpf(cpf) {
   }
 }
 
-/**
- * Atualiza um cliente existente.
- * @param {string} id - O ID do cliente a ser atualizado.
- * @param {object} clienteData - Os dados atualizados do cliente (conforme UpdateClienteDTO).
- * @returns {Promise<object>} - O cliente atualizado.
- */
-export async function atualizarCliente(id, clienteData) {
+export async function atualizarCliente(id: string, clienteData: Cliente) {
   try {
     const response = await fetch(`${API_BASE_URL}/clientes/${id}`, {
       method: 'PUT',
@@ -111,12 +92,7 @@ export async function atualizarCliente(id, clienteData) {
   }
 }
 
-/**
- * Exclui um cliente pelo ID.
- * @param {string} id - O ID do cliente a ser excluído.
- * @returns {Promise<object>} - Um objeto de sucesso indicando a exclusão.
- */
-export async function excluirCliente(id) {
+export async function excluirCliente(id: string) {
   try {
     const response = await fetch(`${API_BASE_URL}/clientes/${id}`, {
       method: 'DELETE',

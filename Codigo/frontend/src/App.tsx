@@ -26,14 +26,14 @@ export default function App() {
 
       <div className="bg-animated">
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<LoginScreen />} />
+          <Route path='/home' element={<HomePage />}></Route>
           <Route path="/clientes" element={<PageCliente />} />
-          <Route path="/clientes/novo" element={<RegisterScreen />} />
+          <Route path="/cadastro" element={<RegisterScreen />} />
           <Route path="/clientes/pesquisar" element={<ConsultaClientes />} />
           <Route path="/carros/pesquisar" element={<ConsultaCarros />} />
           <Route path="/carros/novo" element={<CadastroCarros />} />
           <Route path="/carros/gerencia" element={<GerenciamentoAluguel />} />
-          <Route path="/login" element={<LoginScreen />} />
         </Routes>
       </div>
     </BrowserRouter>

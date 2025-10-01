@@ -1,12 +1,15 @@
 import express from "express";
 import dotenv from "dotenv";
-import userRoutes from "../Backend/adapters/routes/UserRoutes.js"; 
-import loginRoutes from "../Backend/adapters/routes/LoginRoutes.js";
-import automovelRoutes from "../Backend/adapters/routes/AutomovelRoutes.js";
+import cors from "cors";
+import userRoutes from "./adapters/routes/UserRoutes.js"; 
+import loginRoutes from "./adapters/routes/LoginRoutes.js";
+import automovelRoutes from "./adapters/routes/AutomovelRoutes.js";
 
 dotenv.config();
 
 const app = express();
+
+app.use(cors());
 
 app.use(express.json()); 
 app.use("/api/users", userRoutes);
