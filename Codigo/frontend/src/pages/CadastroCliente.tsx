@@ -41,7 +41,7 @@ export default function RegisterScreen(): JSX.Element {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-800 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-purple-700 via-purple-800 to-indigo-900 flex items-center justify-center p-4">
       <div className="w-full max-w-2xl">
         {/* Header */}
         <div className="text-center !mb-8">
@@ -56,7 +56,7 @@ export default function RegisterScreen(): JSX.Element {
        <div className="flex items-center justify-center !mb-8">
           <div className="flex items-center gap-2">
             <div
-              className={`flex items-center justify-center w-10 h-10 rounded-full ${
+              className={`flex items-center justify-center w-10 h-10 rounded-full font-bold ${
                 currentStep >= 1 ? "bg-white text-purple-600" : "bg-purple-400 text-white"
               }`}
             >
@@ -64,7 +64,7 @@ export default function RegisterScreen(): JSX.Element {
             </div>
             <div className={`w-16 h-1 ${currentStep >= 2 ? "bg-white" : "bg-purple-400"}`} />
             <div
-              className={`flex items-center justify-center w-10 h-10 rounded-full ${
+              className={`flex items-center justify-center w-10 h-10 rounded-full font-bold ${
                 currentStep >= 2 ? "bg-white text-purple-600" : "bg-purple-400 text-white"
               }`}
             >

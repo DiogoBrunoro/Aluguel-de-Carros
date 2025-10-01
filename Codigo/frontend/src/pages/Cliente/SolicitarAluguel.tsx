@@ -30,30 +30,37 @@ export default function SolicitarAluguel() {
   const [message, setMessage] = useState<MessageState>({ type: "", text: "" })
   const [loading, setLoading] = useState(false)
 
-  // Mock de carros disponíveis
-  const mockCarros: Carro[] = [
-    {
-      id: "car1",
-      placa: "ABC-1234",
-      matricula: "MV-001",
-      ano: 2020,
-      marca: "Toyota",
-      modelo: "Corolla",
-      disponivel: true,
-    },
-    {
-      id: "car2",
-      placa: "XYZ-5678",
-      matricula: "MV-002",
-      ano: 2022,
-      marca: "Honda",
-      modelo: "Civic",
-      disponivel: true,
-    },
-  ]
-
   useEffect(() => {
-    setCarros(mockCarros.filter((c) => c.disponivel))
+    const fetchCarros = async () => {
+      try {
+        const token = localStorage.getItem("token")
+
+        const response = await fetch("http://localhost:3000/api/automoveis/", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          }
+        })
+
+        console.log("Response: ", response)
+
+        if (!response.ok) {
+          throw new Error("Erro ao buscar automóveis")
+        }
+
+        const data = await response.json()
+
+        // Filtra apenas os carros disponíveis
+        const carrosDisponiveis = data.filter((carro: { disponivel: boolean }) => carro.disponivel === true)
+
+        setCarros(carrosDisponiveis)
+      } catch (error) {
+        console.error("Erro:", error)
+      }
+    }
+
+    fetchCarros()
   }, [])
 
   const handleSubmit = async () => {
@@ -72,8 +79,27 @@ export default function SolicitarAluguel() {
 
     setLoading(true)
     try {
-      // Aqui você faria a chamada à API
-      console.log("Solicitando aluguel:", { ...formData, clienteId: user?.id })
+      const token = localStorage.getItem("token")
+
+      const response = await fetch("http://localhost:3000/api/pedidoAluguel", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          ...formData,
+          clienteId: user?.id
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error("Erro ao solicitar aluguel")
+      }
+
+      const result = await response.json()
+      console.log("Resposta do backend:", result)
+
       setMessage({ type: "success", text: "Solicitação de aluguel enviada com sucesso!" })
       setFormData({ carroId: "", dataInicio: "", dataFim: "" })
     } catch (err) {

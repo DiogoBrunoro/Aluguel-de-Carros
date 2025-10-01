@@ -23,43 +23,40 @@ export default function CarrosDisponiveis() {
   const [carroSelecionado, setCarroSelecionado] = useState<Carro | null>(null)
   const [dialogAberto, setDialogAberto] = useState(false)
 
-  // Mock de dados
-  const mockCarros: Carro[] = [
-    {
-      id: "car1",
-      placa: "ABC-1234",
-      matricula: "MV-001",
-      ano: 2020,
-      marca: "Toyota",
-      modelo: "Corolla",
-      imagemUrl: "https://www.comprecar.com.br/storage/news/featured/2Aw_A_xdWZC9Dne.jpg",
-      disponivel: true,
-    },
-    {
-      id: "car2",
-      placa: "XYZ-5678",
-      matricula: "MV-002",
-      ano: 2022,
-      marca: "Honda",
-      modelo: "Civic",
-      imagemUrl: "https://www.comprecar.com.br/storage/news/featured/2Aw_A_xdWZC9Dne.jpg",
-      disponivel: true,
-    },
-    {
-      id: "car3",
-      placa: "DEF-9012",
-      matricula: "MV-003",
-      ano: 2019,
-      marca: "Volkswagen",
-      modelo: "Jetta",
-      imagemUrl: "https://www.comprecar.com.br/storage/news/featured/2Aw_A_xdWZC9Dne.jpg",
-      disponivel: false,
-    },
-  ]
-
   useEffect(() => {
-    setCarros(mockCarros)
+    const fetchCarros = async () => {
+      try {
+        const token = localStorage.getItem("token")
+
+        const response = await fetch("http://localhost:3000/api/automoveis/", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          }
+        })
+
+        console.log("Response: ", response)
+
+        if (!response.ok) {
+          throw new Error("Erro ao buscar automóveis")
+        }
+
+        const data = await response.json()
+
+        // Filtra apenas os carros disponíveis
+        const carrosDisponiveis = data.filter((carro: { disponivel: boolean }) => carro.disponivel === true)
+
+        setCarros(carrosDisponiveis)
+      } catch (error) {
+        console.error("Erro:", error)
+      }
+    }
+
+    fetchCarros()
   }, [])
+
+
 
   const handleVerDetalhes = (carro: Carro) => {
     setCarroSelecionado(carro)

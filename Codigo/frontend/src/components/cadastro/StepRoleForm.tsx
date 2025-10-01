@@ -21,28 +21,38 @@ export default function StepRole({ onSelect, onBack }: StepRoleProps): JSX.Eleme
       <CardContent className="space-y-4">
         <div className="grid gap-4 md:grid-cols-2">
           <Card
-            className="cursor-pointer border-2 transition-colors hover:border-primary"
+            className="relative cursor-pointer border-2 transition-colors hover:border-primary"
             onClick={() => onSelect("CLIENTE")}
           >
-            <CardHeader className="text-center">
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+            <CardHeader className="flex flex-col items-center justify-center text-center h-30 relative">
+              {/* Ícone fixo no topo */}
+              <div className="absolute top-0 left-0 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
                 <User className="h-6 w-6 text-primary" />
               </div>
-              <CardTitle className="text-lg">Cliente</CardTitle>
-              <CardDescription>Pessoa física que deseja alugar veículos</CardDescription>
+
+              {/* Texto centralizado no meio */}
+              <div className="flex flex-col items-center justify-center">
+                <CardTitle className="text-lg">Cliente</CardTitle>
+                <CardDescription>Pessoa física que deseja alugar veículos</CardDescription>
+              </div>
             </CardHeader>
           </Card>
 
           <Card
-            className="cursor-pointer border-2 transition-colors hover:border-primary"
+            className="relative cursor-pointer border-2 transition-colors hover:border-primary"
             onClick={() => onSelect("AGENTE")}
           >
-            <CardHeader className="relative text-center">
-              <div className="relative mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                <Building2 className="h-6 w-6 text-primary absolute" />
+            <CardHeader className="flex flex-col items-center justify-center text-center h-30 relative">
+              {/* Ícone fixo no topo */}
+              <div className="absolute top-0 left-0 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                <Building2 className="h-6 w-6 text-primary" />
               </div>
-              <CardTitle className="text-lg">Agente</CardTitle>
-              <CardDescription>Empresa ou banco que oferece crédito</CardDescription>
+
+              {/* Texto centralizado no meio */}
+              <div className="flex flex-col items-center justify-center">
+                <CardTitle className="text-lg">Agente</CardTitle>
+                <CardDescription>Empresa ou banco que oferece crédito</CardDescription>
+              </div>
             </CardHeader>
           </Card>
         </div>
