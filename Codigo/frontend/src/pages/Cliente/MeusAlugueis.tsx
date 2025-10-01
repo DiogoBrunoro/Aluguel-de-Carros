@@ -12,6 +12,7 @@ import {
 } from "@mui/icons-material"
 import type { Aluguel, StatusAluguel, Carro } from "../../types/types"
 import { useAuth } from "../../hooks/useAuth"
+import { listAllAlugueis, updateAluguel } from "../../api/aluguel"
 
 interface StatusStyle {
   bg: string
@@ -23,34 +24,14 @@ export default function MeusAlugueis() {
   const [alugueis, setAlugueis] = useState<Aluguel[]>([])
   const [carros, setCarros] = useState<Carro[]>([])
 
-  // Mock de dados
-  const mockCarros: Carro[] = [
-    {
-      id: "car1",
-      placa: "ABC-1234",
-      matricula: "MV-001",
-      ano: 2020,
-      marca: "Toyota",
-      modelo: "Corolla",
-      imagemUrl: "https://www.comprecar.com.br/storage/news/featured/2Aw_A_xdWZC9Dne.jpg",
-    },
-  ]
-
-  const mockAlugueis: Aluguel[] = [
-    {
-      id: "aluguel1",
-      clienteId: user?.id || "cliente1",
-      carroId: "car1",
-      dataInicio: "2025-01-15",
-      dataFim: "2025-01-20",
-      valorDiario: "150.00",
-      status: "pendente",
-    },
-  ]
-
   useEffect(() => {
-    setCarros(mockCarros)
-    setAlugueis(mockAlugueis)
+
+    async function fetchAluguel() {
+      const data = await listAllAlugueis()
+      setAlugueis(data)
+    }
+
+    fetchAluguel()
   }, [])
 
   const getStatusColor = (status: StatusAluguel): StatusStyle => {
@@ -90,6 +71,25 @@ export default function MeusAlugueis() {
     return dias * Number.parseFloat(valorDiario)
   }
 
+  const handleCancelar = async (id: string) => {
+      const data = await updateAluguel({ id, status: "cancelado" })
+
+      if(!data){
+        throw new Error("Erro ao cancelar aluguel")
+      }
+
+      type NewAluguel = Omit<Aluguel, 'status'> & { status: StatusAluguel };
+
+      const newAlugueis = alugueis.map((aluguel) => {
+        if (aluguel.id === id) {
+          return { ...aluguel, status: "cancelado" } as NewAluguel 
+        }
+        return aluguel
+      })
+
+      setAlugueis(newAlugueis)
+  }
+
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
       <Typography variant="h4" sx={{ fontWeight: 700, mb: 4 }}>
@@ -99,7 +99,7 @@ export default function MeusAlugueis() {
       <Grid container direction="column" spacing={3}>
         {alugueis.length > 0 ? (
           alugueis.map((aluguel) => {
-            const carro = carros.find((c) => c.id === aluguel.carroId)
+            const carro = aluguel.automovel
             const status = getStatusColor(aluguel.status)
 
             return (
@@ -114,7 +114,7 @@ export default function MeusAlugueis() {
                   <CardContent sx={{ p: 3 }}>
                     <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
                       <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                        Aluguel #{aluguel.id}
+                        Aluguel #{aluguel.automovel.matricula}
                       </Typography>
                       <Chip
                         icon={getStatusIcon(aluguel.status)}
@@ -157,7 +157,7 @@ export default function MeusAlugueis() {
                         variant="outlined"
                         color="error"
                         sx={{ mt: 2 }}
-                        onClick={() => console.log("Cancelar aluguel")}
+                        onClick={() => handleCancelar(aluguel?.id || "")}
                       >
                         Cancelar Solicitação
                       </Button>

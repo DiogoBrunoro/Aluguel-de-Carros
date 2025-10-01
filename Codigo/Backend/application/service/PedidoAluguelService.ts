@@ -1,6 +1,5 @@
 import { IPedidoAluguelRepository } from "../interface/IPedidoAluguel.js";
 import { PedidoAluguel } from "../model/PedidoAluguelModel.js";
-import { v4 as uuidv4 } from "uuid";
 import { CreatePedidoAluguelDTO } from "../dto/PedidoAluguelDTO.js";
 import { UpdatePedidoAluguelDTO } from "../dto/PedidoAluguelDTO.js";
 
@@ -13,15 +12,13 @@ export class PedidoAluguelService {
     }
     
     async createPedidoAluguel(dto: CreatePedidoAluguelDTO) {
-        const id = uuidv4();
         const newPedido: PedidoAluguel = {
-        id,
         clienteId: dto.clienteId,
         automovelId: dto.automovelId,
-        dataInicio: dto.dataInicio,
-        dataFim: dto.dataFim,
-        valor: dto.valor,
-        status: "PENDENTE",
+        data_inicio: dto.dataInicio,
+        data_fim: dto.dataFim,
+        valor_diario: dto.valor,
+        status: "pendente",
         };
         return this.pedidoAluguelRepository.createPedidoAluguel(newPedido);
     }
@@ -43,10 +40,11 @@ export class PedidoAluguelService {
         ...existingPedido,
         ...dto,
         };
+        console.log(updatedPedido)
         return this.pedidoAluguelRepository.updatePedidoAluguel(updatedPedido);
     }
     
-    async listPedidosAluguel() {
-        return this.pedidoAluguelRepository.listPedidosAluguel();
+    async listPedidosAluguel(id: string) {
+        return this.pedidoAluguelRepository.listPedidosAluguel(id);
     }
 }

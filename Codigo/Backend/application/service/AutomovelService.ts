@@ -46,7 +46,7 @@ export class AutomovelService {
     return this.automovelRepository.deleteAutomovel(id);
   }
 
-  async listAutomoveis() {
-    return this.automovelRepository.listAutomoveis();
+  async listAutomoveis(id: string) {
+    return this.automovelRepository.listAutomoveis(id);
   }
 }

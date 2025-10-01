@@ -23,6 +23,23 @@ export class UserController {
     }
   }
 
+  static async getUserById(req: Request, res: Response) {
+    try {
+      const id = req?.user?.id;
+
+      if (!id) {
+        return res.status(401).json({ error: "Usuário nao autenticado" });
+      }
+
+      const user = await userService.getUserById(id);
+      if (!user) return res.status(404).json({ error: "Usuário nao encontrado" });
+      res.json(user);
+    } catch (err: any) {
+      console.error(err);
+      res.status(500).json({ error: err.message });
+    }
+  }
+
   static async createAgente(req: Request, res: Response) {
     try {
       const dto: CreateUserDTO = {

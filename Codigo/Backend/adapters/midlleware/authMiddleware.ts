@@ -10,7 +10,6 @@ export function authMiddleware(req: Request, res: Response, next: NextFunction) 
     return res.status(401).json({ error: "Token não fornecido" });
   }
 
-
   const token = authHeader.split(" ")[1];
 
   if (!token) {

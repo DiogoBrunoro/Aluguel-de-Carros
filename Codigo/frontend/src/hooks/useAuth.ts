@@ -1,101 +1,106 @@
 import { useState, useEffect, useCallback } from "react";
-import { Usuario } from "../types/types";
+import { Usuario } from "../types/types"; // Certifique-se de que Usuario tem 'role' e 'tipoAgente'
 import { useNavigate } from "react-router-dom";
+import apiUrl from "../api/apiUrl"; // Assumindo que apiUrl exporta uma string constante
 
 export function useAuth() {
-    // ! MOCADO
-    const [user, setUser] = useState<Usuario | null>({
-        id: "1",
-        nome: "Teste Mock",
-        email: "teste@teste.com",
-        role: "CLIENTE",
-    });
+    const [user, setUser] = useState<Usuario | null>(null);
     const [loading, setLoading] = useState(true);
-    const navivate = useNavigate()
+    const navigate = useNavigate();
 
-    // Carregar user completo no início
-    useEffect(() => {
-        const token = localStorage.getItem("token");
-        if (token) {
-            // ! TODO
-            // fetchUserProfile(token);
-            setLoading(false);
-            return;
-        } else {
-            setLoading(false);
-            return;
-        }
-    }, []);
-
-    console.log("Olha:", user)
-
-    // Função para buscar perfil completo do usuário
-    const fetchUserProfile = async (token: string) => {
+    const fetchUserProfile = useCallback(async (token: string) => {
+        setLoading(true);
         try {
-            const response = await fetch("http://localhost:3000/api/users/me", {
+            const response = await fetch(`${apiUrl}/users`, { 
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             });
-
-            if (!response.ok) throw new Error("Erro ao buscar perfil");
+            
+            if (!response.ok) {
+                throw new Error("Erro ao buscar perfil. Token inválido ou expirado.");
+            }
 
             const data: Usuario = await response.json();
-            setUser(data);
-        } catch (err) {
+            console.log("Perfil do usuário carregado:", data);
+            setUser(data); 
+        } catch (err: any) {
             console.error("Erro ao carregar perfil:", err);
-            // ! TODO
-            // logout();
+            localStorage.removeItem("token");
+            localStorage.removeItem("role"); 
+            setUser(null);
+            navigate("/"); 
         } finally {
             setLoading(false);
         }
-    };
+    }, [navigate, apiUrl]); 
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            fetchUserProfile(token); // Chama a função memoizada
+        } else {
+            // Se não houver token, não há usuário para buscar, então não está carregando.
+            setUser(null);
+            setLoading(false);
+        }
+    }, [fetchUserProfile]); // Agora fetchUserProfile é uma dependência estável
 
     // Função de login
     const login = useCallback(async (email: string, password: string) => {
+        setLoading(true); // Define loading como true durante o login
         try {
-            const response = await fetch("http://localhost:3000/api/users/login", {
+            const response = await fetch(`${apiUrl}/users/login`, { // Use apiUrl aqui também
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, senha: password }),
             });
 
-            if (!response.ok) throw new Error("Credenciais inválidas");
+            if (!response.ok) {
+                const errorData = await response.json(); // Tenta pegar a mensagem de erro do backend
+                throw new Error(errorData.message || "Credenciais inválidas");
+            }
 
-            const data = await response.json(); // { token, role }
+            const data = await response.json(); // { token, role, ...outros dados se o backend retornar}
 
-            console.log(data)
+            console.log("Dados de login recebidos:", data);
 
             localStorage.setItem("token", data.token);
             localStorage.setItem("role", data.role);
+            await fetchUserProfile(data.token);
 
-            // ! TODO
-            // buscar perfil completo
-            // await fetchUserProfile(data.token);
-            if (data.token) {
-                console.log("Data", data)
-
-                if (user?.role === "CLIENTE") {
-                    navivate("/cliente")
-                };
-                if (user?.role === "AGENTE") { navivate('/agente') };
-                return true;
+            if (data.role === "CLIENTE") {
+                navigate("/cliente");
+            } else if (data.role === "AGENTE") {
+                navigate('/agente');
+            } else {
+                // Redirecionamento padrão ou caso o role não seja reconhecido
+                navigate("/");
             }
-            console.log("Data", data)
+            return true;
+        } catch (err: any) {
+            console.error("Erro no login:", err.message);
+            // Em caso de erro de login, limpa tudo e redireciona.
+            localStorage.removeItem("token");
+            localStorage.removeItem("role");
+            setUser(null);
+            navigate("/"); // Redireciona para a página inicial em caso de falha no login
             return false;
-        } catch (err) {
-            console.error(err);
-            return false;
+        } finally {
+            setLoading(false); // Sempre define loading como false
         }
-    }, []);
+    }, [fetchUserProfile, navigate, apiUrl]); // Dependências do useCallback para login
 
     // Função de logout
     const logout = useCallback(() => {
         localStorage.removeItem("token");
         localStorage.removeItem("role");
         setUser(null);
-        navivate("/")
-    }, []);
+        setLoading(false); // Reseta o estado de loading no logout
+        navigate("/");
+    }, [navigate]);
 
-    return { user, login, logout, isAuthenticated: !!user, loading };
+    const isAuthenticated = !!user;
+
+    return { user, login, logout, isAuthenticated, loading };
 }

@@ -18,6 +18,8 @@ import {
 import { AddCircle, Save } from "@mui/icons-material"
 import type { Carro, MessageState } from "../../types/types"
 import { useAuth } from "../../hooks/useAuth"
+import apiUrl from "../../api/apiUrl"
+import { createAluguel } from "../../api/aluguel"
 
 export default function SolicitarAluguel() {
   const { user } = useAuth()
@@ -26,10 +28,11 @@ export default function SolicitarAluguel() {
     carroId: "",
     dataInicio: "",
     dataFim: "",
+    valor: "",
   })
   const [message, setMessage] = useState<MessageState>({ type: "", text: "" })
   const [loading, setLoading] = useState(false)
-
+  console.log(formData)
   useEffect(() => {
     const fetchCarros = async () => {
       try {
@@ -79,29 +82,21 @@ export default function SolicitarAluguel() {
 
     setLoading(true)
     try {
-      const token = localStorage.getItem("token")
-
-      const response = await fetch("http://localhost:3000/api/pedidoAluguel", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          ...formData,
-          clienteId: user?.id
-        })
+      if(!user?.id){
+        throw new Error("Usuário nao autenticado")
+      }
+      const data = createAluguel({
+        clienteId: user?.id,
+        automovelId: formData.carroId,
+        dataInicio: formData.dataInicio,
+        dataFim: formData.dataFim,
+        valor: formData.valor
       })
 
-      if (!response.ok) {
-        throw new Error("Erro ao solicitar aluguel")
-      }
-
-      const result = await response.json()
-      console.log("Resposta do backend:", result)
+      console.log(data)
 
       setMessage({ type: "success", text: "Solicitação de aluguel enviada com sucesso!" })
-      setFormData({ carroId: "", dataInicio: "", dataFim: "" })
+      setFormData({ carroId: "", dataInicio: "", dataFim: "" , valor: ""})
     } catch (err) {
       console.error("Erro ao solicitar aluguel:", err)
       setMessage({ type: "error", text: "Erro ao enviar solicitação. Tente novamente." })
@@ -158,6 +153,15 @@ export default function SolicitarAluguel() {
                 ))}
               </Select>
             </FormControl>
+
+            <TextField
+              label="Valor Diário"
+              type="number"
+              value={formData.valor}
+              onChange={(e) => setFormData({ ...formData, valor: e.target.value })}
+              fullWidth
+              InputLabelProps={{ shrink: true }}
+            />
 
             <TextField
               label="Data de Início"

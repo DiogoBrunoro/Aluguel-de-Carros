@@ -17,6 +17,10 @@ export class UserService {
         return this.userRepository.findByEmail(email);
     }
 
+    async getUserById(id: string) {
+        return this.userRepository.getUserById(id);
+    }
+
     async createUser(dto: CreateUserDTO) {
         const hashedPassword = await bcrypt.hash(dto.senha, 10);
         const id = uuidv4();

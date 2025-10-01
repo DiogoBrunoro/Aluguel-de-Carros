@@ -36,18 +36,13 @@ export default function CarrosDisponiveis() {
           }
         })
 
-        console.log("Response: ", response)
-
         if (!response.ok) {
           throw new Error("Erro ao buscar automóveis")
         }
 
         const data = await response.json()
 
-        // Filtra apenas os carros disponíveis
-        const carrosDisponiveis = data.filter((carro: { disponivel: boolean }) => carro.disponivel === true)
-
-        setCarros(carrosDisponiveis)
+        setCarros(data)
       } catch (error) {
         console.error("Erro:", error)
       }

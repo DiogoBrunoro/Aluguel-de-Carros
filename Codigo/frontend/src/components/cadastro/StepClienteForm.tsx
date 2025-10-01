@@ -6,6 +6,8 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "../ui
 import { Label } from "../ui/Label"
 import { Input } from "../ui/Input"
 import { Button } from "../ui/Button"
+import { criarCliente } from "../../api/clientes"
+import { Cliente } from "../../types/types"
 
 export interface ClienteFormData {
     nome: string
@@ -34,7 +36,6 @@ export default function StepCliente({ onSuccess, onBack }: StepClienteProps): JS
         empregadores: "",
         confirmarSenha: "",
     })
-
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string>("")
 
@@ -47,7 +48,6 @@ export default function StepCliente({ onSuccess, onBack }: StepClienteProps): JS
         e.preventDefault()
         setError("")
         setLoading(true)
-
         if (formData.senha !== formData.confirmarSenha) {
             setError("As senhas não coincidem")
             setLoading(false)
@@ -61,7 +61,7 @@ export default function StepCliente({ onSuccess, onBack }: StepClienteProps): JS
                 .map((emp) => ({ nome: emp.trim() }))
                 .filter((emp) => emp.nome.length > 0)
 
-            const payload = {
+            const payload: Cliente = {
                 nome: formData.nome,
                 email: formData.email,
                 senha: formData.senha,
@@ -71,16 +71,7 @@ export default function StepCliente({ onSuccess, onBack }: StepClienteProps): JS
                 rendimentos: formData.rendimentos,
                 empregadores: empregadoresArray,
             }
-
-            const response = await fetch("http://localhost:3000/api/users/clientes", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload),
-            })
-
-            if (!response.ok) {
-                throw new Error("Erro ao criar perfil de cliente")
-            }
+            const response = await criarCliente(payload)
 
             onSuccess()
         } catch (err) {

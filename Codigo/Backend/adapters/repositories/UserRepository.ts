@@ -15,6 +15,14 @@ export class UserRepository implements IUserRepository {
     return result[0] || null;
   }
 
+  // Buscar usuário pelo id
+  async getUserById(id: string): Promise<Usuario | null> {
+    const result = await sql<Usuario[]>`
+      SELECT * FROM usuarios WHERE id = ${id}
+    `;
+    return result[0] || null;
+  }
+
   // Criar Cliente
   async createUserCliente(cliente: Cliente): Promise<Cliente> {
     const result = await sql<Cliente[]>`

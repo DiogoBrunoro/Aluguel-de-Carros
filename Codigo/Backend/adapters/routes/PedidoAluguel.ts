@@ -4,7 +4,9 @@ import { authMiddleware } from "../midlleware/authMiddleware.js";
 
 const router = Router();
 
-router.post("/PedidoAluguel",authMiddleware, PedidoAluguelController.createPedidoAluguel);
+router.post("/",authMiddleware, PedidoAluguelController.createPedidoAluguel);
+router.get("/",authMiddleware, PedidoAluguelController.listPedidosAluguel);
+router.put("/:id",authMiddleware, PedidoAluguelController.updatePedidoAluguel);
 router.get("/PedidoAluguel/:id",authMiddleware, PedidoAluguelController.getPedidoAluguelById);
 
 

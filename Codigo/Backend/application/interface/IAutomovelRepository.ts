@@ -5,5 +5,5 @@ export interface IAutomovelRepository {
   getAutomovelById(id: string): Promise<Automovel | null>;
   updateAutomovel(automovel: Automovel): Promise<Automovel>;
   deleteAutomovel(id: string): Promise<void>;
-  listAutomoveis(): Promise<Automovel[]>;
+  listAutomoveis(id: string): Promise<Automovel[]>;
 }

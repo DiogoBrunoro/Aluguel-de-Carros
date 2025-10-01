@@ -51,7 +51,7 @@ export class AutomovelRepository implements IAutomovelRepository {
 
   async listAutomoveis(): Promise<Automovel[]> {
     const result = await sql<Automovel[]>`
-        SELECT * FROM automoveis
+        SELECT * FROM automoveis where disponivel = true
       `;
     return result;
   }

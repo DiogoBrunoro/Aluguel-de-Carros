@@ -16,7 +16,8 @@ async function handleApiResponse(response: Response) {
 
 export async function criarCliente(clienteData: Cliente) {
   try {
-    const response = await fetch(`${API_BASE_URL}/clientes`, {
+    console.log(API_BASE_URL)
+    const response = await fetch(`${API_BASE_URL}/users/clientes`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

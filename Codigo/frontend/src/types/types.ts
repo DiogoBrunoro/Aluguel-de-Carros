@@ -1,12 +1,16 @@
+interface Empregador {
+  nome: string;
+}
+
 export interface Cliente {
-  id: string
+  id?: string
   nome: string
-  cpf: string
-  rg: string
+  email: string
+  role: "CLIENTE" | "AGENTE"
   endereco: string
   profissao?: string
-  rendimentos?: number[]
-  empregadores?: string[]
+  rendimentos?: string
+  empregadores?: Empregador[]
   senha?: string
 }
 
@@ -24,12 +28,26 @@ export interface Carro {
 export type StatusAluguel = "ativo" | "pendente" | "cancelado" | "finalizado"
 
 export interface Aluguel {
-  id: string
+  id?: string
   clienteId: string
   carroId: string
   dataInicio: string
   dataFim: string
   valorDiario: string
+  status: StatusAluguel
+  automovel: Carro
+}
+
+export interface CreateAluguel {
+  clienteId: string
+  automovelId: string
+  dataInicio: string
+  dataFim: string
+  valor: string
+}
+
+export interface UpdateAluguel {
+  id: string
   status: StatusAluguel
 }
 
