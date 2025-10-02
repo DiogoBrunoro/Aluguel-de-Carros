@@ -17,10 +17,10 @@
 
 ## Diagrama de Implantação:
 
-<img width="2482" height="1169" alt="DiagramaImplantacao drawio(1)" src="https://github.com/user-attachments/assets/a0d8e66d-4747-448c-827a-7b121b7016ec" />
-
+<img width="1841" height="361" alt="DiagramaImplantacao drawio" src="https://github.com/user-attachments/assets/2685b4d6-fbd1-4dcf-ad8b-bd54fe7ad78e" />
 
 ## Histórias de Usuário:
+
 
 ### Clientes:
 
