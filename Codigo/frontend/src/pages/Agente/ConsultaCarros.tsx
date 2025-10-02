@@ -27,46 +27,37 @@ import {
 import InputClient from "../../components/InputClient";
 import { Carro } from "../../types/types";
 
+import apiUrl from "../../api/apiUrl";
+
+const API_BASE_URL = apiUrl;
+
 export default function ConsultaCarros() {
   const [carros, setCarros] = useState<Carro[]>([])
   const [busca, setBusca] = useState<string>("")
   const [editandoId, setEditandoId] = useState<string | null>(null)
   const [formData, setFormData] = useState<Partial<Carro>>({})
 
-  // Mock de dados para simular a API. Remova isso ao integrar com o backend real.
-  const mockCarros = [
-    {
-      id: "car1",
-      placa: "ABC-1234",
-      matricula: "MV-001",
-      ano: 2020,
-      marca: "Toyota",
-      modelo: "Corolla",
-      imagemUrl: "https://www.comprecar.com.br/storage/news/featured/2Aw_A_xdWZC9Dne.jpg",
-    },
-    {
-      id: "car2",
-      placa: "XYZ-5678",
-      matricula: "MV-002",
-      ano: 2022,
-      marca: "Honda",
-      modelo: "Civic",
-      imagemUrl: "https://www.comprecar.com.br/storage/news/featured/2Aw_A_xdWZC9Dne.jpg",
-    },
-    {
-      id: "car3",
-      placa: "DEF-9012",
-      matricula: "MV-003",
-      ano: 2019,
-      marca: "Volkswagen",
-      modelo: "Jetta",
-      imagemUrl: "https://www.comprecar.com.br/storage/news/featured/2Aw_A_xdWZC9Dne.jpg",
-    },
-  ];
-
-  const carregarCarros = (): void => {
-    setCarros(mockCarros)
-  }
+  // Consulta carros do backend
+  const carregarCarros = async (): Promise<void> => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${API_BASE_URL}/automoveis`, {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setCarros(data); // ajuste conforme o formato retornado pela API
+      } else {
+        setCarros([]);
+      }
+    } catch (err) {
+      console.error("Erro ao consultar carros:", err);
+      setCarros([]);
+    }
+  };
 
   useEffect(() => {
     carregarCarros()

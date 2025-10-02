@@ -4,6 +4,9 @@ import { DirectionsCar, Save, Clear } from "@mui/icons-material"
 // import "../../styles/PageCliente"
 import { Alert, Card, CardContent, Stack, TextField, Typography, Button } from "@mui/material"
 import { MessageState } from "../../types/types"
+import apiUrl from "../../api/apiUrl";
+
+const API_BASE_URL = apiUrl; 
 
 interface CarroFormData {
   marca: string
@@ -53,11 +56,14 @@ export default function CadastroCarros() {
 
     setLoading(true)
     try {
-      const response = await fetch("/api/carros", {
+      const token = localStorage.getItem("token")
+      const response = await fetch(`${API_BASE_URL}/automoveis`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+         },
         body: JSON.stringify(formData),
-      })
+      });
 
       if (response.ok) {
         setMessage({ type: "success", text: "Carro cadastrado com sucesso!" })
