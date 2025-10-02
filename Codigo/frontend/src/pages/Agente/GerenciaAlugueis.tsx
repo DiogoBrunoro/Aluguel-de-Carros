@@ -19,7 +19,7 @@ import {
   DialogContent,
   DialogActions,
   Divider,
-  Grid, 
+  Grid,
 } from "@mui/material"
 import {
   Edit,
@@ -38,30 +38,10 @@ import {
 // import "../styles/PageClient.css"
 import InputClient from "../../components/InputClient"
 import { Aluguel, Carro, Cliente, StatusAluguel } from "../../types/types"
+import apiUrl from "../../api/apiUrl";
+import { listAllAlugueis, updateAluguel, createAluguel } from "../../api/aluguel"   
 
-//   const carregarDados = () => {
-//     // Carregar aluguéis
-//     fetch("/api/alugueis")
-//       .then((res) => res.json())
-//       .then((data) => setAlugueis(data))
-//       .catch((err) => console.error("Erro ao buscar aluguéis:", err))
 
-//     // Carregar clientes
-//     fetch("/api/clientes")
-//       .then((res) => res.json())
-//       .then((data) => setClientes(data))
-//       .catch((err) => console.error("Erro ao buscar clientes:", err))
-
-//     // Carregar carros
-//     fetch("/api/carros")
-//       .then((res) => res.json())
-//       .then((data) => setCarros(data))
-//       .catch((err) => console.error("Erro ao buscar carros:", err))
-//   }
-
-//   useEffect(() => {
-//     carregarDados()
-//   }, [])
 
 interface NovoAluguelForm {
   cliente_id: string
@@ -77,6 +57,8 @@ interface StatusStyle {
   color: string
 }
 
+const API_BASE_URL = apiUrl;
+
 export default function GerenciamentoAluguel() {
   const [alugueis, setAlugueis] = useState<Aluguel[]>([])
   const [clientes, setClientes] = useState<Cliente[]>([])
@@ -91,6 +73,43 @@ export default function GerenciamentoAluguel() {
     valorDiario: "",
     status: "pendente",
   })
+
+
+
+
+  const carregarDados = async (): Promise<void> => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const alugueisData = await listAllAlugueis()
+      setAlugueis(alugueisData)
+
+      const resClientes = await fetch(`${API_BASE_URL}/users`, {
+        method: "GET",
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}` },
+      });
+      const clientesData = await resClientes.json();
+      setClientes(Array.isArray(clientesData) ? clientesData : []);
+
+      const resCarros = await fetch(`${API_BASE_URL}/automoveis`, {
+        method: "GET",
+        headers: { "Authorization": `Bearer ${token}` },
+      });
+      const carrosData = await resCarros.json();
+      setCarros(carrosData);
+
+    } catch (err) {
+      console.error("Erro ao carregar dados:", err);
+    }
+  };
+
+
+
+  useEffect(() => {
+    carregarDados()
+  }, [])
 
   const getStatusColor = (status: StatusAluguel): StatusStyle => {
     switch (status) {
@@ -143,6 +162,49 @@ export default function GerenciamentoAluguel() {
       modeloCarro.includes(busca.toLowerCase())
     )
   })
+
+  const handleCriarAluguel = async () => {
+  try {
+    const token = localStorage.getItem("token")
+    if (!token) {
+      alert("Usuário não autenticado")
+      return
+    }
+
+    // validações básicas
+    if (!novoAluguel.carroId || !novoAluguel.data_inicio || !novoAluguel.data_fim || !novoAluguel.valorDiario) {
+      alert("Preencha todos os campos!")
+      return
+    }
+
+    const aluguel = await createAluguel({
+      cliente_id: "dc469de0-fb09-4b7f-8c89-14a720510f53",
+      automovel_id: novoAluguel.carroId,
+      data_inicio: novoAluguel.data_inicio,
+      data_fim: novoAluguel.data_fim,
+      valor: novoAluguel.valorDiario
+    })
+
+    // adiciona o novo aluguel na lista
+    setAlugueis((prev) => [...prev, aluguel])
+    setDialogAberto(false)
+
+    // limpa o formulário
+    setNovoAluguel({
+      cliente_id: "",
+      carroId: "",
+      data_inicio: "",
+      data_fim: "",
+      valorDiario: "",
+      status: "pendente"
+    })
+
+  } catch (err) {
+    console.error("Erro ao criar aluguel:", err)
+    alert("Erro ao criar aluguel. Tente novamente.")
+  }
+}
+
 
   return (
     <div className="screen-center">
@@ -251,7 +313,6 @@ export default function GerenciamentoAluguel() {
           )}
         </Grid>
 
-        {/* Dialog para novo aluguel */}
         {/* Dialog para novo aluguel */}
         <Dialog open={dialogAberto} onClose={() => setDialogAberto(false)} maxWidth="sm" fullWidth>
           {/* Cabeçalho moderno */}
@@ -392,7 +453,7 @@ export default function GerenciamentoAluguel() {
               Cancelar
             </Button>
             <Button
-              onClick={() => { }}
+              onClick={handleCriarAluguel}
               variant="contained"
               sx={{
                 borderRadius: 2,

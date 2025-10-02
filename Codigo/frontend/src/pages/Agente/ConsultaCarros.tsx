@@ -49,7 +49,7 @@ export default function ConsultaCarros() {
       });
       if (response.ok) {
         const data = await response.json();
-        setCarros(data); // ajuste conforme o formato retornado pela API
+        setCarros(data); 
       } else {
         setCarros([]);
       }
@@ -74,22 +74,52 @@ export default function ConsultaCarros() {
   }
 
   const handleSalvar = async (): Promise<void> => {
+    if (!editandoId || !formData) return;
     try {
-      setEditandoId(null)
-      carregarCarros()
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${API_BASE_URL}/automoveis/${editandoId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify(formData),
+      });
+      if (response.ok) {
+        setEditandoId(null);
+        setFormData({});
+        await carregarCarros();
+      } else {
+        const error = await response.json();
+        alert(error.message || "Erro ao atualizar carro");
+      }
     } catch (err) {
-      console.error("Erro ao salvar carro:", err)
+      console.error("Erro ao salvar carro:", err);
+      alert("Erro de conexão. Tente novamente.");
     }
-  }
+  };
 
   const handleExcluir = async (id: string): Promise<void> => {
-    if (!window.confirm("Deseja realmente excluir este carro?")) return
+    if (!window.confirm("Deseja realmente excluir este carro?")) return;
     try {
-      setCarros(carros.filter((c) => c.id !== id))
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${API_BASE_URL}/automoveis/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+        },
+      });
+      if (response.status === 204) {
+        setCarros(carros.filter((c) => c.id !== id));
+      } else {
+        const error = await response.json();
+        alert(error.message || "Erro ao excluir carro");
+      }
     } catch (err) {
-      console.error("Erro ao excluir carro:", err)
+      console.error("Erro ao excluir carro:", err);
+      alert("Erro de conexão. Tente novamente.");
     }
-  }
+  };
 
   const carrosFiltrados = carros.filter(
     (c) =>
