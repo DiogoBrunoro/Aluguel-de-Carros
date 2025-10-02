@@ -101,7 +101,7 @@ export default function CarrosDisponiveis({ onSelecionarCarro }: CarrosDisponive
               >
                 <Box
                   component="img"
-                  src={carro.imagemUrl || "/placeholder.png"}
+                  src={carro.imagemUrl || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbv1QnMsnbqe0-5v98_4yRKy5G03BM8oBTXQ&s"}
                   alt={`${carro.marca} ${carro.modelo}`}
                   sx={{
                     width: "100%",
@@ -177,7 +177,7 @@ export default function CarrosDisponiveis({ onSelecionarCarro }: CarrosDisponive
             <DialogContent>
               <Box
                 component="img"
-                src={carroSelecionado.imagemUrl || "/placeholder.png"}
+                src={carroSelecionado.imagemUrl || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbv1QnMsnbqe0-5v98_4yRKy5G03BM8oBTXQ&s"}
                 alt={`${carroSelecionado.marca} ${carroSelecionado.modelo}`}
                 sx={{ width: "100%", borderRadius: 2, mb: 2 }}
               />

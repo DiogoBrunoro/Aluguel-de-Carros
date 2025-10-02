@@ -241,13 +241,12 @@ export default function ConsultaCarros() {
                       {/* Modo visualização */}
                       <CardContent sx={{ p: 3 }}>
                         <Stack direction="row" spacing={3} alignItems="center" sx={{ mb: 3 }}>
-                          {/* Imagem à esquerda
                           <Box
                             component="img"
-                            src={c.imagemUrl || "/placeholder.png"} // Substitua pelo URL da imagem
+                            src={c.imagemUrl || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbv1QnMsnbqe0-5v98_4yRKy5G03BM8oBTXQ&s"}
                             alt={`${c.marca} ${c.modelo}`}
                             sx={{ width: 150, height: "100%", borderRadius: 2, objectFit: "cover" }}
-                          /> */}
+                          />
 
                           {/* Conteúdo do card */}
                           <Stack spacing={1} flex={1}>
