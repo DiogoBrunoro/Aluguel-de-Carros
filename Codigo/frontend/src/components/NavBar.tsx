@@ -19,8 +19,7 @@ import {
 import { useTheme } from "@mui/material/styles"
 
 import { Home as HomeIcon, Person, DirectionsCar, Add, Assignment, Menu as MenuIcon, Home } from "@mui/icons-material"
-
-type TelaAtiva = "home" | "consulta-clientes" | "consulta-carros" | "cadastro-carros" | "gerenciamento-aluguel"
+import { TelaAtiva } from "../types/types"
 
 interface NavbarProps {
   setTelaAtiva: (tela: TelaAtiva) => void

@@ -17,11 +17,17 @@ import {
 } from "@mui/material"
 import { DirectionsCar, DateRange, LocalOffer, CheckCircle } from "@mui/icons-material"
 import { Carro } from "../../types/types"
+import { useNavigate } from "react-router-dom"
 
-export default function CarrosDisponiveis() {
+interface CarrosDisponivesProps {
+  onSelecionarCarro: (carro: Carro) => void
+}
+
+export default function CarrosDisponiveis({ onSelecionarCarro }: CarrosDisponivesProps) {
   const [carros, setCarros] = useState<Carro[]>([])
   const [carroSelecionado, setCarroSelecionado] = useState<Carro | null>(null)
   const [dialogAberto, setDialogAberto] = useState(false)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchCarros = async () => {
@@ -50,6 +56,14 @@ export default function CarrosDisponiveis() {
 
     fetchCarros()
   }, [])
+
+  const handleSolicitarAluguel = (carroSelecionado: Carro) => {
+    if (carroSelecionado) {
+      onSelecionarCarro(carroSelecionado);
+    } else {
+      alert('Por favor, selecione um carro antes de solicitar o aluguel.');
+    }
+  };
 
 
 
@@ -185,6 +199,7 @@ export default function CarrosDisponiveis() {
                   background: "linear-gradient(90deg, #22c55e, #16a34a)",
                   "&:hover": { background: "linear-gradient(90deg, #15803d, #166534)" },
                 }}
+                onClick={() => handleSolicitarAluguel(carroSelecionado)}
               >
                 Solicitar Aluguel
               </Button>

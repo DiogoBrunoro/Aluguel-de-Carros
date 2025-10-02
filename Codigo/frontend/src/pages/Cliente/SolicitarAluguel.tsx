@@ -21,23 +21,38 @@ import { useAuth } from "../../hooks/useAuth"
 import apiUrl from "../../api/apiUrl"
 import { createAluguel } from "../../api/aluguel"
 
-export default function SolicitarAluguel() {
+interface SolicitarAluguelProps {
+  carroSelecionado?: Carro | null
+  onLimpar?: () => void
+}
+
+export default function SolicitarAluguel({ carroSelecionado, onLimpar }: SolicitarAluguelProps) {
   const { user } = useAuth()
   const [carros, setCarros] = useState<Carro[]>([])
   const [formData, setFormData] = useState({
-    carroId: "",
+    carroId: carroSelecionado?.id ||"",
     data_inicio: "",
     data_fim: "",
     valor: "",
   })
   const [message, setMessage] = useState<MessageState>({ type: "", text: "" })
   const [loading, setLoading] = useState(false)
+
   useEffect(() => {
+
+    if (carroSelecionado) {
+      setFormData({
+        carroId: carroSelecionado.id,
+        data_inicio: "",
+        data_fim: "",
+        valor: "",
+      })
+    }
     const fetchCarros = async () => {
       try {
         const token = localStorage.getItem("token")
 
-        const response = await fetch("http://localhost:3000/api/automoveis/", {
+        const response = await fetch(`${apiUrl}/automoveis/`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -61,7 +76,7 @@ export default function SolicitarAluguel() {
     }
 
     fetchCarros()
-  }, [])
+  }, [carroSelecionado])
 
   const handleSubmit = async () => {
     if (!formData.carroId || !formData.data_inicio || !formData.data_fim) {
@@ -79,7 +94,7 @@ export default function SolicitarAluguel() {
 
     setLoading(true)
     try {
-      if(!user?.id){
+      if (!user?.id) {
         throw new Error("Usuário nao autenticado")
       }
       const data = createAluguel({
@@ -91,7 +106,11 @@ export default function SolicitarAluguel() {
       })
 
       setMessage({ type: "success", text: "Solicitação de aluguel enviada com sucesso!" })
-      setFormData({ carroId: "", data_inicio: "", data_fim: "" , valor: ""})
+      setFormData({ carroId: "", data_inicio: "", data_fim: "", valor: "" })
+      if (onLimpar) {
+        onLimpar
+      }
+      
     } catch (err) {
       console.error("Erro ao solicitar aluguel:", err)
       setMessage({ type: "error", text: "Erro ao enviar solicitação. Tente novamente." })
