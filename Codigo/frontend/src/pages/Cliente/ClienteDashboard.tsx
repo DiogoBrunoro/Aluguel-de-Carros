@@ -1,26 +1,39 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import NavBarCliente from "../../components/NavBarCliente"
 import CarrosDisponiveis from "./CarrosDisponiveis"
 import MeusAlugueis from "./MeusAlugueis"
 import SolicitarAluguel from "./SolicitarAluguel"
-import type { TelaAtiva } from "../../types/types"
+import type { Carro, TelaAtiva } from "../../types/types"
 import { Box, Container, Typography, Grid, Card, CardContent } from "@mui/material"
 import { DirectionsCar, EventNote, AddCircle } from "@mui/icons-material"
 
 export default function ClienteDashboard() {
   const [telaAtiva, setTelaAtiva] = useState<TelaAtiva>("home")
-  
+  const [carroSelecionadoParaAluguel, setCarroSelecionadoParaAluguel] = useState<Carro | null>(null)
+
+  const handleSelecionarCarroParaAluguel = (carro: Carro) => {
+    setCarroSelecionadoParaAluguel(carro); 
+    setTelaAtiva("solicitar-aluguel"); 
+  };
+
+
+  const handleLimparCarroAluguel = () => {
+    setCarroSelecionadoParaAluguel(null);
+    setTelaAtiva("meus-alugueis");
+  };
+
+
 
   const renderTelaContent = () => {
     switch (telaAtiva) {
       case "carros-disponiveis":
-        return <CarrosDisponiveis />
+        return <CarrosDisponiveis onSelecionarCarro={handleSelecionarCarroParaAluguel} />
       case "meus-alugueis":
         return <MeusAlugueis />
       case "solicitar-aluguel":
-        return <SolicitarAluguel />
+        return <SolicitarAluguel carroSelecionado={carroSelecionadoParaAluguel} onLimpar={handleLimparCarroAluguel} />
       case "home":
       default:
         return (
