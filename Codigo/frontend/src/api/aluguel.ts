@@ -25,7 +25,7 @@ export async function listAllRealAlugueis() {
 
     const token = sessionStorage.getItem("token")
 
-    const response = await fetch(`${apiUrl}/aluguel/pedidos`, {
+    const response = await fetch(`${apiUrl}/aluguel/pe                                                                                                                                                                             didos`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -85,5 +85,23 @@ export async function updateAluguel(aluguel: UpdateAluguel) {
 
     const data = await response.json();
     return data;
+
+}
+
+export async function deleteAluguel(id: number) {
+
+ const token = sessionStorage.getItem("token")
+    const response = await fetch(`${apiUrl}/aluguel/${id}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+    });
+    if (!response.ok) {
+        throw new Error("Erro ao deletar aluguel");
+    }
+
+    return true;
 
 }
