@@ -90,6 +90,16 @@ export default function MeusAlugueis() {
       setAlugueis(newAlugueis)
   }
 
+  const formatData = (data: string) => {
+    const date = new Date(data);
+
+    const day = date.getUTCDate().toString().padStart(2, "0");
+    const month = (date.getUTCMonth() + 1).toString().padStart(2, "0"); 
+    const year = date.getUTCFullYear();
+    
+    return `${day}/${month}/${year}`;
+};
+
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
       <Typography variant="h4" sx={{ fontWeight: 700, mb: 4 }}>
@@ -138,8 +148,8 @@ export default function MeusAlugueis() {
                       </Typography>
                       <Typography variant="body2" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                         <CalendarToday fontSize="small" />
-                        <strong>Período:</strong> {new Date(aluguel.data_inicio).toLocaleDateString()} até{" "}
-                        {new Date(aluguel.data_fim).toLocaleDateString()}
+                        <strong>Período:</strong> {formatData(aluguel.data_inicio)} até{" "}
+                        {formatData(aluguel.data_fim)}
                       </Typography>
                       <Typography variant="body2" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                         <AttachMoney fontSize="small" />
