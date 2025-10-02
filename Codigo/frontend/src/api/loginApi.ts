@@ -18,7 +18,6 @@ async function Login(cpf: string, senha: string) {
     const data = await response.json();
 
     if (response.ok) { 
-      console.log('Login bem-sucedido!', data);
       localStorage.setItem('authToken', data.token);
       return data.token; 
     } else {

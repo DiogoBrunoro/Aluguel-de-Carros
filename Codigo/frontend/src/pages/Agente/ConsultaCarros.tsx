@@ -84,7 +84,6 @@ export default function ConsultaCarros() {
 
   const handleSalvar = async (): Promise<void> => {
     try {
-      console.log("Salvando carro:", formData)
       setEditandoId(null)
       carregarCarros()
     } catch (err) {
@@ -95,7 +94,6 @@ export default function ConsultaCarros() {
   const handleExcluir = async (id: string): Promise<void> => {
     if (!window.confirm("Deseja realmente excluir este carro?")) return
     try {
-      console.log("Excluindo carro com ID:", id)
       setCarros(carros.filter((c) => c.id !== id))
     } catch (err) {
       console.error("Erro ao excluir carro:", err)

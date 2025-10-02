@@ -16,7 +16,6 @@ async function handleApiResponse(response: Response) {
 
 export async function criarCliente(clienteData: Cliente) {
   try {
-    console.log(API_BASE_URL)
     const response = await fetch(`${API_BASE_URL}/users/clientes`, {
       method: 'POST',
       headers: {
@@ -24,7 +23,6 @@ export async function criarCliente(clienteData: Cliente) {
       },
       body: JSON.stringify(clienteData),
     });
-    console.log("Response: ", response)
     return await handleApiResponse(response);
   } catch (error) {
     console.error('Erro ao criar cliente:', error);

@@ -22,7 +22,6 @@ export function useAuth() {
             }
 
             const data: Usuario = await response.json();
-            console.log("Perfil do usuário carregado:", data);
             setUser(data); 
         } catch (err: any) {
             console.error("Erro ao carregar perfil:", err);
@@ -62,8 +61,6 @@ export function useAuth() {
             }
 
             const data = await response.json(); // { token, role, ...outros dados se o backend retornar}
-
-            console.log("Dados de login recebidos:", data);
 
             localStorage.setItem("token", data.token);
             localStorage.setItem("role", data.role);

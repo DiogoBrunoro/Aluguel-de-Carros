@@ -32,7 +32,6 @@ export default function SolicitarAluguel() {
   })
   const [message, setMessage] = useState<MessageState>({ type: "", text: "" })
   const [loading, setLoading] = useState(false)
-  console.log(formData)
   useEffect(() => {
     const fetchCarros = async () => {
       try {
@@ -45,8 +44,6 @@ export default function SolicitarAluguel() {
             "Authorization": `Bearer ${token}`
           }
         })
-
-        console.log("Response: ", response)
 
         if (!response.ok) {
           throw new Error("Erro ao buscar automóveis")
@@ -92,8 +89,6 @@ export default function SolicitarAluguel() {
         data_fim: formData.data_fim,
         valor: formData.valor
       })
-
-      console.log(data)
 
       setMessage({ type: "success", text: "Solicitação de aluguel enviada com sucesso!" })
       setFormData({ carroId: "", data_inicio: "", data_fim: "" , valor: ""})

@@ -13,8 +13,6 @@ export class AuthService {
   async login(dto: LoginDTO): Promise<{ token: string; role: string }> {
     const user = await this.userRepository.findByEmail(dto.email);
 
-    console.log(user);
-
     if (!user) {
       throw new Error("Credenciais inválidas");
     }

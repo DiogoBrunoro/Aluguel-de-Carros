@@ -18,7 +18,6 @@ export function PrivateRoute({ allowedRoles, allowedTipoAgente }: PrivateRoutePr
     //     return <Navigate to="/" replace />;
     //   }
 
-    console.log(user)
     // Verifica se o role é permitido
     if (allowedRoles && !allowedRoles.includes(user!.role!)) {
         return <Navigate to="/unauthorized" replace />;
