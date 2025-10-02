@@ -4,7 +4,7 @@ import sql from "../config/database.js";
 import { Automovel } from "../../application/model/AutomovelModel.js";
 import { listarPedidoAluguelDTO } from "../../application/dto/PedidoAluguelDTO.js";
 
-export class PedidoAluguelRepository implements IPedidoAluguelRepository{
+export class PedidoAluguelRepository implements IPedidoAluguelRepository {
 
     async createPedidoAluguel(pedido: PedidoAluguel): Promise<PedidoAluguel> {
         const result = await sql<PedidoAluguel[]>`
@@ -36,7 +36,7 @@ export class PedidoAluguelRepository implements IPedidoAluguelRepository{
 
     async updatePedidoAluguel(pedido: PedidoAluguel): Promise<PedidoAluguel> {
 
-        if(!pedido.id){
+        if (!pedido.id) {
             throw new Error("Pedido de aluguel nao encontrado")
         }
         const result = await sql<PedidoAluguel[]>`
@@ -90,6 +90,44 @@ export class PedidoAluguelRepository implements IPedidoAluguelRepository{
                 automoveis m ON a.automovel_id = m.id 
             WHERE
                 a.cliente_id = ${id};
+        `;
+        return result;
+    }
+
+    async listAllPedidosAluguel(): Promise<listarPedidoAluguelDTO[]> {
+        const result = await sql<listarPedidoAluguelDTO[]>`
+            SELECT
+    a.id,
+    a.cliente_id AS "cliente_id",
+    a.automovel_id AS "automovel_id", 
+    a.data_inicio AS "data_inicio",
+    a.data_fim AS "data_fim",
+    a.status,
+    a.valor_diario AS "valorDiario", 
+
+    json_build_object(
+        'id', m.id,
+        'marca', m.marca,
+        'modelo', m.modelo,
+        'ano', m.ano,
+        'matricula', m.matricula,
+        'placa', m.placa,
+        'disponivel', m.disponivel
+    ) AS automovel,
+
+    json_build_object(
+        'id', c.id,
+        'nome', c.nome,
+        'email', c.email
+    ) AS cliente
+
+FROM
+    aluguel a
+JOIN
+    automoveis m ON a.automovel_id = m.id
+JOIN
+    usuarios c ON a.cliente_id = c.id;
+
         `;
         return result;
     }

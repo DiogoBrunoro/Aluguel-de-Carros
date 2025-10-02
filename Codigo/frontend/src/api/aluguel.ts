@@ -21,6 +21,30 @@ export async function createAluguel(aluguel: CreateAluguel) {
     return data;
 }
 
+export async function listAllRealAlugueis() {
+
+    const token = sessionStorage.getItem("token")
+
+    const response = await fetch(`${apiUrl}/aluguel/pedidos`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+    });
+
+    console.log("Response",response)
+
+    if (!response.ok) {
+        throw new Error("Erro ao listar alugueis");
+    }
+    const data = await response.json();
+
+    console.log("Data",data)
+    return data;
+}
+
+
 export async function listAllAlugueis() {
 
     const token = sessionStorage.getItem("token")
@@ -33,10 +57,14 @@ export async function listAllAlugueis() {
         },
     });
 
+    console.log("Response",response)
+
     if (!response.ok) {
         throw new Error("Erro ao listar alugueis");
     }
     const data = await response.json();
+
+    console.log("Data",data)
     return data;
 }
 

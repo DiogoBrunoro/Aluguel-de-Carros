@@ -8,6 +8,7 @@ import { Car, Mail, Lock, ArrowRight } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 import { Button } from "../components/ui/Button"
 import { useAuth } from "../hooks/useAuth"
+import Alert from "../components/Alert"
 
 export default function LoginScreen() {
 
@@ -16,6 +17,7 @@ export default function LoginScreen() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const { login, isAuthenticated, user } = useAuth();
+  const [alert, setAlert] = useState<{ message: string; type: "success" | "error" } | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,9 +25,9 @@ export default function LoginScreen() {
     const success = await login(email, password);
 
     if (success) {
-      alert("Login realizado com sucesso!");
+      setAlert({ message: "Login realizado com sucesso!", type: "success" });
     } else {
-      alert("Erro no login");
+      setAlert({ message: "Erro no login", type: "error" });
     }
   };
 
@@ -101,6 +103,13 @@ export default function LoginScreen() {
           <p className="footer-text">© 2025 Sistema de Aluguel de Carros</p>
         </div>
       </div>
+      {alert && (
+        <Alert
+          message={alert.message}
+          type={alert.type}
+          onClose={() => setAlert(null)}
+        />
+      )}
     </div>
   )
 }

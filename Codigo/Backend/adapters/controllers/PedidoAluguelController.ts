@@ -50,6 +50,24 @@ export class PedidoAluguelController {
         }
     }
 
+    static async listAllPedidosAluguel(req: Request, res: Response) {
+        try {
+            const pedidoAluguelRepository = new PedidoAluguelRepository();
+            const pedidoAluguelService = new PedidoAluguelService(pedidoAluguelRepository);
+
+            const id = req.user?.id;
+            if (!id) {
+                return res.status(401).json({ error: "Usuário nao autenticado" });
+            }
+
+            const pedidos = await pedidoAluguelService.listAllPedidosAluguel();
+            res.json(pedidos);
+        } catch (err: any) {
+            console.error(err);
+            res.status(500).json({ error: err.message });
+        }
+    }
+
     static async updatePedidoAluguel(req: Request, res: Response) {
         try {
             const pedidoAluguelRepository = new PedidoAluguelRepository();

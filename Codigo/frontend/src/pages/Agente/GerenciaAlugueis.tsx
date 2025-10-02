@@ -39,7 +39,7 @@ import {
 import InputClient from "../../components/InputClient"
 import { Aluguel, Carro, Cliente, StatusAluguel } from "../../types/types"
 import apiUrl from "../../api/apiUrl";
-import { listAllAlugueis, updateAluguel, createAluguel } from "../../api/aluguel"   
+import { listAllAlugueis, updateAluguel, createAluguel, listAllRealAlugueis } from "../../api/aluguel"
 
 
 
@@ -74,21 +74,19 @@ export default function GerenciamentoAluguel() {
     status: "pendente",
   })
 
-
-
-
   const carregarDados = async (): Promise<void> => {
     try {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
 
-      const alugueisData = await listAllAlugueis()
+      const alugueisData = await listAllRealAlugueis()
       setAlugueis(alugueisData)
 
       const resClientes = await fetch(`${API_BASE_URL}/users`, {
         method: "GET",
-        headers: { 
+        headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}` },
+          "Authorization": `Bearer ${token}`
+        },
       });
       const clientesData = await resClientes.json();
       setClientes(Array.isArray(clientesData) ? clientesData : []);
@@ -104,8 +102,6 @@ export default function GerenciamentoAluguel() {
       console.error("Erro ao carregar dados:", err);
     }
   };
-
-
 
   useEffect(() => {
     carregarDados()
@@ -149,6 +145,7 @@ export default function GerenciamentoAluguel() {
     const dias = Math.ceil((fim.getTime() - inicio.getTime()) / (1000 * 60 * 60 * 24))
     return dias * Number.parseFloat(valorDiario)
   }
+
   const aluguelsFiltrados = alugueis.filter((a) => {
     const cliente = clientes.find((c) => c.id === a.cliente_id)
     const carro = carros.find((c) => c.id === a.carroId)
@@ -163,47 +160,50 @@ export default function GerenciamentoAluguel() {
     )
   })
 
+  console.log("Busca: ", busca)
+  console.log("Alugueis: ", alugueis)
+
   const handleCriarAluguel = async () => {
-  try {
-    const token = localStorage.getItem("token")
-    if (!token) {
-      alert("Usuário não autenticado")
-      return
+    try {
+      const token = sessionStorage.getItem("token")
+      if (!token) {
+        alert("Usuário não autenticado")
+        return
+      }
+
+      // validações básicas
+      if (!novoAluguel.carroId || !novoAluguel.data_inicio || !novoAluguel.data_fim || !novoAluguel.valorDiario) {
+        alert("Preencha todos os campos!")
+        return
+      }
+
+      const aluguel = await createAluguel({
+        cliente_id: novoAluguel.cliente_id,
+        automovel_id: novoAluguel.carroId,
+        data_inicio: novoAluguel.data_inicio,
+        data_fim: novoAluguel.data_fim,
+        valor: novoAluguel.valorDiario
+      })
+
+      // adiciona o novo aluguel na lista
+      setAlugueis((prev) => [...prev, aluguel])
+      setDialogAberto(false)
+
+      // limpa o formulário
+      setNovoAluguel({
+        cliente_id: "",
+        carroId: "",
+        data_inicio: "",
+        data_fim: "",
+        valorDiario: "",
+        status: "pendente"
+      })
+
+    } catch (err) {
+      console.error("Erro ao criar aluguel:", err)
+      alert("Erro ao criar aluguel. Tente novamente.")
     }
-
-    // validações básicas
-    if (!novoAluguel.carroId || !novoAluguel.data_inicio || !novoAluguel.data_fim || !novoAluguel.valorDiario) {
-      alert("Preencha todos os campos!")
-      return
-    }
-
-    const aluguel = await createAluguel({
-      cliente_id: novoAluguel.cliente_id,
-      automovel_id: novoAluguel.carroId,
-      data_inicio: novoAluguel.data_inicio,
-      data_fim: novoAluguel.data_fim,
-      valor: novoAluguel.valorDiario
-    })
-
-    // adiciona o novo aluguel na lista
-    setAlugueis((prev) => [...prev, aluguel])
-    setDialogAberto(false)
-
-    // limpa o formulário
-    setNovoAluguel({
-      cliente_id: "",
-      carroId: "",
-      data_inicio: "",
-      data_fim: "",
-      valorDiario: "",
-      status: "pendente"
-    })
-
-  } catch (err) {
-    console.error("Erro ao criar aluguel:", err)
-    alert("Erro ao criar aluguel. Tente novamente.")
   }
-}
 
 
   return (
@@ -238,8 +238,10 @@ export default function GerenciamentoAluguel() {
           {aluguelsFiltrados.length > 0 ? (
             aluguelsFiltrados.map((a) => {
               const cliente = clientes.find((c) => c.id === a.cliente_id)
-              const carro = carros.find((c) => c.id === a.carroId)
+              const carro = a.automovel
               const status = getStatusColor(a.status)
+
+              console.log("CArros;", carro?.id, a.automovel.id)
 
               return (
                 <Grid>

@@ -6,6 +6,7 @@ const router = Router();
 
 router.post("/",authMiddleware, PedidoAluguelController.createPedidoAluguel);
 router.get("/",authMiddleware, PedidoAluguelController.listPedidosAluguel);
+router.get("/pedidos",authMiddleware, PedidoAluguelController.listAllPedidosAluguel);
 router.put("/:id",authMiddleware, PedidoAluguelController.updatePedidoAluguel);
 router.get("/PedidoAluguel/:id",authMiddleware, PedidoAluguelController.getPedidoAluguelById);
 

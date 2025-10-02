@@ -98,7 +98,7 @@ export default function ConsultaClientes() {
   const handleExcluir = async (id: string): Promise<void> => {
     if (!window.confirm("Deseja realmente excluir este cliente?")) return
     try {
-      await fetch(`/api/clientes/${id}`, { method: "DELETE" })
+      await fetch(`http://localhost:3000/api/users/clientes/${id}`, { method: "DELETE" })
     } catch (err) {
       console.error("Erro ao excluir cliente:", err)
     }
