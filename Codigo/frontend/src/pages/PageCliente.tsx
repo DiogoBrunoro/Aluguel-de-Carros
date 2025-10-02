@@ -1,4 +1,3 @@
-import React from "react";
 import "../styles/PageClienteMenu.css"; // importa o CSS externo
 
 export default function PageClienteMenu() {
