@@ -1,10 +1,10 @@
 import { Automovel } from "../model/AutomovelModel.js";
 
 export interface CreatePedidoAluguelDTO {
-    clienteId: string;        
-    automovelId: string;      
-    dataInicio: Date;
-    dataFim: Date;
+    cliente_id: string;        
+    automovel_id: string;      
+    data_inicio: Date;
+    data_fim: Date;
     valor: number;
 }
 
@@ -14,18 +14,18 @@ export interface UpdatePedidoAluguelDTO {
 
 export interface listarPedidoAluguelDTO {
     id: string;
-    clienteId: string;
-    automovelId: string;
-    dataInicio: Date;
-    dataFim: Date;
+    cliente_id: string;
+    automovel_id: string;
+    data_inicio: Date;
+    data_fim: Date;
     status: "pendente" | "aprovado" | "rejeitado" | "cancelado";
     valor: number;
     automovel: Automovel; 
 }
 
 export interface UpdatePedidoAluguelDTO {
-    dataInicio?: Date;
-    dataFim?: Date;
+    data_inicio?: Date;
+    data_fim?: Date;
     status?: "pendente" | "aprovado" | "rejeitado" | "cancelado";
     valor?: number;
 }

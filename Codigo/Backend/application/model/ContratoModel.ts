@@ -1,11 +1,11 @@
 export interface Contrato {
     id: string;
-    pedidoId: string;          
-    clienteId: string;
-    automovelId: string;
-    agenteId: string;          
-    dataInicio: Date;
-    dataFim: Date;
+    pedido_id: string;          
+    cliente_id: string;
+    automovel_id: string;
+    agente_id: string;          
+    data_inicio: Date;
+    data_fim: Date;
     valor: number;
     propriedade: "CLIENTE" | "EMPRESA" | "BANCO";
   }

@@ -26,8 +26,8 @@ export default function SolicitarAluguel() {
   const [carros, setCarros] = useState<Carro[]>([])
   const [formData, setFormData] = useState({
     carroId: "",
-    dataInicio: "",
-    dataFim: "",
+    data_inicio: "",
+    data_fim: "",
     valor: "",
   })
   const [message, setMessage] = useState<MessageState>({ type: "", text: "" })
@@ -67,13 +67,13 @@ export default function SolicitarAluguel() {
   }, [])
 
   const handleSubmit = async () => {
-    if (!formData.carroId || !formData.dataInicio || !formData.dataFim) {
+    if (!formData.carroId || !formData.data_inicio || !formData.data_fim) {
       setMessage({ type: "error", text: "Todos os campos são obrigatórios!" })
       return
     }
 
-    const inicio = new Date(formData.dataInicio)
-    const fim = new Date(formData.dataFim)
+    const inicio = new Date(formData.data_inicio)
+    const fim = new Date(formData.data_fim)
 
     if (fim <= inicio) {
       setMessage({ type: "error", text: "A data de fim deve ser posterior à data de início!" })
@@ -86,17 +86,17 @@ export default function SolicitarAluguel() {
         throw new Error("Usuário nao autenticado")
       }
       const data = createAluguel({
-        clienteId: user?.id,
-        automovelId: formData.carroId,
-        dataInicio: formData.dataInicio,
-        dataFim: formData.dataFim,
+        cliente_id: user?.id,
+        automovel_id: formData.carroId,
+        data_inicio: formData.data_inicio,
+        data_fim: formData.data_fim,
         valor: formData.valor
       })
 
       console.log(data)
 
       setMessage({ type: "success", text: "Solicitação de aluguel enviada com sucesso!" })
-      setFormData({ carroId: "", dataInicio: "", dataFim: "" , valor: ""})
+      setFormData({ carroId: "", data_inicio: "", data_fim: "" , valor: ""})
     } catch (err) {
       console.error("Erro ao solicitar aluguel:", err)
       setMessage({ type: "error", text: "Erro ao enviar solicitação. Tente novamente." })
@@ -166,8 +166,8 @@ export default function SolicitarAluguel() {
             <TextField
               label="Data de Início"
               type="date"
-              value={formData.dataInicio}
-              onChange={(e) => setFormData({ ...formData, dataInicio: e.target.value })}
+              value={formData.data_inicio}
+              onChange={(e) => setFormData({ ...formData, data_inicio: e.target.value })}
               fullWidth
               InputLabelProps={{ shrink: true }}
               inputProps={{ min: new Date().toISOString().split("T")[0] }}
@@ -176,11 +176,11 @@ export default function SolicitarAluguel() {
             <TextField
               label="Data de Fim"
               type="date"
-              value={formData.dataFim}
-              onChange={(e) => setFormData({ ...formData, dataFim: e.target.value })}
+              value={formData.data_fim}
+              onChange={(e) => setFormData({ ...formData, data_fim: e.target.value })}
               fullWidth
               InputLabelProps={{ shrink: true }}
-              inputProps={{ min: formData.dataInicio || new Date().toISOString().split("T")[0] }}
+              inputProps={{ min: formData.data_inicio || new Date().toISOString().split("T")[0] }}
             />
 
             <Button

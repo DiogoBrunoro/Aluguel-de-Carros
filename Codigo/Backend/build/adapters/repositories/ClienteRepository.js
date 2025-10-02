@@ -18,7 +18,7 @@ const uuid_1 = require("uuid");
 class ClienteRepository {
     create(clienteData) {
         return __awaiter(this, void 0, void 0, function* () {
-            const clienteId = (0, uuid_1.v4)();
+            const cliente_id = (0, uuid_1.v4)();
             try {
                 // Validar que rendimentos tem exatamente 3 valores
                 if (!clienteData.rendimentos || clienteData.rendimentos.length !== 3) {
@@ -28,7 +28,7 @@ class ClienteRepository {
                 const cliente = yield (0, database_1.default) `
         INSERT INTO clientes (id, rg, cpf, nome, endereco, profissao, rendimentos, empregadores)
         VALUES (
-          ${clienteId}, 
+          ${cliente_id}, 
           ${clienteData.rg}, 
           ${clienteData.cpf}, 
           ${clienteData.nome}, 
@@ -46,7 +46,7 @@ class ClienteRepository {
                         const rendimento = clienteData.rendimentos[i] || 0;
                         yield (0, database_1.default) `
             INSERT INTO entidades_empregadoras (cliente_id, nome, rendimento)
-            VALUES (${clienteId}, ${empregador}, ${rendimento});
+            VALUES (${cliente_id}, ${empregador}, ${rendimento});
           `;
                     }
                 }

@@ -10,8 +10,8 @@ export class PedidoAluguelRepository implements IPedidoAluguelRepository{
         const result = await sql<PedidoAluguel[]>`
             INSERT INTO aluguel (cliente_id, automovel_id, data_inicio, data_fim, valor_diario, status)
             VALUES (
-                ${pedido.clienteId},
-                ${pedido.automovelId},
+                ${pedido.cliente_id},
+                ${pedido.automovel_id},
                 ${pedido.data_inicio},
                 ${pedido.data_fim},
                 ${pedido.valor_diario},
@@ -22,7 +22,7 @@ export class PedidoAluguelRepository implements IPedidoAluguelRepository{
         await sql<Automovel[]>`
             UPDATE automoveis
             SET disponivel = false
-            WHERE id = ${pedido.automovelId};
+            WHERE id = ${pedido.automovel_id};
         `;
         return result[0];
     }
@@ -35,8 +35,6 @@ export class PedidoAluguelRepository implements IPedidoAluguelRepository{
     }
 
     async updatePedidoAluguel(pedido: PedidoAluguel): Promise<PedidoAluguel> {
-        console.log("UPDATE")
-        console.log(pedido)
 
         if(!pedido.id){
             throw new Error("Pedido de aluguel nao encontrado")
@@ -44,17 +42,25 @@ export class PedidoAluguelRepository implements IPedidoAluguelRepository{
         const result = await sql<PedidoAluguel[]>`
             UPDATE aluguel
             SET 
-                cliente_id = ${pedido.clienteId},
-                automovel_id = ${pedido.automovelId},
+                cliente_id = ${pedido.cliente_id},
+                automovel_id = ${pedido.automovel_id},
                 data_inicio = ${pedido.data_inicio},
                 data_fim = ${pedido.data_fim},
                 valor_diario = ${pedido.valor_diario},
-                status = ${pedido.status}
+                status = ${pedido.status},
+                atualizado_em = NOW()
             WHERE id = ${pedido.id}
             RETURNING *;
         `;
 
-        console.log(result)
+        if (pedido.status == "cancelado") {
+            await sql<Automovel[]>`
+                UPDATE automoveis
+                SET disponivel = true
+                WHERE id = ${pedido.automovel_id};
+            `;
+        }
+
         return result[0];
     }
 
@@ -62,10 +68,10 @@ export class PedidoAluguelRepository implements IPedidoAluguelRepository{
         const result = await sql<listarPedidoAluguelDTO[]>`
             SELECT
                 a.id,
-                a.cliente_id AS "clienteId",
-                a.automovel_id AS "automovelId", 
-                a.data_inicio AS "dataInicio",
-                a.data_fim AS "dataFim",
+                a.cliente_id AS "cliente_id",
+                a.automovel_id AS "automovel_id", 
+                a.data_inicio AS "data_inicio",
+                a.data_fim AS "data_fim",
                 a.status,
                 a.valor_diario AS "valorDiario", 
                 

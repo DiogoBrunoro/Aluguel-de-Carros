@@ -64,9 +64,9 @@ export default function MeusAlugueis() {
     }
   }
 
-  const calcularValorTotal = (dataInicio: string, dataFim: string, valorDiario: string): number => {
-    const inicio = new Date(dataInicio)
-    const fim = new Date(dataFim)
+  const calcularValorTotal = (data_inicio: string, data_fim: string, valorDiario: string): number => {
+    const inicio = new Date(data_inicio)
+    const fim = new Date(data_fim)
     const dias = Math.ceil((fim.getTime() - inicio.getTime()) / (1000 * 60 * 60 * 24))
     return dias * Number.parseFloat(valorDiario)
   }
@@ -138,8 +138,8 @@ export default function MeusAlugueis() {
                       </Typography>
                       <Typography variant="body2" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                         <CalendarToday fontSize="small" />
-                        <strong>Período:</strong> {new Date(aluguel.dataInicio).toLocaleDateString()} até{" "}
-                        {new Date(aluguel.dataFim).toLocaleDateString()}
+                        <strong>Período:</strong> {new Date(aluguel.data_inicio).toLocaleDateString()} até{" "}
+                        {new Date(aluguel.data_fim).toLocaleDateString()}
                       </Typography>
                       <Typography variant="body2" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                         <AttachMoney fontSize="small" />
@@ -147,7 +147,7 @@ export default function MeusAlugueis() {
                         <strong>
                           {" "}
                           Total: R${" "}
-                          {calcularValorTotal(aluguel.dataInicio, aluguel.dataFim, aluguel.valorDiario).toFixed(2)}
+                          {calcularValorTotal(aluguel.data_inicio, aluguel.data_fim, aluguel.valorDiario).toFixed(2)}
                         </strong>
                       </Typography>
                     </Stack>

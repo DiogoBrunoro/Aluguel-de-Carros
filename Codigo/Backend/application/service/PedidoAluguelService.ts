@@ -13,10 +13,10 @@ export class PedidoAluguelService {
     
     async createPedidoAluguel(dto: CreatePedidoAluguelDTO) {
         const newPedido: PedidoAluguel = {
-        clienteId: dto.clienteId,
-        automovelId: dto.automovelId,
-        data_inicio: dto.dataInicio,
-        data_fim: dto.dataFim,
+        cliente_id: dto.cliente_id,
+        automovel_id: dto.automovel_id,
+        data_inicio: dto.data_inicio,
+        data_fim: dto.data_fim,
         valor_diario: dto.valor,
         status: "pendente",
         };
@@ -31,6 +31,7 @@ export class PedidoAluguelService {
         id: string,
         dto:UpdatePedidoAluguelDTO
     ) {
+
         const existingPedido =
         await this.pedidoAluguelRepository.getPedidoAluguelById(id);
         if (!existingPedido) {
@@ -40,7 +41,6 @@ export class PedidoAluguelService {
         ...existingPedido,
         ...dto,
         };
-        console.log(updatedPedido)
         return this.pedidoAluguelRepository.updatePedidoAluguel(updatedPedido);
     }
     

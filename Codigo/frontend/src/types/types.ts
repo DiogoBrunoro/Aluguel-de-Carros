@@ -29,20 +29,20 @@ export type StatusAluguel = "ativo" | "pendente" | "cancelado" | "finalizado"
 
 export interface Aluguel {
   id?: string
-  clienteId: string
+  cliente_id: string
   carroId: string
-  dataInicio: string
-  dataFim: string
+  data_inicio: string
+  data_fim: string
   valorDiario: string
   status: StatusAluguel
   automovel: Carro
 }
 
 export interface CreateAluguel {
-  clienteId: string
-  automovelId: string
-  dataInicio: string
-  dataFim: string
+  cliente_id: string
+  automovel_id: string
+  data_inicio: string
+  data_fim: string
   valor: string
 }
 

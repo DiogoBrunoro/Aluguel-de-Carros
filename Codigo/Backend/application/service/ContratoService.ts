@@ -13,12 +13,12 @@ export class ContratoService {
     async createContrato(dto: CreateContratoDTO) {
         const newContrato: Contrato = {
             id: "", 
-            pedidoId: dto.pedidoId,
-            clienteId: dto.clienteId,
-            automovelId: dto.automovelId,
-            agenteId: dto.agenteId,
-            dataInicio: dto.dataInicio,
-            dataFim: dto.dataFim,
+            pedido_id: dto.pedido_id,
+            cliente_id: dto.cliente_id,
+            automovel_id: dto.automovel_id,
+            agente_id: dto.agente_id,
+            data_inicio: dto.data_inicio,
+            data_fim: dto.data_fim,
             valor: dto.valor,
             propriedade: dto.propriedade,
         };

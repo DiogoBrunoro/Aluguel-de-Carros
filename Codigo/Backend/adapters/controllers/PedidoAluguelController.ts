@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { PedidoAluguelService } from "../../application/service/PedidoAluguelService.js";
-import { CreatePedidoAluguelDTO } from "../../application/dto/PedidoAluguelDTO.js";
+import { CreatePedidoAluguelDTO, UpdatePedidoAluguelDTO } from "../../application/dto/PedidoAluguelDTO.js";
 import { PedidoAluguelRepository } from "../repositories/PedidoAluguelRepository.js";
 
 export class PedidoAluguelController {
@@ -9,9 +9,7 @@ export class PedidoAluguelController {
         try {
             const pedidoAluguelRepository = new PedidoAluguelRepository();
             const pedidoAluguelService = new PedidoAluguelService(pedidoAluguelRepository);
-            console.log(req.body)
             const dto: CreatePedidoAluguelDTO = req.body;
-            console.log(dto)
             const newPedido = await pedidoAluguelService.createPedidoAluguel(dto);
             res.status(201).json(newPedido);
         } catch (err: any) {
@@ -57,7 +55,7 @@ export class PedidoAluguelController {
             const pedidoAluguelRepository = new PedidoAluguelRepository();
             const pedidoAluguelService = new PedidoAluguelService(pedidoAluguelRepository);
             const { id } = req.params;
-            const dto: CreatePedidoAluguelDTO = req.body;
+            const dto: UpdatePedidoAluguelDTO = req.body;
             const updatedPedido = await pedidoAluguelService.updatePedidoAluguel(id, dto);
             res.json(updatedPedido);
         } catch (err: any) {

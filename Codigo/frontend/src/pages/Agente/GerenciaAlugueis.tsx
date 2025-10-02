@@ -64,10 +64,10 @@ import { Aluguel, Carro, Cliente, StatusAluguel } from "../../types/types"
 //   }, [])
 
 interface NovoAluguelForm {
-  clienteId: string
+  cliente_id: string
   carroId: string
-  dataInicio: string
-  dataFim: string
+  data_inicio: string
+  data_fim: string
   valorDiario: string
   status: StatusAluguel
 }
@@ -84,10 +84,10 @@ export default function GerenciamentoAluguel() {
   const [busca, setBusca] = useState<string>("")
   const [dialogAberto, setDialogAberto] = useState<boolean>(false)
   const [novoAluguel, setNovoAluguel] = useState<NovoAluguelForm>({
-    clienteId: "",
+    cliente_id: "",
     carroId: "",
-    dataInicio: "",
-    dataFim: "",
+    data_inicio: "",
+    data_fim: "",
     valorDiario: "",
     status: "pendente",
   })
@@ -123,15 +123,15 @@ export default function GerenciamentoAluguel() {
     }
   }
 
-  const calcularValorTotal = (dataInicio: string, dataFim: string, valorDiario: string): number => {
-    if (!dataInicio || !dataFim || !valorDiario) return 0
-    const inicio = new Date(dataInicio)
-    const fim = new Date(dataFim)
+  const calcularValorTotal = (data_inicio: string, data_fim: string, valorDiario: string): number => {
+    if (!data_inicio || !data_fim || !valorDiario) return 0
+    const inicio = new Date(data_inicio)
+    const fim = new Date(data_fim)
     const dias = Math.ceil((fim.getTime() - inicio.getTime()) / (1000 * 60 * 60 * 24))
     return dias * Number.parseFloat(valorDiario)
   }
   const aluguelsFiltrados = alugueis.filter((a) => {
-    const cliente = clientes.find((c) => c.id === a.clienteId)
+    const cliente = clientes.find((c) => c.id === a.cliente_id)
     const carro = carros.find((c) => c.id === a.carroId)
     const nomeCliente = cliente ? cliente.nome.toLowerCase() : ""
     const marcaCarro = carro ? carro.marca.toLowerCase() : ""
@@ -175,7 +175,7 @@ export default function GerenciamentoAluguel() {
         <Grid container direction="column" spacing={2} sx={{ mt: 2 }}>
           {aluguelsFiltrados.length > 0 ? (
             aluguelsFiltrados.map((a) => {
-              const cliente = clientes.find((c) => c.id === a.clienteId)
+              const cliente = clientes.find((c) => c.id === a.cliente_id)
               const carro = carros.find((c) => c.id === a.carroId)
               const status = getStatusColor(a.status)
 
@@ -219,12 +219,12 @@ export default function GerenciamentoAluguel() {
                         </Typography>
                         <Typography variant="body2" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                           <CalendarToday fontSize="small" />
-                          <strong>Período:</strong> {new Date(a.dataInicio).toLocaleDateString()} até {new Date(a.dataFim).toLocaleDateString()}
+                          <strong>Período:</strong> {new Date(a.data_inicio).toLocaleDateString()} até {new Date(a.data_fim).toLocaleDateString()}
                         </Typography>
                         <Typography variant="body2" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                           <AttachMoney fontSize="small" />
                           <strong>Valor:</strong> R$ {Number.parseFloat(a.valorDiario).toFixed(2)}/dia —
-                          <strong> Total: R$ {calcularValorTotal(a.dataInicio, a.dataFim, a.valorDiario).toFixed(2)}</strong>
+                          <strong> Total: R$ {calcularValorTotal(a.data_inicio, a.data_fim, a.valorDiario).toFixed(2)}</strong>
                         </Typography>
                       </Stack>
                     </CardContent>
@@ -277,9 +277,9 @@ export default function GerenciamentoAluguel() {
                 <FormControl fullWidth>
                   <InputLabel>Cliente</InputLabel>
                   <Select
-                    value={novoAluguel.clienteId}
+                    value={novoAluguel.cliente_id}
                     onChange={(e) =>
-                      setNovoAluguel({ ...novoAluguel, clienteId: e.target.value })
+                      setNovoAluguel({ ...novoAluguel, cliente_id: e.target.value })
                     }
                     sx={{
                       borderRadius: 2,
@@ -320,9 +320,9 @@ export default function GerenciamentoAluguel() {
                 <TextField
                   label="Data Início"
                   type="date"
-                  value={novoAluguel.dataInicio}
+                  value={novoAluguel.data_inicio}
                   onChange={(e) =>
-                    setNovoAluguel({ ...novoAluguel, dataInicio: e.target.value })
+                    setNovoAluguel({ ...novoAluguel, data_inicio: e.target.value })
                   }
                   fullWidth
                   InputLabelProps={{ shrink: true }}
@@ -336,9 +336,9 @@ export default function GerenciamentoAluguel() {
                 <TextField
                   label="Data Fim"
                   type="date"
-                  value={novoAluguel.dataFim}
+                  value={novoAluguel.data_fim}
                   onChange={(e) =>
-                    setNovoAluguel({ ...novoAluguel, dataFim: e.target.value })
+                    setNovoAluguel({ ...novoAluguel, data_fim: e.target.value })
                   }
                   fullWidth
                   InputLabelProps={{ shrink: true }}

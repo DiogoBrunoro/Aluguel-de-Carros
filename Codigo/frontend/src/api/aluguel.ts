@@ -47,14 +47,13 @@ export async function listAllAlugueis() {
 export async function updateAluguel(aluguel: UpdateAluguel) {
 
     const token = localStorage.getItem("token")
-
     const response = await fetch(`${apiUrl}/aluguel/${aluguel.id}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`
         },
-        body: JSON.stringify(aluguel),
+        body: JSON.stringify({status: aluguel.status}),
     });
     console.log("Response: ", response)
     if (!response.ok) {

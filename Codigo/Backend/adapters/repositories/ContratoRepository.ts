@@ -8,12 +8,12 @@ export class ContratoRepository implements IContratoRepository {
             INSERT INTO contratos (id, pedido_id, cliente_id, automovel_id, agente_id, data_inicio, data_fim, valor, propriedade)
             VALUES (
                 ${contrato.id},
-                ${contrato.pedidoId},
-                ${contrato.clienteId},
-                ${contrato.automovelId},
-                ${contrato.agenteId},
-                ${contrato.dataInicio},
-                ${contrato.dataFim},
+                ${contrato.pedido_id},
+                ${contrato.cliente_id},
+                ${contrato.automovel_id},
+                ${contrato.agente_id},
+                ${contrato.data_inicio},
+                ${contrato.data_fim},
                 ${contrato.valor},
                 ${contrato.propriedade}
             )
@@ -33,12 +33,12 @@ export class ContratoRepository implements IContratoRepository {
         const result = await sql<Contrato[]>`
             UPDATE contratos
             SET 
-                pedido_id = ${contrato.pedidoId},
-                cliente_id = ${contrato.clienteId},
-                automovel_id = ${contrato.automovelId},
-                agente_id = ${contrato.agenteId},
-                data_inicio = ${contrato.dataInicio},
-                data_fim = ${contrato.dataFim},
+                pedido_id = ${contrato.pedido_id},
+                cliente_id = ${contrato.cliente_id},
+                automovel_id = ${contrato.automovel_id},
+                agente_id = ${contrato.agente_id},
+                data_inicio = ${contrato.data_inicio},
+                data_fim = ${contrato.data_fim},
                 valor = ${contrato.valor},
                 propriedade = ${contrato.propriedade}
             WHERE id = ${contrato.id}

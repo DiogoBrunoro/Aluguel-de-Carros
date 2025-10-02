@@ -1,7 +1,7 @@
 export interface PedidoAluguel {
     id?: string;
-    clienteId: string;        
-    automovelId: string;      
+    cliente_id: string;        
+    automovel_id: string;      
     data_inicio: Date;
     data_fim: Date;
     status: "pendente" | "aprovado" | "rejeitado" | "cancelado";
@@ -10,8 +10,8 @@ export interface PedidoAluguel {
 
 
 export interface UpdatePedidoAluguelDTO {
-    dataInicio?: Date;
-    dataFim?: Date;
+    data_inicio?: Date;
+    data_fim?: Date;
     status?: "PENDENTE" | "APROVADO" | "REJEITADO" | "CANCELADO";
     valor?: number; // Corresponde a valor_diario na DB
 }
