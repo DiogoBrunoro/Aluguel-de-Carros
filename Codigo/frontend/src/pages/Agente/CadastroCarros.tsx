@@ -52,10 +52,12 @@ export default function CadastroCarros() {
     }
 
     setLoading(true)
+
+    const token = sessionStorage.getItem("token")
     try {
-      const response = await fetch("/api/carros", {
+      const response = await fetch("http://localhost:3000/api/automoveis", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
         body: JSON.stringify(formData),
       })
 
