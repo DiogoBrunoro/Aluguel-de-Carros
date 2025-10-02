@@ -40,7 +40,7 @@ export default function ConsultaCarros() {
   // Consulta carros do backend
   const carregarCarros = async (): Promise<void> => {
     try {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       const response = await fetch(`${API_BASE_URL}/automoveis`, {
         method: "GET",
         headers: {

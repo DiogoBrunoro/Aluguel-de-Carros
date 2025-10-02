@@ -11,7 +11,7 @@ export function useAuth() {
     const fetchUserProfile = useCallback(async (token: string) => {
         setLoading(true);
         try {
-            const response = await fetch(`${apiUrl}/users`, { 
+            const response = await fetch(`${apiUrl}/users/me`, { 
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -25,8 +25,8 @@ export function useAuth() {
             setUser(data); 
         } catch (err: any) {
             console.error("Erro ao carregar perfil:", err);
-            localStorage.removeItem("token");
-            localStorage.removeItem("role"); 
+            sessionStorage.removeItem("token");
+            sessionStorage.removeItem("role"); 
             setUser(null);
             navigate("/"); 
         } finally {
@@ -35,35 +35,32 @@ export function useAuth() {
     }, [navigate, apiUrl]); 
 
     useEffect(() => {
-        const token = localStorage.getItem("token");
+        const token = sessionStorage.getItem("token");
         if (token) {
-            fetchUserProfile(token); // Chama a função memoizada
+            fetchUserProfile(token); 
         } else {
-            // Se não houver token, não há usuário para buscar, então não está carregando.
             setUser(null);
             setLoading(false);
         }
-    }, [fetchUserProfile]); // Agora fetchUserProfile é uma dependência estável
+    }, [fetchUserProfile]); 
 
     // Função de login
     const login = useCallback(async (email: string, password: string) => {
-        setLoading(true); // Define loading como true durante o login
+        setLoading(true); 
         try {
-            const response = await fetch(`${apiUrl}/users/login`, { // Use apiUrl aqui também
+            const response = await fetch(`${apiUrl}/users/login`, { 
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, senha: password }),
             });
 
             if (!response.ok) {
-                const errorData = await response.json(); // Tenta pegar a mensagem de erro do backend
+                const errorData = await response.json(); 
                 throw new Error(errorData.message || "Credenciais inválidas");
             }
-
-            const data = await response.json(); // { token, role, ...outros dados se o backend retornar}
-
-            localStorage.setItem("token", data.token);
-            localStorage.setItem("role", data.role);
+            const data = await response.json(); 
+            sessionStorage.setItem("token", data.token);
+            sessionStorage.setItem("role", data.role);
             await fetchUserProfile(data.token);
 
             if (data.role === "CLIENTE") {
@@ -78,8 +75,8 @@ export function useAuth() {
         } catch (err: any) {
             console.error("Erro no login:", err.message);
             // Em caso de erro de login, limpa tudo e redireciona.
-            localStorage.removeItem("token");
-            localStorage.removeItem("role");
+            sessionStorage.removeItem("token");
+            sessionStorage.removeItem("role");
             setUser(null);
             navigate("/"); // Redireciona para a página inicial em caso de falha no login
             return false;
@@ -90,8 +87,8 @@ export function useAuth() {
 
     // Função de logout
     const logout = useCallback(() => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("role");
+        sessionStorage.removeItem("token");
+        sessionStorage.removeItem("role");
         setUser(null);
         setLoading(false); // Reseta o estado de loading no logout
         navigate("/");

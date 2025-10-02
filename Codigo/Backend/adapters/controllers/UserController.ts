@@ -25,8 +25,24 @@ export class UserController {
 
   static async getUserById(req: Request, res: Response) {
     try {
-      const id = req?.user?.id;
+      const { id } = req.params;
 
+      if (!id) {
+        return res.status(401).json({ error: "Usuário nao autenticado" });
+      }
+
+      const user = await userService.getUserById(id);
+      if (!user) return res.status(404).json({ error: "Usuário nao encontrado" });
+      res.json(user);
+    } catch (err: any) {
+      console.error(err);
+      res.status(500).json({ error: err.message });
+    }
+  }
+
+    static async me(req: Request, res: Response) {
+    try {
+      const id = req?.user?.id;
       if (!id) {
         return res.status(401).json({ error: "Usuário nao autenticado" });
       }
@@ -60,6 +76,16 @@ export class UserController {
       const user = await userService.getUserByEmail(email);
       if (!user) return res.status(404).json({ error: "Usuário não encontrado" });
       res.json(user);
+    } catch (err: any) {
+      console.error(err);
+      res.status(500).json({ error: err.message });
+    }
+  }
+
+  static async getAllClients(req: Request, res: Response) {
+    try {
+      const users = await userService.getAllClients();
+      res.json(users);
     } catch (err: any) {
       console.error(err);
       res.status(500).json({ error: err.message });

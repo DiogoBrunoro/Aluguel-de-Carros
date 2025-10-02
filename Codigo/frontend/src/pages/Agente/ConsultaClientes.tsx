@@ -28,6 +28,7 @@ import {
 // import "../styles/PageClient.css";
 import InputClient from "../../components/InputClient";
 import { Cliente } from "../../types/types";
+import { listarClientes } from "../../api/clientes";
 
 interface NovoClienteForm {
   nome: string
@@ -38,10 +39,21 @@ interface NovoClienteForm {
 }
 
 export default function ConsultaClientes() {
+
+  const initialFormData: Cliente = {
+    nome: "",
+    email: "",
+    senha: "",
+    endereco: "",
+    profissao: "",
+    rendimentos: "",
+    empregadores: [],
+  };
+
   const [clientes, setClientes] = useState<Cliente[]>([])
   const [busca, setBusca] = useState<string>("")
   const [editandoId, setEditandoId] = useState<string | null>(null)
-  const [formData, setFormData] = useState<Partial<Cliente>>({})
+  const [formData, setFormData] = useState<Cliente>(initialFormData)
   const [dialogAberto, setDialogAberto] = useState<boolean>(false)
   const [novoCliente, setNovoCliente] = useState<NovoClienteForm>({
     nome: "",
@@ -51,8 +63,15 @@ export default function ConsultaClientes() {
     endereco: "",
   })
 
-  const carregarClientes = () => {
+  const carregarClientes = async () => {
+      const clientes = await listarClientes() as Cliente[]
+      console.log(clientes)
 
+      let clientesFiltrados = clientes.filter(cliente => {
+        return cliente.role == "CLIENTE"
+      })
+
+      setClientes(clientes)
   };
 
   useEffect(() => { carregarClientes(); }, []);

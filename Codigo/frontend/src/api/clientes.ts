@@ -31,14 +31,19 @@ export async function criarCliente(clienteData: Cliente) {
 }
 
 export async function listarClientes() {
+
+  const token = sessionStorage.getItem('token');
+
   try {
-    const response = await fetch(`${API_BASE_URL}/clientes`, {
+    const response = await fetch(`${API_BASE_URL}/users/clientes`, {
       method: 'GET',
       headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
       },
     });
     const data = await handleApiResponse(response);
-    return data.data; // Retorna apenas o array de clientes
+    return data; 
   } catch (error) {
     console.error('Erro ao listar clientes:', error);
     throw error;

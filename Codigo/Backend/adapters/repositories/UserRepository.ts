@@ -57,4 +57,11 @@ export class UserRepository implements IUserRepository {
     `;
     return result[0];
   }
+
+  async getAllClients(): Promise<Cliente[]> {
+    const result = await sql<Cliente[]>`
+      SELECT * FROM usuarios WHERE role = 'CLIENTE'
+    `;
+    return result;
+  }
 }

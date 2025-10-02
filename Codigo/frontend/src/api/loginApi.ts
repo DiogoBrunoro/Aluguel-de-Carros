@@ -18,7 +18,7 @@ async function Login(cpf: string, senha: string) {
     const data = await response.json();
 
     if (response.ok) { 
-      localStorage.setItem('authToken', data.token);
+      sessionStorage.setItem('authToken', data.token);
       return data.token; 
     } else {
       console.error('Erro no login:', data.error);

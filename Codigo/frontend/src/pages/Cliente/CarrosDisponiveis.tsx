@@ -32,7 +32,7 @@ export default function CarrosDisponiveis({ onSelecionarCarro }: CarrosDisponive
   useEffect(() => {
     const fetchCarros = async () => {
       try {
-        const token = localStorage.getItem("token")
+        const token = sessionStorage.getItem("token")
 
         const response = await fetch("http://localhost:3000/api/automoveis/", {
           method: "GET",

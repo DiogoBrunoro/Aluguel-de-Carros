@@ -55,4 +55,7 @@ export class UserService {
           
       }
       
+    async getAllClients() {
+        return this.userRepository.getAllClients();
+    }
 }

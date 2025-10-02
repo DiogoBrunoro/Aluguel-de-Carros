@@ -6,7 +6,7 @@ export interface Cliente {
   id?: string
   nome: string
   email: string
-  role: "CLIENTE" | "AGENTE"
+  role: "CLIENTE" | "AGENTE" | undefined
   endereco: string
   profissao?: string
   rendimentos?: string

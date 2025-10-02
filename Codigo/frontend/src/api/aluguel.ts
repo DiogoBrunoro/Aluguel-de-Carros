@@ -3,7 +3,7 @@ import apiUrl from "./apiUrl";
 
 export async function createAluguel(aluguel: CreateAluguel) {
 
-    const token = localStorage.getItem("token")
+    const token = sessionStorage.getItem("token")
 
     const response = await fetch(`${apiUrl}/aluguel`, {
         method: "POST",
@@ -23,7 +23,7 @@ export async function createAluguel(aluguel: CreateAluguel) {
 
 export async function listAllAlugueis() {
 
-    const token = localStorage.getItem("token")
+    const token = sessionStorage.getItem("token")
 
     const response = await fetch(`${apiUrl}/aluguel`, {
         method: "GET",
@@ -42,7 +42,7 @@ export async function listAllAlugueis() {
 
 export async function updateAluguel(aluguel: UpdateAluguel) {
 
-    const token = localStorage.getItem("token")
+    const token = sessionStorage.getItem("token")
     const response = await fetch(`${apiUrl}/aluguel/${aluguel.id}`, {
         method: "PUT",
         headers: {

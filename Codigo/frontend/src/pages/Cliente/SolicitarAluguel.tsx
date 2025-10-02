@@ -50,7 +50,7 @@ export default function SolicitarAluguel({ carroSelecionado, onLimpar }: Solicit
     }
     const fetchCarros = async () => {
       try {
-        const token = localStorage.getItem("token")
+        const token = sessionStorage.getItem("token")
 
         const response = await fetch(`${apiUrl}/automoveis/`, {
           method: "GET",
