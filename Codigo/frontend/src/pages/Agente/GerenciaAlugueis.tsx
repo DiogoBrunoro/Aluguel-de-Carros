@@ -178,7 +178,7 @@ export default function GerenciamentoAluguel() {
     }
 
     const aluguel = await createAluguel({
-      cliente_id: "dc469de0-fb09-4b7f-8c89-14a720510f53",
+      cliente_id: novoAluguel.cliente_id,
       automovel_id: novoAluguel.carroId,
       data_inicio: novoAluguel.data_inicio,
       data_fim: novoAluguel.data_fim,
