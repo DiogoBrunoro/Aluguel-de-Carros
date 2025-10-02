@@ -35,7 +35,7 @@ export async function listarClientes() {
   const token = sessionStorage.getItem('token');
 
   try {
-    const response = await fetch(`${API_BASE_URL}/users/clientes`, {
+    const response = await fetch(`${API_BASE_URL}/users`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

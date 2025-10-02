@@ -32,7 +32,7 @@ import { listarClientes } from "../../api/clientes";
 
 interface NovoClienteForm {
   nome: string
-  cpf: string
+  email: string
   rg: string
   profissao: string
   endereco: string
@@ -48,6 +48,7 @@ export default function ConsultaClientes() {
     profissao: "",
     rendimentos: "",
     empregadores: [],
+    role: "CLIENTE"
   };
 
   const [clientes, setClientes] = useState<Cliente[]>([])
@@ -57,7 +58,7 @@ export default function ConsultaClientes() {
   const [dialogAberto, setDialogAberto] = useState<boolean>(false)
   const [novoCliente, setNovoCliente] = useState<NovoClienteForm>({
     nome: "",
-    cpf: "",
+    email: "",
     rg: "",
     profissao: "",
     endereco: "",
@@ -65,25 +66,20 @@ export default function ConsultaClientes() {
 
   const carregarClientes = async () => {
       const clientes = await listarClientes() as Cliente[]
-      console.log(clientes)
-
-      let clientesFiltrados = clientes.filter(cliente => {
-        return cliente.role == "CLIENTE"
-      })
-
       setClientes(clientes)
   };
 
   useEffect(() => { carregarClientes(); }, []);
 
   const handleEditar = (cliente: Cliente): void => {
+    if (!cliente.id) return
     setEditandoId(cliente.id)
     setFormData({ ...cliente })
   }
 
   const handleCancelar = (): void => {
     setEditandoId(null)
-    setFormData({})
+    setFormData(initialFormData)
   }
 
   const handleSalvar = async (): Promise<void> => {
@@ -118,7 +114,7 @@ export default function ConsultaClientes() {
       setDialogAberto(false)
       setNovoCliente({
         nome: "",
-        cpf: "",
+        email: "",
         rg: "",
         profissao: "",
         endereco: "",
@@ -193,10 +189,10 @@ export default function ConsultaClientes() {
                             size="small"
                           />
                           <TextField
-                            label="CPF"
-                            value={formData.cpf ?? ""}
+                            label="Email"
+                            value={formData.email ?? ""}
                             onChange={(e) =>
-                              setFormData({ ...formData, cpf: e.target.value })
+                              setFormData({ ...formData, email: e.target.value })
                             }
                             fullWidth
                             size="small"
@@ -260,7 +256,7 @@ export default function ConsultaClientes() {
                         </Typography>
                         <Stack spacing={1}>
                           <Typography variant="body2" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                            <CreditCard fontSize="small" /> <strong>CPF:</strong> {c.cpf}
+                            <CreditCard fontSize="small" /> <strong>Email:</strong> {c.email}
                           </Typography>
                           <Typography variant="body2" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                             <Badge fontSize="small" /> <strong>RG:</strong> {c.rg}
@@ -283,7 +279,7 @@ export default function ConsultaClientes() {
                         <IconButton sx={{ color: "#1976d2" }} onClick={() => handleEditar(c)}>
                           <Edit />
                         </IconButton>
-                        <IconButton sx={{ color: "#d32f2f" }} onClick={() => handleExcluir(c.id)}>
+                        <IconButton sx={{ color: "#d32f2f" }} onClick={() => handleExcluir(c.id!)}>
                           <Delete />
                         </IconButton>
                       </Stack>
@@ -344,10 +340,10 @@ export default function ConsultaClientes() {
                 }}
               />
               <TextField
-                label="CPF"
-                value={novoCliente.cpf}
+                label="Email"
+                value={novoCliente.email}
                 onChange={(e) =>
-                  setNovoCliente({ ...novoCliente, cpf: e.target.value })
+                  setNovoCliente({ ...novoCliente, email: e.target.value })
                 }
                 fullWidth
                 variant="outlined"
