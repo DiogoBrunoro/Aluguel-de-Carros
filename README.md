@@ -62,3 +62,6 @@
 
 8. Como agente (empresa ou banco), quero definir se o automóvel alugado será registrado como propriedade do cliente, da empresa ou do banco, para adequar ao tipo de contrato.
 
+
+### Acesso ao site:
+[Aluguel de Carros](https://aluguel-de-carros-topaz.vercel.app/)
